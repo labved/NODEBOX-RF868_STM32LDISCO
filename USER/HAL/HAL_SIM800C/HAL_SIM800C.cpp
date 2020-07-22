@@ -22,6 +22,145 @@
 extern Sim80x_t               Sim80x;
 
 /****************************************************************
+*FUNCTION NAME:set2Tx
+*FUNCTION     :set UART to Tx mode
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_SIM800C::set2Tx(void)
+{
+  req2Rx();
+  setTxMode();
+}
+
+/****************************************************************
+*FUNCTION NAME:set2Rx
+*FUNCTION     :set UART to Rx mode
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_SIM800C::set2Rx(void)
+{
+  req2Tx();
+  setRxMode();
+}
+
+/****************************************************************
+*FUNCTION NAME:req2Tx
+*FUNCTION     : req2Tx
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_SIM800C::req2Tx(void)
+{
+  putc(XON_BYTE);
+}
+
+/****************************************************************
+*FUNCTION NAME:req2Rx
+*FUNCTION     :req2Rx
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_SIM800C::req2Rx(void)
+{
+  putc(XOFF_BYTE);
+}
+
+/****************************************************************
+*FUNCTION NAME:setTxMode
+*FUNCTION     :set Tx flags
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_SIM800C::setTxMode(void)
+{
+  //CP2102TxFlag = 1;
+  //CP2102RxFlag = 0;
+}
+
+/****************************************************************
+*FUNCTION NAME:setRxMode
+*FUNCTION     :set Rx flags
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_SIM800C::setRxMode(void)
+{
+  //CP2102TxFlag = 0;
+  //CP2102RxFlag = 1 ; 
+}
+
+/****************************************************************
+*FUNCTION NAME:flowControl
+*FUNCTION     :flowControl
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_SIM800C::flowControl(void)
+{
+  byte temp;
+   
+  temp = getc();
+  
+  if(temp == XOFF_BYTE)
+  {
+    setRxMode();
+  } 
+  else if(temp == XON_BYTE)
+  {
+    setTxMode();
+  }
+}
+
+/****************************************************************
+*FUNCTION NAME:putc
+*FUNCTION     :send data in UART
+*INPUT        : ch
+*OUTPUT       :void
+****************************************************************/
+void  HAL_SIM800C::putc(byte ch)                        
+{
+  while(!(USART_GetFlagStatus(GSM_USART_CH, USART_FLAG_TXE)));
+
+  USART_SendData(GSM_USART_CH, ch);
+  
+  while(!(USART_GetFlagStatus(GSM_USART_CH, USART_FLAG_TC)));
+  
+}
+
+/****************************************************************
+*FUNCTION NAME:getc
+*FUNCTION     :recieve data in UART
+*INPUT        :void
+*OUTPUT       :byte
+****************************************************************/
+byte  HAL_SIM800C::getc(void)                            
+{ 
+  while (!(USART_GetFlagStatus(GSM_USART_CH, USART_FLAG_RXNE)));
+    
+  return USART_ReceiveData(GSM_USART_CH); 
+}
+
+/****************************************************************
+*FUNCTION NAME:HAL_UART_Transmit
+*FUNCTION     :transmit block of data
+*INPUT        :data,size, timeout;
+*OUTPUT       :void
+****************************************************************/
+void HAL_SIM800C::HAL_UART_Transmit(uint8_t *data, uint8_t size,uint8_t timeout)
+{
+  char temp;
+  for(uint8_t i=0;i<size;i++)
+  {
+      temp = *data;
+      putc(temp);
+      data++;
+  }
+
+}
+
+/****************************************************************
 *FUNCTION NAME:gpioInit
 *FUNCTION     :GPIO pins
 *INPUT        :void
@@ -68,7 +207,7 @@ void HAL_SIM800C::gpioInit(void)
 
 /****************************************************************
 *FUNCTION NAME:uartInit
-*FUNCTION     :Init
+*FUNCTION     :USART pins 
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
@@ -153,149 +292,10 @@ void HAL_SIM800C::hardReset(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void HAL_SIM800C::set2Tx(void)
-{
-  req2Rx();
-  setTxMode();
-}
-
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void HAL_SIM800C::set2Rx(void)
-{
-  req2Tx();
-  setRxMode();
-}
-
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void HAL_SIM800C::req2Tx(void)
-{
-  putc(XON_BYTE);
-}
-
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void HAL_SIM800C::req2Rx(void)
-{
-  putc(XOFF_BYTE);
-}
-
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void HAL_SIM800C::setTxMode(void)
-{
-  //CP2102TxFlag = 1;
-  //CP2102RxFlag = 0;
-}
-
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void HAL_SIM800C::setRxMode(void)
-{
-  //CP2102TxFlag = 0;
-  //CP2102RxFlag = 1 ; 
-}
-
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void HAL_SIM800C::flowControl(void)
-{
-  byte temp;
-   
-  temp = getc();
-  
-  if(temp == XOFF_BYTE)
-  {
-    setRxMode();
-  } 
-  else if(temp == XON_BYTE)
-  {
-    setTxMode();
-  }
-}
-
-/****************************************************************
-*FUNCTION NAME:putc
-*FUNCTION     :send data in UART
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void  HAL_SIM800C::putc(byte ch)                        
-{
-  while(!(USART_GetFlagStatus(GSM_USART_CH, USART_FLAG_TXE)));
-
-  USART_SendData(GSM_USART_CH, ch);
-  
-  while(!(USART_GetFlagStatus(GSM_USART_CH, USART_FLAG_TC)));
-  
-}
-
-/****************************************************************
-*FUNCTION NAME:getc
-*FUNCTION     :send data in UART
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-byte  HAL_SIM800C::getc(void)                            
-{ 
-  while (!(USART_GetFlagStatus(GSM_USART_CH, USART_FLAG_RXNE)));
-    
-  return USART_ReceiveData(GSM_USART_CH); 
-}
-
-/****************************************************************
-*FUNCTION NAME:HAL_UART_Transmit
-*FUNCTION     :HAL_UART_Transmit
-*INPUT        :USARTx,str,size, timeout;
-*OUTPUT       :void
-****************************************************************/
-void HAL_SIM800C::HAL_UART_Transmit(uint8_t *data, uint8_t size,uint8_t timeout)
-{
-  char temp;
-  for(uint8_t i=0;i<size;i++)
-  {
-      temp = *data;
-      putc(temp);
-      data++;
-  }
-
-}
-
-/****************************************************************
 *FUNCTION NAME:write8
 *FUNCTION     :write8
-*INPUT        :unsigned i, char *a, unsigned r
-*OUTPUT       :byte
+*INPUT        :data
+*OUTPUT       :void
 ****************************************************************/
 void  HAL_SIM800C::write8(uint8_t *data) // ASK BHARAT FOR CONFIRMATION
 {
@@ -314,10 +314,10 @@ void  HAL_SIM800C::write8(uint8_t *data) // ASK BHARAT FOR CONFIRMATION
 }
 
 /****************************************************************
-*FUNCTION NAME:coreSendRaw
-*FUNCTION     :coreSendRaw
-*INPUT        :unsigned i, char *a, unsigned r
-*OUTPUT       :byte
+*FUNCTION NAME:writeRaw
+*FUNCTION     :writeRaw
+*INPUT        :data, len
+*OUTPUT       :void
 ****************************************************************/
 void  HAL_SIM800C::writeRaw(uint8_t *data,uint16_t len)
 {
@@ -337,10 +337,10 @@ void  HAL_SIM800C::writeRaw(uint8_t *data,uint16_t len)
 }
 
 /****************************************************************
-*FUNCTION NAME:coreSendString
-*FUNCTION     :coreSendString
-*INPUT        :unsigned i, char *a, unsigned r
-*OUTPUT       :byte
+*FUNCTION NAME:writeString
+*FUNCTION     :Transmit character untill null character
+*INPUT        :str
+*OUTPUT       :void
 ****************************************************************/
 void	HAL_SIM800C::writeString(char *str)
 {
@@ -360,7 +360,7 @@ void	HAL_SIM800C::writeString(char *str)
 
 /****************************************************************
 *FUNCTION NAME:sendAtCommand
-*FUNCTION     :transmit and read at commands in uart
+*FUNCTION     :transmit and read response at commands in uart
 *INPUT        :ATcommand,wait_time, HowMuchAnswers,...
 *OUTPUT       :byte
 ****************************************************************/
