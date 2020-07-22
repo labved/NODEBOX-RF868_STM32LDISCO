@@ -7,9 +7,8 @@
 #include "stm32l1xx.h"  
 #include "Settings.h"
 
-#ifndef _USE_SDMMC
-  #define _USE_SDMMC
-#endif
+
+#ifndef LIB_SDMMC_H
 
 #if(_USE_SDMMC==1)
 
@@ -274,5 +273,7 @@ FRESULT SD_MMC::filburstRead(FIL fil_obj, char const *fil_path, char *buffer)
 }
 
 SD_MMC sdmmc;
+
+#endif
 
 #endif

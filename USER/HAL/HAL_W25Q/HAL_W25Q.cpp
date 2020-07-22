@@ -1,6 +1,8 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
+#ifdef HAL_FLASH_H
+  
 #ifndef _USE_FLASH
   #define _USE_FLASH
 #endif
@@ -277,4 +279,7 @@ void HAL_W25Q::SPIInit(void)
 
 
 }
+
+#endif
+
 #endif

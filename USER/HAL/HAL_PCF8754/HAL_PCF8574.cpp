@@ -1,6 +1,8 @@
 #include "stm32l1xx.h"  
 #include "Settings.h"
 
+#ifdef HAL_IOEXP_H
+  
 #ifndef _USE_IOEXP
   #define _USE_IOEXP
 #endif
@@ -591,5 +593,7 @@ bool HAL_PCF8574::readPin(uint8_t address, uint8_t pin, uint8_t val)
 // // -- END OF FILE --
 
 
+
+#endif
 
 #endif

@@ -1,6 +1,9 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
+#ifndef HAL_FLASH_H
+  #define HAL_FLASH_H
+
 #ifndef _USE_FLASH
   #define _USE_FLASH
 #endif
@@ -24,4 +27,5 @@ public:
 extern HAL_W25Q w25q;
 
 
+#endif
 #endif

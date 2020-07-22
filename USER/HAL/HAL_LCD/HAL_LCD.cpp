@@ -2,9 +2,8 @@
 #include "Settings.h"
 
 
-#ifndef _USE_LCD
-  #define _USE_LCD
-#endif
+#ifdef HAL_LCD_H
+  
 
 #if(_USE_LCD==1) 
 
@@ -234,6 +233,8 @@ void HAL_ERC2401602::write_data(uchar dat)
 	GPIO_SetBits(LCD_GPIO_NSS, LCD_PIN_NSS);
 
 }
+#endif
+
 #endif
 
 

@@ -7,9 +7,9 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_SDMMC
-  #define _USE_SDMMC
-#endif
+
+#ifndef LIB_SDMMC_H
+  #define LIB_SDMMC_H
 
 #if(_USE_SDMMC==1)
 
@@ -42,5 +42,7 @@ class SD_MMC
 };
 
 extern SD_MMC sdmmc;
+
+#endif
 
 #endif

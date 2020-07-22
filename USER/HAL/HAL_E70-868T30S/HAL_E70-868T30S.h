@@ -1,9 +1,8 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_LORA
-#define _USE_LORA
-#endif
+#ifndef HAL_LORA_H
+#define HAL_LORA_H
 
 #if (_USE_LORA == 1)
 
@@ -48,4 +47,5 @@ public:
 
 extern  HAL_E70_868T30S e70_868t30s;
 
+#endif
 #endif

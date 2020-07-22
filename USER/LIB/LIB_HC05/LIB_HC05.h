@@ -1,9 +1,9 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_BT
-#define _USE_BT
-#endif
+#ifndef LIB_HC05_H
+#define LIB_HC05_H
+
 
 #if (_USE_BT == 1)
 
@@ -19,7 +19,7 @@ class LIB_HC05
 {
 private:
   void PoweronReset(void);
-  void RegConfigSettings(void);
+  void regConfigSettings(void);
   void setAtMode(void);
   void setDataMode(void);
   void debugTerminal(char *msg);
@@ -118,3 +118,4 @@ public:
 
 #endif
 
+#endif

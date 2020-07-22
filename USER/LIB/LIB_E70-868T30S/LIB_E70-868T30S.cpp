@@ -1,9 +1,9 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_LORA
-#define _USE_LORA
-#endif
+
+#ifdef  LIB_LORA_H
+
 
 #if (_USE_LORA == 1)
 
@@ -123,6 +123,6 @@ void LIB_E70_868T30S::testCommand(void)
 extern LIB_E70_868T30S lora;
 
 #endif
-
+#endif
 
    

@@ -1,9 +1,8 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_LCD
-#define _USE_LCD
-#endif
+#ifndef HAL_LCD_H
+  #define HAL_LCD_H
 
 #if (_USE_LCD == 1)
 
@@ -25,5 +24,7 @@ public:
 };
 
 extern HAL_ERC2401602 lcd240160;
+
+#endif
 
 #endif

@@ -1,6 +1,10 @@
 #include "stm32l1xx.h"  
 #include "Settings.h"
 
+
+#ifndef HAL_IOEXP_H
+  #define HAL_IOEXP_H
+
 #ifndef _USE_IOEXP
   #define _USE_IOEXP
 #endif
@@ -55,5 +59,8 @@
 #define PCF8574_MASK_COUNT_PIN5				5  
 #define PCF8574_MASK_COUNT_PIN6				6  
 #define PCF8574_MASK_COUNT_PIN7				7
+
+
+#endif
 
 #endif

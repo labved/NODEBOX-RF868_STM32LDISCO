@@ -26,7 +26,7 @@ class LIB_SIM800C
     void                    test(void);  // to be deleted
     void                    Init(void);
     void                    softReset(void);
-    bool                    probe(unsigned long timeout = HC05_DEFAULT_TIMEOUT);
+    bool                    probe(unsigned long timeout );
     void	                  rxCallBack(void);
     void                    startSim80xBuffTask(void const * argument);
     void                    bufferProcess(void);
@@ -34,39 +34,39 @@ class LIB_SIM800C
 
     // SIM800C LIBRARY     
     void                    saveParameters(void);
-    void                    setPower(bool TurnOn);
+    void                    setPower(bool turnon);
     void                    setFactoryDefault(void);
     void                    setBaudRate(uint16_t baudrate);
     void                    setAtEcho(bool turnon);
     void                    getIMEI(char *IMEI);
     uint8_t                 getRingVol(void);
-    bool                    setRingVol(uint8_t Vol_0_to_100);
+    bool                    setRingVol(uint8_t vol_0_to_100);
     uint8_t                 getLoadVol(void);//need to check
-    bool                    setLoadVol(uint8_t Vol_0_to_100);
+    bool                    setLoadVol(uint8_t vol_0_to_100);
     Sim80xWave_t            waveGetState(void);
-    bool                    waveRecord(uint8_t ID,uint8_t TimeLimitInSecond);  
+    bool                    waveRecord(uint8_t ID,uint8_t timelimitinsecond);  
     bool                    wavePlay(uint8_t ID);  
     bool                    waveStop(void);  
     bool                    waveDelete(uint8_t ID);
-    bool                    setMicGain(uint8_t Channel_0_to_4,uint8_t Gain_0_to_15);
+    bool                    setMicGain(uint8_t channel_0_to_4,uint8_t gain_0_to_15);
     bool                    getMicGain(void);
-    bool                    tonePlay(Sim80xTone_t Sim80xTone,uint32_t  Time_ms);
+    bool                    tonePlay(Sim80xTone_t sim80xtone,uint32_t  time_ms);
     bool                    toneStop(void);
     uint8_t                 getToneVol(void);
-    bool                    setToneVol(uint8_t Vol_0_to_100);
-    bool                    setRingTone(uint8_t Tone_0_to_19,bool Save);
-    bool                    setEchoParameters(uint8_t  SelectMic_0_or_1,uint16_t NonlinearProcessingRemove,uint16_t AcousticEchoCancellation,uint16_t NoiseReduction,uint16_t NoiseSuppression);
+    bool                    setToneVol(uint8_t vol_0_to_100);
+    bool                    setRingTone(uint8_t tone_0_to_19,bool save);
+    bool                    setEchoParameters(uint8_t  selectmic_0_or_1,uint16_t nonlinearprocessingremove,uint16_t acousticechocancellation,uint16_t noisereduction,uint16_t noisesuppression);
    
     // GSM
-    void                    Gsm_user(uint32_t StartupTime);
+    void                    Gsm_user(uint32_t startupTime);
     void                    Gsm_userNewCall(const char *CallerNumber);
-    void                    Gsm_userNewMsg(char *Number,char *Date,char *Time,char *msg);
+    void                    Gsm_userNewMsg(char *number,char *Date,char *Time,char *msg);
 
     bool                    Gsm_ussd(char *send,char *receive);
 
     bool                    Gsm_callAnswer(void);
     bool                    Gsm_callDisconnect(void);
-    GsmVoiceStatus_t        Gsm_dial(char *Number,uint8_t WaitForAnswer_second); 
+    GsmVoiceStatus_t        Gsm_dial(char *number,uint8_t WaitForAnswer_second); 
     GsmVoiceStatus_t        Gsm_getLastVoiceActivity(void);
     GsmMsgFormat_t          Gsm_getMsgFormat(void);
     bool                    Gsm_setMsgFormat(GsmMsgFormat_t GsmMsgFormat);  
@@ -80,14 +80,14 @@ class LIB_SIM800C
     bool                    Gsm_setMsgServiceNumber(char *ServiceNumber);
     bool                    Gsm_getMsgTextModeParameter(void);
     bool                    Gsm_setMsgTextModeParameter(uint8_t fo,uint8_t vp,uint8_t pid,uint8_t dcs);
-    bool                    Gsm_sendMsgText(char *Number,char *msg);  
+    bool                    Gsm_sendMsgText(char *number,char *msg);  
 
 // BLUETOOTH
     void                    Bluetooth_userNewPairingRequest(char *Name,char *Address,char *Pass);
     void                    Bluetooth_userConnectingSpp(void);
     void                    Bluetooth_userNewSppData(char *NewData,uint16_t len);
    
-    bool                    Bluetooth_setPower(bool TurnOn);
+    bool                    Bluetooth_setPower(bool turnon);
     bool                    Bluetooth_getHostName(void);  
     bool                    Bluetooth_setHostName(char *HostName);
     BluetoothStatus_t       Bluetooth_getStatus(void);

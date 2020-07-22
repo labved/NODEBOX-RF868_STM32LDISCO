@@ -3,8 +3,8 @@
 #include "HAL_SIM800C.h"
 #include "LIB_SIM800C.h"
 
-#ifndef LIB_SIM800C_H
-  #define LIB_SIM800C_H
+#ifdef LIB_SIM800C_H
+  
 
 #if(_USE_GSM==1)
 
@@ -21,6 +21,8 @@
 #define _SIM80X_USE_BLUETOOTH           0
 #define _SIM80X_USE_GPRS                1
 */
+
+#endif
 
 #endif
 

@@ -1,9 +1,9 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_LORA
-#define _USE_LORA
-#endif
+#ifndef LIB_LORA_H
+#define LIB_LORA_H
+
 
 #if (_USE_LORA == 1)
 
@@ -29,5 +29,7 @@ public:
     
 };
 
+
+#endif
 
 #endif

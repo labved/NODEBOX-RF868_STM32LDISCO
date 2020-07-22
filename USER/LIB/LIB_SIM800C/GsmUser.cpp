@@ -18,20 +18,37 @@ extern HAL_SIM800C              sim800c;
 extern Sim80x_t                 Sim80x;
 
 
-//##################################################################################################################
+/****************************************************************
+*FUNCTION NAME:Gsm_user
+*FUNCTION     :Gsm_user
+*INPUT        :StartupTime
+*OUTPUT       :void
+****************************************************************/
 void  LIB_SIM800C::Gsm_user(uint32_t StartupTime)
 {
   
   
 }
-//##################################################################################################################
+
+/****************************************************************
+*FUNCTION NAME:Gsm_userNewCall
+*FUNCTION     :Gsm_userNewCall
+*INPUT        :CallerNumber
+*OUTPUT       :void
+****************************************************************/
 void  LIB_SIM800C::Gsm_userNewCall(const char *CallerNumber)
 {
   //Gsm_CallDisconnect(); 
   //Gsm_CallAnswer();    
 
 }
-//##################################################################################################################
+
+/****************************************************************
+*FUNCTION NAME:Gsm_userNewMsg
+*FUNCTION     :Gsm_userNewMsg
+*INPUT        :Number, Date, Time, kmsg
+*OUTPUT       :void
+****************************************************************/
 void  LIB_SIM800C::Gsm_userNewMsg(char *Number,char *Date,char *Time,char *msg)
 {
   

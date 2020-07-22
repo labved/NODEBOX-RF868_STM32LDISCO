@@ -2,9 +2,7 @@
 #include "Settings.h"
 
 
-#ifndef _USE_BT
-  #define _USE_BT
-#endif
+#ifdef LIB_HC05_H
 
 #if(_USE_BT==1)
 
@@ -130,5 +128,7 @@
 
 #define AT_INQC     "INQC"
 #define AT_PAIR     "PAIR"
+
+#endif
 
 #endif

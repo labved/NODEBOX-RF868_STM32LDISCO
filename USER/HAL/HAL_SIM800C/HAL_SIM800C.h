@@ -34,7 +34,7 @@ class HAL_SIM800C
     void                    write8(uint8_t *data);
     void                    writeRaw(uint8_t *data, uint16_t size);
     void	                  writeString(char const *data);
-    uint8_t                 sendAtCommand(char const *AtCommand,int32_t  MaxWaiting_ms,uint8_t const HowMuchAnswers,...);
+    uint8_t                 sendAtCommand(char const *atcommand,int32_t  maxwaiting_ms,uint8_t const howmuchanswers,...);
     uint16_t                readLine(char *buffer, size_t buffer_size); 
 
     //void HAL_UART_Receive_IT(USART_TypeDef* USARTx,uint8_t *UsartRxTemp,bool state);

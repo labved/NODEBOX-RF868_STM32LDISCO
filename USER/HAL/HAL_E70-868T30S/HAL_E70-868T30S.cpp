@@ -1,9 +1,7 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_LORA
-#define _USE_LORA
-#endif
+#ifdef HAL_LORA_H
 
 #if (_USE_LORA == 1)
 
@@ -644,5 +642,7 @@ void	HAL_E70_868T30S::resetRfTxRx(void)
 }
 
 
+
+#endif
 
 #endif

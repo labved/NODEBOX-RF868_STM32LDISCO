@@ -1,10 +1,8 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-
-#ifndef _USE_BT
-  #define _USE_BT
-#endif
+#ifndef HAL_HC05_H
+  #define HAL_HC05_H
 
 #if(_USE_BT==1)
 
@@ -28,12 +26,12 @@ class HAL_HC05
   
   public:
     void                    gpioInit(void);
-    void                    uartInit(uint16_t baudrate));
+    void                    uartInit(uint16_t baudrate);
     void                    hardReset(void);
     void                    write8(uint8_t *data);
     void                    writeRaw(uint8_t *data, uint16_t size);
     void	                  writeString(char const *data);
-    uint8_t                 sendAtCommand(char const *AtCommand,int32_t  MaxWaiting_ms,uint8_t const HowMuchAnswers,...);
+    uint8_t                 sendAtCommand(char const *atcommand,int32_t  maxwaiting_ms,uint8_t const howmuchanswers,...);
     uint16_t                readLine(char *buffer, size_t buffer_size); 
 
 
@@ -65,3 +63,5 @@ class HAL_HC05
 #endif
 
 extern HAL_HC05 GW040;
+
+#endif

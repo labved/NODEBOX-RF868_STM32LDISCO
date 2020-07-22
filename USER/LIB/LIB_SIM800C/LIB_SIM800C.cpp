@@ -55,20 +55,6 @@ void LIB_SIM800C::test(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:Init
-*FUNCTION     :Initialisation
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void LIB_SIM800C::Init(void)  
-{
-  sim800c.gpioInit();
-  sim800c.uartInit();
-  PoweronReset();
-  RegConfigSettings();
-}
-
-/****************************************************************
 *FUNCTION NAME:PoweronReset
 *FUNCTION     :Switch reset //details refer datasheet of CC1101/CC1100//
 *INPUT        :none
@@ -82,12 +68,12 @@ void LIB_SIM800C::PoweronReset(void)
     delay_ms(1000);
   #endif
 
-  hc05.hardReset(); 
+  sim800c.hardReset(); 
 }
 
 /****************************************************************
 *FUNCTION NAME:RegConfigSettings
-*FUNCTION     :HC05 register config //details refer datasheet of ST7586S//
+*FUNCTION     :sim800c register config //details refer datasheet of ST7586S//
 *INPUT        :none
 *OUTPUT       :none
 ****************************************************************/
@@ -110,7 +96,7 @@ void LIB_SIM800C::RegConfigSettings(void)
   }  
   
   setPower(true); 
-  setFactoryDefault(200);
+  setFactoryDefault();
 
   sim800c.sendAtCommand("ATE1\r\n",200,1,"ATE1\r\r\nOK\r\n");
   sim800c.sendAtCommand("AT+COLP=1\r\n",200,1,"AT+COLP=1\r\r\nOK\r\n");
@@ -142,7 +128,7 @@ void LIB_SIM800C::RegConfigSettings(void)
 /****************************************************************
 *FUNCTION NAME:debugTerminal
 *FUNCTION     :Prints response to terminal IO
-*INPUT        :void
+*INPUT        :message
 *OUTPUT       :void
 ****************************************************************/
 void LIB_SIM800C::debugTerminal(char *msg)
@@ -167,6 +153,67 @@ void LIB_SIM800C::debugTerminal(char *msg)
 }
 
 /****************************************************************
+*FUNCTION NAME:Init
+*FUNCTION     :Initialisation
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::Init(void)  
+{
+  sim800c.gpioInit();
+  sim800c.uartInit();
+  PoweronReset();
+  RegConfigSettings();
+}
+
+/****************************************************************
+*FUNCTION NAME:softReset
+*FUNCTION     :softReset
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::softReset(void)
+{
+
+}
+
+/****************************************************************
+*FUNCTION NAME:probe
+*FUNCTION     :probe
+*INPUT        :timeout
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::probe(unsigned long timeout )
+{
+
+}
+
+/****************************************************************
+*FUNCTION NAME:RxCallBack
+*FUNCTION     :RxCallBack
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void	LIB_SIM800C::rxCallBack(void)
+{
+  if((Sim80x.Status.DataTransferMode==0)&&(Sim80x.UsartRxTemp!=0))
+  {
+    //Sim80x.UsartRxLastTime = HAL_GetTick();
+    Sim80x.UsartRxBuffer[Sim80x.UsartRxIndex] = Sim80x.UsartRxTemp;
+    if(Sim80x.UsartRxIndex < (_SIM80X_BUFFER_SIZE-1))
+      Sim80x.UsartRxIndex++;
+  }
+  else if(Sim80x.Status.DataTransferMode==1)
+  {
+    //Sim80x.UsartRxLastTime = HAL_GetTick();
+    Sim80x.UsartRxBuffer[Sim80x.UsartRxIndex] = Sim80x.UsartRxTemp;
+    if(Sim80x.UsartRxIndex < (_SIM80X_BUFFER_SIZE-1))
+      Sim80x.UsartRxIndex++;
+  }
+  USART_ITConfig(GSM_USART_CH, USART_IT_RXNE, ENABLE);	
+}
+
+/****************************************************************
 *FUNCTION NAME:startSim80xBuffTask
 *FUNCTION     :startSim80xBuffTask
 *INPUT        :argument;
@@ -188,7 +235,7 @@ void LIB_SIM800C::startSim80xBuffTask(void const * argument)
 
 /****************************************************************
 *FUNCTION NAME:BufferProcess
-*FUNCTION     : 
+*FUNCTION     :bufferProcess
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
@@ -843,31 +890,6 @@ void  LIB_SIM800C::bufferProcess(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:coreRxCallBack
-*FUNCTION     :coreRxCallBack
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void	LIB_SIM800C::rxCallBack(void)
-{
-  if((Sim80x.Status.DataTransferMode==0)&&(Sim80x.UsartRxTemp!=0))
-  {
-    //Sim80x.UsartRxLastTime = HAL_GetTick();
-    Sim80x.UsartRxBuffer[Sim80x.UsartRxIndex] = Sim80x.UsartRxTemp;
-    if(Sim80x.UsartRxIndex < (_SIM80X_BUFFER_SIZE-1))
-      Sim80x.UsartRxIndex++;
-  }
-  else if(Sim80x.Status.DataTransferMode==1)
-  {
-    //Sim80x.UsartRxLastTime = HAL_GetTick();
-    Sim80x.UsartRxBuffer[Sim80x.UsartRxIndex] = Sim80x.UsartRxTemp;
-    if(Sim80x.UsartRxIndex < (_SIM80X_BUFFER_SIZE-1))
-      Sim80x.UsartRxIndex++;
-  }
-  USART_ITConfig(GSM_USART_CH, USART_IT_RXNE, ENABLE);	
-}
-
-/****************************************************************
 *FUNCTION NAME:startSim80xTask
 *FUNCTION     :startSim80xTask
 *INPUT        :argument; 
@@ -997,12 +1019,12 @@ void   LIB_SIM800C::saveParameters(void)
 /****************************************************************
 *FUNCTION NAME:setPower
 *FUNCTION     :setPower
-*INPUT        :TurnOn
+*INPUT        :turnon
 *OUTPUT       :void
 ****************************************************************/
-void  LIB_SIM800C::setPower(bool TurnOn)
+void  LIB_SIM800C::setPower(bool turnon)
 { 
-  if(TurnOn==true)
+  if(turnon==true)
   {  
     if(sim800c.sendAtCommand("AT\r\n",200,1,"AT\r\r\nOK\r\n") == 1)
     {
@@ -1011,7 +1033,7 @@ void  LIB_SIM800C::setPower(bool TurnOn)
       printf("\r\nSim80x_SetPower(ON) ---> OK\r\n");
       #endif
       Sim80x.Status.Power=1;
-      initValue();
+      //initValue();
     }
     else
     {     
@@ -1028,7 +1050,7 @@ void  LIB_SIM800C::setPower(bool TurnOn)
         printf("\r\nSim80x_SetPower(ON) ---> OK\r\n");
         #endif
         Sim80x.Status.Power=1;
-        initValue();   
+        //initValue();   
       }
       else
         Sim80x.Status.Power=0;
@@ -1072,7 +1094,7 @@ void LIB_SIM800C::setFactoryDefault(void)
 
 /****************************************************************
 *FUNCTION NAME:setBaudRate
-*FUNCTION     :setBaudRate
+*FUNCTION     :AT command to change baud rate
 *INPUT        :baudrate
 *OUTPUT       :void
 ****************************************************************/
@@ -1089,7 +1111,7 @@ void LIB_SIM800C::setBaudRate(uint16_t baudrate)
 
 /****************************************************************
 *FUNCTION NAME:setAtEcho
-*FUNCTION     :setAtEcho
+*FUNCTION     :change command echo mode
 *INPUT        :turnon
 *OUTPUT       :void
 ****************************************************************/
@@ -1107,7 +1129,7 @@ void LIB_SIM800C::setAtEcho(bool turnon)
 
 /****************************************************************
 *FUNCTION NAME:getIMEI
-*FUNCTION     :getIMEI
+*FUNCTION     :recieve module IMEI number 
 *INPUT        :IMEI
 *OUTPUT       :void
 ****************************************************************/
@@ -1134,7 +1156,7 @@ void  LIB_SIM800C::getIMEI(char *IMEI)
 *FUNCTION NAME:getRingVol
 *FUNCTION     :getRingVol
 *INPUT        :void
-*OUTPUT       :uint8_t
+*OUTPUT       :Ringing volume
 ****************************************************************/
 uint8_t  LIB_SIM800C::getRingVol(void)
 {
@@ -1160,18 +1182,18 @@ uint8_t  LIB_SIM800C::getRingVol(void)
 /****************************************************************
 *FUNCTION NAME:setRingVol
 *FUNCTION     :setRingVol
-*INPUT        :Vol_0_to_100
+*INPUT        :vol_0_to_100
 *OUTPUT       :bool
 ****************************************************************/
-bool  LIB_SIM800C::setRingVol(uint8_t Vol_0_to_100)
+bool  LIB_SIM800C::setRingVol(uint8_t vol_0_to_100)
 {
   uint8_t answer;
   char str[16];
-  snprintf(str,sizeof(str),"AT+CRSL=%d\r\n",Vol_0_to_100);
+  snprintf(str,sizeof(str),"AT+CRSL=%d\r\n",vol_0_to_100);
   answer=sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR:");
   if(answer==1)
   {
-    Sim80x.RingVol=Vol_0_to_100;
+    Sim80x.RingVol=vol_0_to_100;
     #if (_SIM80X_DEBUG==1)
     printf("\r\nSim80x_SetRingVol(%d) ---> OK\r\n",Sim80x.RingVol);
     #endif    
@@ -1188,9 +1210,9 @@ bool  LIB_SIM800C::setRingVol(uint8_t Vol_0_to_100)
 
 /****************************************************************
 *FUNCTION NAME:getLoadVol
-*FUNCTION     :getLoadVol
+*FUNCTION     :receive loud speaker volume
 *INPUT        :void
-*OUTPUT       :uint8_t
+*OUTPUT       :loud speaker volume
 ****************************************************************/
 uint8_t  LIB_SIM800C::getLoadVol(void)
 {
@@ -1213,20 +1235,20 @@ uint8_t  LIB_SIM800C::getLoadVol(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:getLoadVol
-*FUNCTION     :getLoadVol
-*INPUT        :Vol_0_to_100
+*FUNCTION NAME:setLoadVol
+*FUNCTION     :setLoadVol
+*INPUT        :vol_0_to_100
 *OUTPUT       :bool
 ****************************************************************/
-bool  LIB_SIM800C::setLoadVol(uint8_t Vol_0_to_100)
+bool  LIB_SIM800C::setLoadVol(uint8_t vol_0_to_100)
 {
   uint8_t answer;
   char str[16];
-  snprintf(str,sizeof(str),"AT+CLVL=%d\r\n",Vol_0_to_100);
+  snprintf(str,sizeof(str),"AT+CLVL=%d\r\n",vol_0_to_100);
   answer=sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR:");
   if(answer==1)
   {
-    Sim80x.LoadVol=Vol_0_to_100;
+    Sim80x.LoadVol=vol_0_to_100;
     #if (_SIM80X_DEBUG==1)
     printf("\r\nSim80x_SetLoadVol(%d) ---> OK\r\n",Sim80x.LoadVol);
     #endif    
@@ -1259,14 +1281,14 @@ Sim80xWave_t   LIB_SIM800C::waveGetState(void)
 /****************************************************************
 *FUNCTION NAME:waveRecord
 *FUNCTION     :waveRecord
-*INPUT        :ID,TimeLimitInSecond
+*INPUT        :ID, timelimitinsecond
 *OUTPUT       :bool
 ****************************************************************/
-bool  LIB_SIM800C::waveRecord(uint8_t ID,uint8_t TimeLimitInSecond)
+bool  LIB_SIM800C::waveRecord(uint8_t ID,uint8_t timelimitinsecond)
 {
   uint8_t answer;
   char str[32];
-  snprintf(str,sizeof(str),"AT+CREC=1,\"C:\\User\\%d.amr\",0,%d\r\n",ID,TimeLimitInSecond);
+  snprintf(str,sizeof(str),"AT+CREC=1,\"C:\\User\\%d.amr\",0,%d\r\n",ID,timelimitinsecond);
   answer = sim800c.sendAtCommand(str,3000,1,"\r\nOK\r\n");
   if(answer == 1)
   {
@@ -1375,19 +1397,19 @@ bool  LIB_SIM800C::waveDelete(uint8_t ID)
 /****************************************************************
 *FUNCTION NAME:setMicGain
 *FUNCTION     :setMicGain
-*INPUT        :Channel_0_to_4,Gain_0_to_15; 
+*INPUT        :channel_0_to_4,gain_0_to_15; 
 *OUTPUT       :bool
 ****************************************************************/
-bool  LIB_SIM800C::setMicGain(uint8_t Channel_0_to_4,uint8_t Gain_0_to_15)
+bool  LIB_SIM800C::setMicGain(uint8_t channel_0_to_4,uint8_t gain_0_to_15)
 {
    uint8_t answer;
   char str[32];
-  snprintf(str,sizeof(str),"AT+CMIC=%d,%d\r\n",Channel_0_to_4,Gain_0_to_15);
+  snprintf(str,sizeof(str),"AT+CMIC=%d,%d\r\n",channel_0_to_4,gain_0_to_15);
   answer = sim800c.sendAtCommand(str,1000,1,"\r\nOK\r\n");
   if(answer == 1)
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetMicGain(%d,%d) ---> OK\r\n",Channel_0_to_4,Gain_0_to_15);
+    printf("\r\nSim80x_SetMicGain(%d,%d) ---> OK\r\n",channel_0_to_4,gain_0_to_15);
     #endif  
     getMicGain();    
     return true;
@@ -1395,7 +1417,7 @@ bool  LIB_SIM800C::setMicGain(uint8_t Channel_0_to_4,uint8_t Gain_0_to_15)
   else
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetMicGain(%d,%d) ---> ERROR\r\n",Channel_0_to_4,Gain_0_to_15);
+    printf("\r\nSim80x_SetMicGain(%d,%d) ---> ERROR\r\n",channel_0_to_4,gain_0_to_15);
     #endif     
     return false;
   }  
@@ -1430,19 +1452,19 @@ bool  LIB_SIM800C::getMicGain(void)
 /****************************************************************
 *FUNCTION NAME:tonePlay
 *FUNCTION     :tonePlay
-*INPUT        :Sim80xTone, Time_ms
+*INPUT        :sim80xtone, Time_ms
 *OUTPUT       :void
 ****************************************************************/
-bool  LIB_SIM800C::tonePlay(Sim80xTone_t Sim80xTone,uint32_t  Time_ms)
+bool  LIB_SIM800C::tonePlay(Sim80xTone_t sim80xtone,uint32_t  Time_ms)
 {
   uint8_t answer;
   char str[32];
-  snprintf(str,sizeof(str),"AT+STTONE=1,%d,%d\r\n",Sim80xTone,Time_ms);
+  snprintf(str,sizeof(str),"AT+STTONE=1,%d,%d\r\n",sim80xtone,Time_ms);
   answer = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR\r\n");
   if(answer == 1)
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_TonePlay(%d,%d) ---> OK\r\n",Sim80xTone,Time_ms);
+    printf("\r\nSim80x_TonePlay(%d,%d) ---> OK\r\n",sim80xtone,Time_ms);
     #endif     
     return true;
   }
@@ -1485,7 +1507,7 @@ bool  LIB_SIM800C::toneStop(void)
 *FUNCTION NAME:getToneVol
 *FUNCTION     :getToneVol
 *INPUT        :void
-*OUTPUT       :uint8_t
+*OUTPUT       :tone volume
 ****************************************************************/
 uint8_t LIB_SIM800C::getToneVol(void)
 {
@@ -1511,19 +1533,19 @@ uint8_t LIB_SIM800C::getToneVol(void)
 /****************************************************************
 *FUNCTION NAME:setToneVol
 *FUNCTION     :setToneVol
-*INPUT        :Vol_0_to_100; 
+*INPUT        :vol_0_to_100; 
 *OUTPUT       :bool
 ****************************************************************/
-bool  LIB_SIM800C::setToneVol(uint8_t Vol_0_to_100)
+bool  LIB_SIM800C::setToneVol(uint8_t vol_0_to_100)
 {
   uint8_t answer;
   char str[32];
-  snprintf(str,sizeof(str),"AT+SNDLEVEL=0,%d\r\n",Vol_0_to_100);
+  snprintf(str,sizeof(str),"AT+SNDLEVEL=0,%d\r\n",vol_0_to_100);
   answer = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR\r\n");
   if(answer == 1)
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetToneVol(%d) ---> OK\r\n",Vol_0_to_100);
+    printf("\r\nSim80x_SetToneVol(%d) ---> OK\r\n",vol_0_to_100);
     #endif 
     getToneVol();    
     return true;
@@ -1531,7 +1553,7 @@ bool  LIB_SIM800C::setToneVol(uint8_t Vol_0_to_100)
   else
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetToneVol(%d) ---> ERROR\r\n",Vol_0_to_100);
+    printf("\r\nSim80x_SetToneVol(%d) ---> ERROR\r\n",vol_0_to_100);
     #endif     
     return false;
   }     
@@ -1571,15 +1593,15 @@ bool  LIB_SIM800C::setRingTone(uint8_t Tone_0_to_19,bool Save)
 /****************************************************************
 *FUNCTION NAME:setEchoParameters
 *FUNCTION     :setEchoParameters
-*INPUT        :SelectMic_0_or_1,NonlinearProcessingRemove,AcousticEchoCancellation, NoiseReduction, NoiseSuppression; 
+*INPUT        :selectmic_0_or_1,NonlinearProcessingRemove,AcousticEchoCancellation, NoiseReduction, NoiseSuppression; 
 *OUTPUT       :bool
 ****************************************************************/
-bool  LIB_SIM800C::setEchoParameters(uint8_t  SelectMic_0_or_1,uint16_t NonlinearProcessingRemove,
+bool  LIB_SIM800C::setEchoParameters(uint8_t  selectmic_0_or_1,uint16_t NonlinearProcessingRemove,
 uint16_t AcousticEchoCancellation,uint16_t NoiseReduction,uint16_t NoiseSuppression)
 {
   uint8_t answer;
   char str[64];
-  snprintf(str,sizeof(str),"AT+ECHO=%d,%d,%d,%d,%d,1\r\n",SelectMic_0_or_1,NonlinearProcessingRemove,AcousticEchoCancellation,NoiseReduction,NoiseSuppression);
+  snprintf(str,sizeof(str),"AT+ECHO=%d,%d,%d,%d,%d,1\r\n",selectmic_0_or_1,NonlinearProcessingRemove,AcousticEchoCancellation,NoiseReduction,NoiseSuppression);
   answer = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR\r\n");
   if(answer == 1)
   {
@@ -1602,8 +1624,8 @@ uint16_t AcousticEchoCancellation,uint16_t NoiseReduction,uint16_t NoiseSuppress
 /****************************************************************
 *FUNCTION NAME:GSM_IRQHandler
 *FUNCTION     :GSM_IRQHandler
-*INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
-*OUTPUT       :none
+*INPUT        :
+*OUTPUT       :
 ****************************************************************/
 //#pragma vector = USART_VECTOR
 GSM_IRQHANDLER {

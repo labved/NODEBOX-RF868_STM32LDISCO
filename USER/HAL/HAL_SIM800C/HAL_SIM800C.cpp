@@ -363,10 +363,10 @@ void	HAL_SIM800C::writeString(char const *str)
 /****************************************************************
 *FUNCTION NAME:sendAtCommand
 *FUNCTION     :transmit and read response at commands in uart
-*INPUT        :ATcommand,wait_time, HowMuchAnswers,...
+*INPUT        :atcommand,wait_time, howmuchanswers,...
 *OUTPUT       :index
 ****************************************************************/
-uint8_t  HAL_SIM800C::sendAtCommand(char const *AtCommand,int32_t  MaxWaiting_ms,uint8_t const HowMuchAnswers,...)
+uint8_t  HAL_SIM800C::sendAtCommand(char const *AtCommand,int32_t  maxwaiting_ms,uint8_t const howmuchanswers,...)
 {
   uint16_t index=0;
   
@@ -377,16 +377,16 @@ uint8_t  HAL_SIM800C::sendAtCommand(char const *AtCommand,int32_t  MaxWaiting_ms
   Sim80x.AtCommand.FindAnswer = 0;
   Sim80x.AtCommand.ReceiveAnswerExeTime=0;
   //Sim80x.AtCommand.SendCommandStartTime = HAL_GetTick();
-  Sim80x.AtCommand.ReceiveAnswerMaxWaiting = MaxWaiting_ms;
+  Sim80x.AtCommand.ReceiveAnswerMaxWaiting = maxwaiting_ms;
   
   memset(Sim80x.AtCommand.ReceiveAnswer,0,sizeof(Sim80x.AtCommand.ReceiveAnswer)); // clear buffer
   memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));                     // clear buffer
 
   // va_list tag;
-  // va_start (tag,HowMuchAnswers);
+  // va_start (tag,howmuchanswers);
   
   // char *arg[10];
-  // for(uint8_t i=0; i<HowMuchAnswers ; i++)
+  // for(uint8_t i=0; i<howmuchanswers ; i++)
   // {
   //   arg[i] = va_arg (tag, char *);	
   //   strncpy(Sim80x.AtCommand.ReceiveAnswer[i],arg[i],sizeof(Sim80x.AtCommand.ReceiveAnswer[0]));
@@ -401,15 +401,15 @@ uint8_t  HAL_SIM800C::sendAtCommand(char const *AtCommand,int32_t  MaxWaiting_ms
   if(index == 0)
       memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
     
-  // while(MaxWaiting_ms > 0)
+  // while(maxwaiting_ms > 0)
   // {
   //   delay_ms(10);
   //   if(Sim80x.AtCommand.FindAnswer > 0)
   //     return Sim80x.AtCommand.FindAnswer;    
-  //   MaxWaiting_ms-=10;
+  //   maxwaiting_ms-=10;
   // }
 
-  delay_ms(MaxWaiting_ms);
+  delay_ms(maxwaiting_ms);
 
   Sim80x.Status.Busy=0;
   return Sim80x.AtCommand.FindAnswer;

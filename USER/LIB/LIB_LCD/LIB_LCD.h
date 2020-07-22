@@ -14,9 +14,8 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_LCD
-#define _USE_LCD
-#endif
+#ifndef LIB_LCD_H
+  #define LIB_LCD_H
 
 #if (_USE_LCD == 1)
 
@@ -128,4 +127,6 @@ public:
 };
 
 extern LCD34 lcd;
+#endif
+
 #endif

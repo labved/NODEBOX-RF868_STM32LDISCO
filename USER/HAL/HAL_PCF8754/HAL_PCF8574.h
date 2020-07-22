@@ -2,6 +2,9 @@
 #include "Settings.h"
 #include "Shortcodes.h"
 
+#ifndef HAL_IOEXP_H
+#define HAL_IOEXP_H
+  
 #ifndef _USE_IOEXP
   #define _USE_IOEXP
 #endif
@@ -87,5 +90,7 @@ private:
 extern HAL_PCF8574 ioexp8;
 
 // -- END OF FILE --
+
+#endif
 
 #endif

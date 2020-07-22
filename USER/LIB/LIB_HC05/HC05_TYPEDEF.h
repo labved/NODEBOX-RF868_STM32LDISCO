@@ -1,9 +1,7 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_BT
-#define _USE_BT
-#endif
+#ifdef LIB_HC05_H
 
 #if (_USE_BT == 1)
 
@@ -89,5 +87,7 @@ enum HC05_State
 enum HC05_Mode { HC05_MODE_DATA = 0, HC05_MODE_COMMAND = 1 };
 
 extern HC05_Result m_errCode;
+
+#endif
 
 #endif

@@ -14,9 +14,8 @@ For the details, please refer to the datasheet of CC1100/CC1101.
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_FLASH
-  #define _USE_FLASH
-#endif
+#ifdef LIB_FLASH_H
+
 
 #if(_USE_FLASH==1)
 
@@ -559,5 +558,7 @@ void LIB_QFLASH::addressto3BYTES(uint32_t addrs, uchar *val)
 }
 
 LIB_QFLASH qFlash;
+
+#endif
 
 #endif

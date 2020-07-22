@@ -1,10 +1,8 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_FLASH
-#define _USE_FLASH
-#endif
-
+#ifndef LIB_FLASH_H
+#define LIB_FLASH_H
 #if (_USE_FLASH == 1)
 
 //*************************************** DEFINE **************************************************//
@@ -96,5 +94,7 @@ public:
 };
 
 extern LIB_QFLASH qFlash;
+
+#endif
 
 #endif

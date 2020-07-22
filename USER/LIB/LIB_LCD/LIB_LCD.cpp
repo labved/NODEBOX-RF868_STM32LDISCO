@@ -14,9 +14,8 @@
 #include "stm32l1xx.h"
 #include "Settings.h"
 
-#ifndef _USE_LCD
-#define _USE_LCD
-#endif
+#ifdef LIB_LCD_H
+
 
 #if (_USE_LCD == 1)
 
@@ -600,5 +599,7 @@ void LCD34::write_com_number(uchar x, uchar y, uchar *n, uchar k)
 		y++;
 	}
 }
+
+#endif
 
 #endif

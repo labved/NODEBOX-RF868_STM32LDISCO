@@ -1,6 +1,7 @@
 #include "stm32l1xx.h"  
 #include "Settings.h"
 
+
 #ifndef SIM800C_TYPEDEF_H
   #define SIM800C_TYPEDEF_H
 
