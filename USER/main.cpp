@@ -20,9 +20,6 @@ NODEBOX_RF868 node;
 LIB_MODEL gen;
 char msg[255] = "TESTING";
 
-//testing githhub
-//Viveks inputs
-
 int main()
 {
     __enable_interrupt();
