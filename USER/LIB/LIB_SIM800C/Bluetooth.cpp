@@ -19,10 +19,10 @@ extern Sim80x_t                 Sim80x;
 
 #if (_SIM80X_USE_BLUETOOTH==1)
 /****************************************************************
-*FUNCTION NAME:GSM_IRQHandler
-*FUNCTION     :GSM_IRQHandler
-*INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
-*OUTPUT       :none
+*FUNCTION NAME:Bluetooth_setPower
+*FUNCTION     :eurn on bluetooth
+*INPUT        :TurnOn
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::Bluetooth_setPower(bool TurnOn)
 {
