@@ -17,5 +17,6 @@ void clearbuffer(char *data, unsigned int size);
 void startOperation(unsigned long timeout);
 bool isOperationTimedOut(void);
 unsigned long operationDuration(void);
+uint32_t HAL_GetTick(void); // NO FUNCTIONED DEFINED
 
 #endif

@@ -116,7 +116,7 @@ void HAL_SIM800C::flowControl(void)
 /****************************************************************
 *FUNCTION NAME:putc
 *FUNCTION     :send data in UART
-*INPUT        : ch
+*INPUT        :ch
 *OUTPUT       :void
 ****************************************************************/
 void  HAL_SIM800C::putc(byte ch)                        
@@ -135,7 +135,7 @@ void  HAL_SIM800C::putc(byte ch)
 *INPUT        :void
 *OUTPUT       :byte
 ****************************************************************/
-byte  HAL_SIM800C::getc(void)                            
+byte HAL_SIM800C::getc(void)                            
 { 
   while (!(USART_GetFlagStatus(GSM_USART_CH, USART_FLAG_RXNE)));
     
@@ -145,10 +145,10 @@ byte  HAL_SIM800C::getc(void)
 /****************************************************************
 *FUNCTION NAME:HAL_UART_Transmit
 *FUNCTION     :transmit block of data
-*INPUT        :data,size, timeout;
+*INPUT        :data, size, timeout
 *OUTPUT       :void
 ****************************************************************/
-void HAL_SIM800C::HAL_UART_Transmit(uint8_t *data, uint8_t size,uint8_t timeout)
+void HAL_SIM800C::HAL_UART_Transmit(uint8_t *data, uint8_t size, uint8_t timeout)
 {
   char temp;
   for(uint8_t i=0;i<size;i++)
@@ -162,7 +162,7 @@ void HAL_SIM800C::HAL_UART_Transmit(uint8_t *data, uint8_t size,uint8_t timeout)
 
 /****************************************************************
 *FUNCTION NAME:gpioInit
-*FUNCTION     :GPIO pins
+*FUNCTION     :Initialize GPIO pins
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
@@ -207,7 +207,7 @@ void HAL_SIM800C::gpioInit(void)
 
 /****************************************************************
 *FUNCTION NAME:uartInit
-*FUNCTION     :USART pins 
+*FUNCTION     :Initialize USART pins 
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
@@ -215,7 +215,6 @@ void HAL_SIM800C::uartInit(void)
 {
   
   RCC_AHBPeriphClockCmd(GSM_RCC_TX, ENABLE); // Enable GPIO clock  
-  RCC_APB1PeriphClockCmd(GSM_RCC_APB, ENABLE); // Enable USART clock
 
   // GPIO Setting for TX
   GPIO_InitTypeDef   GSM_GPIO_InitStruct;
@@ -244,6 +243,8 @@ void HAL_SIM800C::uartInit(void)
   
   // UART Setting
   USART_DeInit(GSM_USART_CH);
+
+  RCC_APB1PeriphClockCmd(GSM_RCC_APB, ENABLE); // Enable USART clock
   
   USART_InitTypeDef  GSM_USART_InitStruct;        
 
@@ -258,6 +259,8 @@ void HAL_SIM800C::uartInit(void)
   
   USART_Cmd(GSM_USART_CH, ENABLE);
   
+  // INTERRUPT SETUP
+  /*
   NVIC_InitTypeDef   NVIC_GSM_InitStruct;
 
   NVIC_GSM_InitStruct.NVIC_IRQChannel = GSM_USART_CH_IRQn;
@@ -267,18 +270,17 @@ void HAL_SIM800C::uartInit(void)
 
   NVIC_Init(&NVIC_GSM_InitStruct);
   
-// NVIC_SetPriority(USART2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
-//NVIC_EnableIRQ(USART2_IRQn);
+  // NVIC_SetPriority(USART2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
+  //NVIC_EnableIRQ(USART2_IRQn);
   
   USART_ITConfig(GSM_USART_CH, USART_IT_RXNE, ENABLE);
-  
-  USART_Cmd(GSM_USART_CH, ENABLE);
+  */  
     
 }
 
 /****************************************************************
 *FUNCTION NAME:hardReset
-*FUNCTION     :Reset Pin
+*FUNCTION     :Reset via GPIO
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
@@ -293,7 +295,7 @@ void HAL_SIM800C::hardReset(void)
 
 /****************************************************************
 *FUNCTION NAME:write8
-*FUNCTION     :write8
+*FUNCTION     :write only 1 byte of hex
 *INPUT        :data
 *OUTPUT       :void
 ****************************************************************/
@@ -308,18 +310,18 @@ void  HAL_SIM800C::write8(uint8_t *data) // ASK BHARAT FOR CONFIRMATION
     while(_SIM80X_USART.hdmatx->State != HAL_DMA_STATE_READY)
       delay_ms(10);
   #else
-    HAL_UART_Transmit( data, 1,100);
+    HAL_UART_Transmit(data, 1,100);
     delay_ms(10);
   #endif
 }
 
 /****************************************************************
 *FUNCTION NAME:writeRaw
-*FUNCTION     :writeRaw
+*FUNCTION     :write multiple bytes in hex
 *INPUT        :data, len
 *OUTPUT       :void
 ****************************************************************/
-void  HAL_SIM800C::writeRaw(uint8_t *data,uint16_t len)
+void  HAL_SIM800C::writeRaw(uint8_t *data, uint16_t len)
 {
   USART_ITConfig(GSM_USART_CH, USART_IT_RXNE, ENABLE);	
 
@@ -338,11 +340,11 @@ void  HAL_SIM800C::writeRaw(uint8_t *data,uint16_t len)
 
 /****************************************************************
 *FUNCTION NAME:writeString
-*FUNCTION     :Transmit character untill null character
+*FUNCTION     :Transmit bytes until null character
 *INPUT        :str
 *OUTPUT       :void
 ****************************************************************/
-void	HAL_SIM800C::writeString(char *str)
+void	HAL_SIM800C::writeString(char const *str)
 {
   USART_ITConfig(GSM_USART_CH, USART_IT_RXNE, ENABLE);	
 
@@ -362,7 +364,7 @@ void	HAL_SIM800C::writeString(char *str)
 *FUNCTION NAME:sendAtCommand
 *FUNCTION     :transmit and read response at commands in uart
 *INPUT        :ATcommand,wait_time, HowMuchAnswers,...
-*OUTPUT       :byte
+*OUTPUT       :index
 ****************************************************************/
 uint8_t  HAL_SIM800C::sendAtCommand(char const *AtCommand,int32_t  MaxWaiting_ms,uint8_t const HowMuchAnswers,...)
 {
@@ -425,12 +427,12 @@ uint16_t HAL_SIM800C::readLine(char *buffer, size_t buffer_size)
   uint16_t index = 0;
   uint16_t cnt = 0;
   char *temp2;
-  
+  uint8_t i, size;
+    
   if (!buffer || buffer_size <= 1)
    return 0;
 
   char *p = buffer;
-  *p = 0;
   
   while(index < buffer_size)
   {
@@ -438,29 +440,26 @@ uint16_t HAL_SIM800C::readLine(char *buffer, size_t buffer_size)
       goto EXIT_LOOP;
     else
       *p = getc();
-    
-       
+         
    if(*p == '\n')
    {
      cnt++;
      
      if(cnt%2 == 0)
      {
-       temp1[8] = p[0];
-       temp1[7] = p[-1];
-       temp1[6] = p[-2];
-       temp1[5] = p[-3];
-       temp1[4] = p[-4];
-       temp1[3] = p[-5];
-       temp1[2] = p[-6];
-       temp1[1] = p[-7];
-       temp1[0] = p[-8];
+      size = sizeof(temp1)-1;
+      for( i=0;i<=size;i++)
+        temp1[size-i] = p[-i];
 
+     i=0;
+      
+      while(temp1[i] =='\0')
+        temp1[i++]+=1;
+      
       temp2 = strstr(temp1, "\r\nOK\r\n");
       if(strncmp(temp2, "\r\nOK\r\n", strlen("\r\nOK\r\n")) == 0)
         goto EXIT_LOOP;
         
-          
       temp2 = strstr(temp1, "\r\nERROR\r\n");
       if(strncmp( temp2, "\r\nERROR\r\n", strlen("\r\nERROR\r\n")) == 0)
         return 0;

@@ -20,9 +20,6 @@ NODEBOX_RF868 node;
 LIB_MODEL gen;
 char msg[255] = "TESTING";
 
-// vivek comments1
-// bharath comments
-
 int main()
 {
     __enable_interrupt();
@@ -34,7 +31,7 @@ int main()
     //node.testW25Q();
     //node.testSDMMC(msg);
     //node.testLCD();
-    //node.testHC05();
+    node.testHC05();
     //node.testIOEXP8();
     node.testGSM();
     //node.testLORA();

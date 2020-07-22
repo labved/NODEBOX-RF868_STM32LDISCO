@@ -17,23 +17,22 @@
 
 class LIB_SIM800C   
 {
-  public:
-    void Init(void);
-    void test(void);
+  private:
+    void PoweronReset(void);
+    void RegConfigSettings(void);
     void debugTerminal(char *msg);
 
-    // to move to functions.h
-    uint32_t HAL_GetTick(void); // NO FUNCTIONED DEFINED
-
-    // SIM800C LIBRARY
-    void                    startSim80xTask(void const * argument);
+  public:
+    void                    test(void);  // to be deleted
+    void                    Init(void);
+    void                    softReset(void);
+    bool                    probe(unsigned long timeout = HC05_DEFAULT_TIMEOUT);
+    void	                  rxCallBack(void);
     void                    startSim80xBuffTask(void const * argument);
     void                    bufferProcess(void);
-    void	                  rxCallBack(void);
-    
+    void                    startSim80xTask(void const * argument);
 
-    void                    initValue(void);
-    void		                init(osPriority Priority);
+    // SIM800C LIBRARY     
     void                    saveParameters(void);
     void                    setPower(bool TurnOn);
     void                    setFactoryDefault(void);

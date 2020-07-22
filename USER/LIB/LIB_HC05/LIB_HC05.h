@@ -17,27 +17,27 @@ typedef void (*InquiryCallback)(const BluetoothAddress &address);
 
 class LIB_HC05
 {
-public:
-  void Init(void);
+private:
   void PoweronReset(void);
   void RegConfigSettings(void);
   void setAtMode(void);
   void setDataMode(void);
   void debugTerminal(char *msg);
 
+
 public:
   //HardwareSerial *m_uart;
   unsigned long m_timeout;
   unsigned long m_ticksAtStart;
- 
 
-  // AT COMMANDS METHODS
-  void testCommand(void);
+  void test(void);    // to be deleted 
+  void Init(void);
   bool softReset(unsigned long timeout = HC05_DEFAULT_TIMEOUT);
   bool probe(unsigned long timeout = HC05_DEFAULT_TIMEOUT);
-  
+
+  // AT COMMANDS METHODS
+  bool setFactoryDefault(unsigned long timeout = HC05_DEFAULT_TIMEOUT);
   bool getVersion(char *buffer, size_t buffer_size, unsigned long timeout = HC05_DEFAULT_TIMEOUT);
-  bool restoreDefaults(unsigned long timeout = HC05_DEFAULT_TIMEOUT);
   bool getAddress(BluetoothAddress &address, unsigned long timeout = HC05_DEFAULT_TIMEOUT);
   bool getName(char *buffer, unsigned long timeout = HC05_DEFAULT_TIMEOUT);
   bool setName(const char *name, unsigned long timeout = HC05_DEFAULT_TIMEOUT);

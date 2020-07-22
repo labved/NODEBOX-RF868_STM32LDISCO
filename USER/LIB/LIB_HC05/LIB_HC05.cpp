@@ -21,87 +21,12 @@
 HAL_HC05 hc05;
 
 /****************************************************************
-*FUNCTION NAME:PoweronReset
-*FUNCTION     :Switch reset //details refer datasheet of CC1101/CC1100//
-*INPUT        :none
-*OUTPUT       :none
-****************************************************************/
-void LIB_HC05::PoweronReset(void)
-{
-    hc05.hardReset();
-    
-}
-
-/****************************************************************
-*FUNCTION NAME:RegConfigSettings
-*FUNCTION     :HC05 register config //details refer datasheet of ST7586S//
-*INPUT        :none
-*OUTPUT       :none
-****************************************************************/
-void LIB_HC05::RegConfigSettings(void)
-{
-  setAtMode();
-  restoreDefaults(200);
-
-}
-
-/****************************************************************
-*FUNCTION NAME:Init
-*FUNCTION     :HC05 initialization
-*INPUT        :none
-*OUTPUT       :none
-****************************************************************/
-void LIB_HC05::Init()
-{
-  hc05.gpioInit();
-  hc05.uartInit(HC05_BAUDRATE_AT);
-  PoweronReset();
-
-  RegConfigSettings();
-}
-/****************************************************************
-*FUNCTION NAME:setATMode
-*FUNCTION     :set device to respond to AT Command Mode
-*INPUT        :none
-*OUTPUT       :none
-****************************************************************/
- void LIB_HC05::setAtMode(void)
- { 
-   GPIO_ResetBits(HC05_GPIO_EN, HC05_PIN_EN);      //  EN pulled to LOW
-   delay_ms(100);
-   GPIO_SetBits(HC05_GPIO_KEY, HC05_PIN_KEY);      //  KEY PIN HIGH TO ON COMMAND AT MODE
-    
-   delay_ms(300);
-    
-   GPIO_SetBits(HC05_GPIO_EN, HC05_PIN_EN);       // EN floating to HIGH
-   delay_ms(1000);   
- }
- /****************************************************************
-*FUNCTION NAME:setDataMode
-*FUNCTION     :set device to respond to Data Mode
-*INPUT        :none
-*OUTPUT       :none
-****************************************************************/
-void LIB_HC05::setDataMode(void)
-{
-  GPIO_ResetBits(HC05_GPIO_EN, HC05_PIN_EN);      //  POWER OFF
-  delay_ms(100);
-  GPIO_ResetBits(HC05_GPIO_KEY, HC05_PIN_KEY);    //  KEY PIN LOW TO ON DATA MODE
-
-  delay_ms(300);
-
-  GPIO_SetBits(HC05_GPIO_EN, HC05_PIN_EN);         //POWER ON
-  delay_ms(1000);   
-
-}
-
-/****************************************************************
 *FUNCTION NAME:testCommand
 *FUNCTION     :HC05 initialization
 *INPUT        :none
 *OUTPUT       :none
 ****************************************************************/
-void LIB_HC05::testCommand(void)
+void LIB_HC05::test(void)
 {
   char      *strStart,*str1;
   setAtMode();
@@ -121,6 +46,67 @@ void LIB_HC05::testCommand(void)
   memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
                      
 }
+
+/****************************************************************
+*FUNCTION NAME:PoweronReset
+*FUNCTION     :Switch reset //details refer datasheet of CC1101/CC1100//
+*INPUT        :none
+*OUTPUT       :none
+****************************************************************/
+void LIB_HC05::PoweronReset(void)
+{
+    hc05.hardReset(); 
+}
+
+/****************************************************************
+*FUNCTION NAME:RegConfigSettings
+*FUNCTION     :HC05 register config //details refer datasheet of ST7586S//
+*INPUT        :none
+*OUTPUT       :none
+****************************************************************/
+void LIB_HC05::RegConfigSettings(void)
+{
+  setAtMode();
+  restoreDefaults(200);
+}
+
+/****************************************************************
+*FUNCTION NAME:setATMode
+*FUNCTION     :set device to respond to AT Command Mode
+*INPUT        :none
+*OUTPUT       :none
+****************************************************************/
+ void LIB_HC05::setAtMode(void)
+ { 
+   GPIO_ResetBits(HC05_GPIO_EN, HC05_PIN_EN);      //  EN pulled to LOW
+   delay_ms(100);
+   GPIO_SetBits(HC05_GPIO_KEY, HC05_PIN_KEY);      //  KEY PIN HIGH TO ON COMMAND AT MODE
+    
+   delay_ms(300);
+    
+   GPIO_SetBits(HC05_GPIO_EN, HC05_PIN_EN);       // EN floating to HIGH
+   delay_ms(1000);   
+ }
+
+ /****************************************************************
+*FUNCTION NAME:setDataMode
+*FUNCTION     :set device to respond to Data Mode
+*INPUT        :none
+*OUTPUT       :none
+****************************************************************/
+void LIB_HC05::setDataMode(void)
+{
+  GPIO_ResetBits(HC05_GPIO_EN, HC05_PIN_EN);      //  POWER OFF
+  delay_ms(100);
+  GPIO_ResetBits(HC05_GPIO_KEY, HC05_PIN_KEY);    //  KEY PIN LOW TO ON DATA MODE
+
+  delay_ms(300);
+
+  GPIO_SetBits(HC05_GPIO_EN, HC05_PIN_EN);         //POWER ON
+  delay_ms(1000);   
+
+}
+
 /****************************************************************
 *FUNCTION NAME:debugTerminal
 *FUNCTION     :Prints response to terminal IO
@@ -149,16 +135,18 @@ void LIB_HC05::debugTerminal(char *msg)
 }
 
 /****************************************************************
-*FUNCTION NAME:probe
-*FUNCTION     :probe
-*INPUT        :timeout
-*OUTPUT       :bool
+*FUNCTION NAME:Init
+*FUNCTION     :HC05 initialization
+*INPUT        :none
+*OUTPUT       :none
 ****************************************************************/
-bool LIB_HC05::probe(unsigned long timeout)
+void LIB_HC05::Init()
 {
-  startOperation(timeout);
-  hc05.writeCommand(0);
-  return hc05.readOperationResult();
+  hc05.gpioInit();
+  hc05.uartInit(HC05_BAUDRATE_AT);
+  PoweronReset();
+
+  RegConfigSettings();
 }
 
 /****************************************************************
@@ -171,6 +159,19 @@ bool LIB_HC05::softReset(unsigned long timeout)
 {
   //PGM_STRING_MAPPED_TO_RAM(reset_cmd, "RESET");
   return (hc05.simpleCommand(AT_RESET, 0, timeout));
+}
+
+/****************************************************************
+*FUNCTION NAME:probe
+*FUNCTION     :probe
+*INPUT        :timeout
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_HC05::probe(unsigned long timeout)
+{
+  startOperation(timeout);
+  hc05.writeCommand(0);
+  return hc05.readOperationResult();
 }
 
 /****************************************************************
@@ -210,19 +211,16 @@ bool LIB_HC05::getVersion(char *buffer, size_t buffer_size, unsigned long timeou
   return hc05.readOperationResult();
 }
 
-
 /****************************************************************
 *FUNCTION NAME:restoreDefaults
 *FUNCTION     :restoreDefaults// check with bharath
 *INPUT        :timeout
 *OUTPUT       :bool
 ****************************************************************/
-
-bool LIB_HC05::restoreDefaults(unsigned long timeout)
+bool LIB_HC05::setFactoryDefault(unsigned long timeout)
 {
   return hc05.sendAtCommand("AT+ORGL\r\n", 200, 0);
 }
-
 
 /****************************************************************
 *FUNCTION NAME:getAddress
@@ -230,13 +228,11 @@ bool LIB_HC05::restoreDefaults(unsigned long timeout)
 *INPUT        :address:BluetoothAddress,timeout
 *OUTPUT       :bool
 ****************************************************************/
-
 bool LIB_HC05::getAddress(BluetoothAddress &address, unsigned long timeout)
 {
   //PGM_STRING_MAPPED_TO_RAM(command_name, "ADDR");
   return hc05.readAddressWithCommand(address, AT_ADDR, timeout);
 }
-
 
 /****************************************************************
 *FUNCTION NAME:getName

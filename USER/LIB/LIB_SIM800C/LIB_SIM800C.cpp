@@ -21,18 +21,6 @@ Sim80x_t                        Sim80x;
 //osThreadId    Sim80xBuffTaskHandle;   // RTOS
 
 /****************************************************************
-*FUNCTION NAME:Init
-*FUNCTION     :Initialisation
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void LIB_SIM800C::Init(void)  
-{
-  sim800c.gpioInit();
-  sim800c.uartInit();
-}
-
-/****************************************************************
 *FUNCTION NAME:test
 *FUNCTION     :test codes
 *INPUT        :void
@@ -64,6 +52,91 @@ void LIB_SIM800C::test(void)
   //sim800c.writeString("AT\r\n");
     //sim800c.init(osprior);
   //getRingVol();  
+}
+
+/****************************************************************
+*FUNCTION NAME:Init
+*FUNCTION     :Initialisation
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::Init(void)  
+{
+  sim800c.gpioInit();
+  sim800c.uartInit();
+  PoweronReset();
+  RegConfigSettings();
+}
+
+/****************************************************************
+*FUNCTION NAME:PoweronReset
+*FUNCTION     :Switch reset //details refer datasheet of CC1101/CC1100//
+*INPUT        :none
+*OUTPUT       :none
+****************************************************************/
+void LIB_SIM800C::PoweronReset(void)
+{
+  #if (_SIM80X_USE_POWER_KEY==1)  
+    GPIO_WriteBit(GSM_GPIO_PWR,GSM_PIN_PWR,Bit_SET);
+  #else
+    delay_ms(1000);
+  #endif
+
+  hc05.hardReset(); 
+}
+
+/****************************************************************
+*FUNCTION NAME:RegConfigSettings
+*FUNCTION     :HC05 register config //details refer datasheet of ST7586S//
+*INPUT        :none
+*OUTPUT       :none
+****************************************************************/
+void LIB_SIM800C::RegConfigSettings(void)
+{
+  memset(&Sim80x,0,sizeof(Sim80x));
+  memset(Sim80x.UsartRxBuffer,0,_SIM80X_BUFFER_SIZE);
+  USART_ITConfig(GSM_USART_CH, USART_IT_RXNE, ENABLE);	
+        
+  //osThreadDef(Sim80xTask, startSim80xTask, Priority, 0, 256);         //RTOS
+  //Sim80xTaskHandle = osThreadCreate(osThread(Sim80xTask), NULL);        //RTOS
+  //osThreadDef(Sim80xBuffTask, startSim80xBuffTask, Priority, 0, 256);   //RTOS
+  //Sim80xBuffTaskHandle = osThreadCreate(osThread(Sim80xBuffTask), NULL);        //RTOS
+        
+  for(uint8_t i=0 ;i<10 ;i++)  
+  {
+    if(sim800c.sendAtCommand("AT\r\n",200,1,"AT\r\r\nOK\r\n") == 1)
+      break;
+    delay_ms(200);
+  }  
+  
+  setPower(true); 
+  setFactoryDefault(200);
+
+  sim800c.sendAtCommand("ATE1\r\n",200,1,"ATE1\r\r\nOK\r\n");
+  sim800c.sendAtCommand("AT+COLP=1\r\n",200,1,"AT+COLP=1\r\r\nOK\r\n");
+  sim800c.sendAtCommand("AT+CLIP=1\r\n",200,1,"AT+CLIP=1\r\r\nOK\r\n");
+  sim800c.sendAtCommand("AT+FSHEX=0\r\n",200,1,"AT+FSHEX=0\r\r\nOK\r\n");
+  sim800c.sendAtCommand("AT+CREG=1\r\n",200,1,"AT+CREG=1\r\r\nOK\r\n");
+  sim800c.sendAtCommand("AT+ECHO?\r\n",200,1,"\r\nOK\r\n");
+  Gsm_setMsgMemoryLocation(GsmMsgMemory_OnModule);
+  Gsm_setMsgFormat(GsmMsgFormat_Text);
+  Gsm_setMsgTextModeParameter(17,167,0,0);
+  Gsm_getMsgCharacterFormat();
+  Gsm_getMsgFormat();
+  if(Sim80x.Gsm.MsgFormat != GsmMsgFormat_Text)
+    Gsm_setMsgFormat(GsmMsgFormat_Text);
+  Gsm_getMsgServiceNumber();
+  Gsm_getMsgTextModeParameter();
+  getIMEI(NULL);
+  getLoadVol();
+  getRingVol();
+  getMicGain();
+  getToneVol();
+    #if (_SIM80X_USE_BLUETOOTH==1)
+    Bluetooth_setAutoPair(true);
+    #endif
+  sim800c.sendAtCommand("AT+CREG?\r\n",200,1,"\r\n+CREG:");  
+  //coreUserInit();
 }
 
 /****************************************************************
@@ -905,74 +978,6 @@ void LIB_SIM800C::startSim80xTask(void const * argument)
     delay_ms(100);
     
   }    
-}
-
-/****************************************************************
-*FUNCTION NAME:initValue
-*FUNCTION     :initValue
-*INPUT        :void
-*OUTPUT       :void
-****************************************************************/
-void  LIB_SIM800C::initValue(void)
-{
-  sim800c.sendAtCommand("ATE1\r\n",200,1,"ATE1\r\r\nOK\r\n");
-  sim800c.sendAtCommand("AT+COLP=1\r\n",200,1,"AT+COLP=1\r\r\nOK\r\n");
-  sim800c.sendAtCommand("AT+CLIP=1\r\n",200,1,"AT+CLIP=1\r\r\nOK\r\n");
-  sim800c.sendAtCommand("AT+FSHEX=0\r\n",200,1,"AT+FSHEX=0\r\r\nOK\r\n");
-  sim800c.sendAtCommand("AT+CREG=1\r\n",200,1,"AT+CREG=1\r\r\nOK\r\n");
-  sim800c.sendAtCommand("AT+ECHO?\r\n",200,1,"\r\nOK\r\n");
-  Gsm_setMsgMemoryLocation(GsmMsgMemory_OnModule);
-  Gsm_setMsgFormat(GsmMsgFormat_Text);
-  Gsm_setMsgTextModeParameter(17,167,0,0);
-  Gsm_getMsgCharacterFormat();
-  Gsm_getMsgFormat();
-  if(Sim80x.Gsm.MsgFormat != GsmMsgFormat_Text)
-    Gsm_setMsgFormat(GsmMsgFormat_Text);
-  Gsm_getMsgServiceNumber();
-  Gsm_getMsgTextModeParameter();
-  getIMEI(NULL);
-  getLoadVol();
-  getRingVol();
-  getMicGain();
-  getToneVol();
-    #if (_SIM80X_USE_BLUETOOTH==1)
-    Bluetooth_setAutoPair(true);
-    #endif
-  sim800c.sendAtCommand("AT+CREG?\r\n",200,1,"\r\n+CREG:");  
-  //coreUserInit();
-}
-
-/****************************************************************
-*FUNCTION NAME:init
-*FUNCTION     :init
-*INPUT        :Priority : osPriority 
-*OUTPUT       :void
-****************************************************************/
-void	LIB_SIM800C::init(osPriority Priority)
-{
-  #if (_SIM80X_USE_POWER_KEY==1)  
-      GPIO_WriteBit(GSM_GPIO_PWR,GSM_PIN_PWR,Bit_SET);
-  #else
-  delay_ms(1000);
-  #endif
-  
-  memset(&Sim80x,0,sizeof(Sim80x));
-  memset(Sim80x.UsartRxBuffer,0,_SIM80X_BUFFER_SIZE);
-  USART_ITConfig(GSM_USART_CH, USART_IT_RXNE, ENABLE);	
-        
-  //osThreadDef(Sim80xTask, startSim80xTask, Priority, 0, 256);         //RTOS
-  //Sim80xTaskHandle = osThreadCreate(osThread(Sim80xTask), NULL);        //RTOS
-  //osThreadDef(Sim80xBuffTask, startSim80xBuffTask, Priority, 0, 256);   //RTOS
-  //Sim80xBuffTaskHandle = osThreadCreate(osThread(Sim80xBuffTask), NULL);        //RTOS
-        
-  for(uint8_t i=0 ;i<10 ;i++)  
-  {
-    if(sim800c.sendAtCommand("AT\r\n",200,1,"AT\r\r\nOK\r\n") == 1)
-      break;
-    delay_ms(200);
-  }  
-  
-  setPower(true); 
 }
 
 /****************************************************************

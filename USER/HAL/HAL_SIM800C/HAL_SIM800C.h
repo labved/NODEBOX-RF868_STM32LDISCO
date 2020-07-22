@@ -33,7 +33,7 @@ class HAL_SIM800C
     void                    hardReset(void);
     void                    write8(uint8_t *data);
     void                    writeRaw(uint8_t *data, uint16_t size);
-    void	                  writeString(char *data);
+    void	                  writeString(char const *data);
     uint8_t                 sendAtCommand(char const *AtCommand,int32_t  MaxWaiting_ms,uint8_t const HowMuchAnswers,...);
     uint16_t                readLine(char *buffer, size_t buffer_size); 
 

@@ -22,8 +22,8 @@
 #include "string.h"
 #include "stdarg.h"
 
-//HC05_Result m_errorCode;
-HC05_Result m_errCode;
+extern Sim80x_t               Sim80x;
+HC05_Result                   m_errCode;
 
 #pragma location=0x1FF7FF90
 __no_init char ReservedArea[256];
@@ -54,11 +54,151 @@ void PGM_STRING_MAPPED_TO_RAM(void *name, const char *src)
 }
 */
 
+
+/****************************************************************
+*FUNCTION NAME:set2Tx
+*FUNCTION     :set UART to Tx mode
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_HC05::set2Tx(void)
+{
+  req2Rx();
+  setTxMode();
+}
+
+/****************************************************************
+*FUNCTION NAME:set2Rx
+*FUNCTION     :set UART to Rx mode
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_HC05::set2Rx(void)
+{
+  req2Tx();
+  setRxMode();
+}
+
+/****************************************************************
+*FUNCTION NAME:req2Tx
+*FUNCTION     : req2Tx
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_HC05::req2Tx(void)
+{
+  putc(XON_BYTE);
+}
+
+/****************************************************************
+*FUNCTION NAME:req2Rx
+*FUNCTION     :req2Rx
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_HC05::req2Rx(void)
+{
+  putc(XOFF_BYTE);
+}
+
+/****************************************************************
+*FUNCTION NAME:setTxMode
+*FUNCTION     :set Tx flags
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_HC05::setTxMode(void)
+{
+  //CP2102TxFlag = 1;
+  //CP2102RxFlag = 0;
+}
+
+/****************************************************************
+*FUNCTION NAME:setRxMode
+*FUNCTION     :set Rx flags
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_HC05::setRxMode(void)
+{
+  //CP2102TxFlag = 0;
+  //CP2102RxFlag = 1 ; 
+}
+
+/****************************************************************
+*FUNCTION NAME:flowControl
+*FUNCTION     :flowControl
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void HAL_HC05::flowControl(void)
+{
+  byte temp;
+   
+  temp = getc();
+  
+  if(temp == XOFF_BYTE)
+  {
+    setRxMode();
+  } 
+  else if(temp == XON_BYTE)
+  {
+    setTxMode();
+  }
+}
+
+/****************************************************************
+*FUNCTION NAME:putc
+*FUNCTION     :send data in UART
+*INPUT        :ch
+*OUTPUT       :void
+****************************************************************/
+void  HAL_HC05::putc(byte ch)                        
+{
+  while(!(USART_GetFlagStatus(HC05_USART_CH, USART_FLAG_TXE)));
+
+  USART_SendData(HC05_USART_CH, ch);
+  
+  while(!(USART_GetFlagStatus(HC05_USART_CH, USART_FLAG_TC)));
+  
+}
+
+/****************************************************************
+*FUNCTION NAME:getc
+*FUNCTION     :recieve data in UART
+*INPUT        :void
+*OUTPUT       :byte
+****************************************************************/
+byte  HAL_HC05::getc(void)                            
+{ 
+  while (!(USART_GetFlagStatus(HC05_USART_CH, USART_FLAG_RXNE)));
+    
+  return USART_ReceiveData(HC05_USART_CH); 
+}
+
+/****************************************************************
+*FUNCTION NAME:HAL_UART_Transmit
+*FUNCTION     :transmit block of data
+*INPUT        :data, size, timeout
+*OUTPUT       :void
+****************************************************************/
+void HAL_HC05::HAL_UART_Transmit(uint8_t *data, uint8_t size,uint8_t timeout)
+{
+  char temp;
+  for(uint8_t i=0;i<size;i++)
+  {
+      temp = *data;
+      putc(temp);
+      data++;
+  }
+
+}
+
 /****************************************************************
 *FUNCTION NAME:gpioInit
-*FUNCTION     :Init
-*INPUT        :none
-*OUTPUT       :none
+*FUNCTION     :Initialize GPIO pins
+*INPUT        :void
+*OUTPUT       :void
 ****************************************************************/
 void HAL_HC05::gpioInit(void)                             
 {
@@ -90,7 +230,6 @@ void HAL_HC05::gpioInit(void)
 
   GPIO_Init(HC05_GPIO_EN, &HC05_GPIO_EN_InitStruct);
   
-
   // Setting GPIO for KEY
   RCC_AHBPeriphClockCmd(HC05_RCC_KEY, ENABLE); // Enable GPIO clock 
   RCC_APB2PeriphClockCmd(HC05_KEY_SYSCONFIG_APB, ENABLE); // Enable SYSCFG clock 
@@ -111,38 +250,48 @@ void HAL_HC05::gpioInit(void)
    GPIO_SetBits(HC05_GPIO_EN, HC05_PIN_EN);       // EN floating to HIGH
    delay_ms(1000);   
 }
+
 /****************************************************************
 *FUNCTION NAME:uartInit
-*FUNCTION     :initialise the UART
-*INPUT        :none
-*OUTPUT       :none
+*FUNCTION     :Initialize USART pins 
+*INPUT        :void
+*OUTPUT       :void
 ****************************************************************/
 void HAL_HC05::uartInit(uint16_t baudrate)                             
 {
-  
   RCC_AHBPeriphClockCmd(HC05_RCC_TX, ENABLE); // Enable GPIO clock  
   RCC_AHBPeriphClockCmd(HC05_RCC_RX, ENABLE); // Enable GPIO clock  
 
-  RCC_APB2PeriphClockCmd(HC05_RCC_APB_UART, ENABLE); // Enable USART clock
-
-  // GPIO Setting for TX RX
+  // GPIO Setting for TX
   GPIO_InitTypeDef   HC05_GPIO_InitStruct;
 
-  HC05_GPIO_InitStruct.GPIO_Pin = HC05_PIN_TX | HC05_PIN_RX;
+  HC05_GPIO_InitStruct.GPIO_Pin = HC05_PIN_TX;
   HC05_GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
   HC05_GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-  HC05_GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+  HC05_GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
   HC05_GPIO_InitStruct.GPIO_Speed = GPIO_Speed_10MHz;
   
-  GPIO_Init(HC05_GPIO, &HC05_GPIO_InitStruct);
-  GPIO_Init(HC05_GPIO, &HC05_GPIO_InitStruct);
+  GPIO_Init(HC05_GPIO_TX, &HC05_GPIO_InitStruct);
+
+  // GPIO Setting for RX
+  RCC_AHBPeriphClockCmd(HC05_RCC_RX, ENABLE); // Enable GPIO clock  
+
+  HC05_GPIO_InitStruct.GPIO_Pin = HC05_PIN_RX;
+  HC05_GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+  HC05_GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
+  HC05_GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  HC05_GPIO_InitStruct.GPIO_Speed = GPIO_Speed_10MHz;
   
-  GPIO_PinAFConfig(HC05_GPIO, HC05_AF_PIN_TX, HC05_GPIO_AF);
-  GPIO_PinAFConfig(HC05_GPIO, HC05_AF_PIN_RX, HC05_GPIO_AF);
+  GPIO_Init(HC05_GPIO_RX, &HC05_GPIO_InitStruct);
+
+  GPIO_PinAFConfig(HC05_GPIO_TX, HC05_AF_PIN_TX, HC05_GPIO_AF);
+  GPIO_PinAFConfig(HC05_GPIO_RX, HC05_AF_PIN_RX, HC05_GPIO_AF);
     
   // UART Setting
   USART_DeInit(HC05_USART_CH);
-  
+
+  RCC_APB2PeriphClockCmd(HC05_RCC_APB_UART, ENABLE); // Enable USART clock
+
   USART_InitTypeDef  HC05_USART_InitStruct;        
 
   HC05_USART_InitStruct.USART_BaudRate = baudrate;
@@ -155,9 +304,11 @@ void HAL_HC05::uartInit(uint16_t baudrate)
   USART_Init(HC05_USART_CH, &HC05_USART_InitStruct);
   
   USART_Cmd(HC05_USART_CH, ENABLE);
-   
-    /*
-  //NVIC_InitTypeDef   NVIC_InitStruct;
+
+
+  // INTERRUPT SETUP
+  /*
+  NVIC_InitTypeDef   NVIC_InitStruct;
 
   USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
 
@@ -170,11 +321,12 @@ void HAL_HC05::uartInit(uint16_t baudrate)
   */
  
 }
+
 /****************************************************************
 *FUNCTION NAME:hardReset
-*FUNCTION     :Reset Pin
-*INPUT        :none
-*OUTPUT       :none
+*FUNCTION     :Reset via GPIO
+*INPUT        :void
+*OUTPUT       :void
 ****************************************************************/
 void HAL_HC05::hardReset(void)
 {
@@ -185,189 +337,87 @@ void HAL_HC05::hardReset(void)
   
   m_errCode = HC05_OK;
 }
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :data : data to send
-*OUTPUT       :none
-****************************************************************/
-void HAL_HC05::set2Tx(void)
-{
-  req2Rx();
-  setTxMode();
-}
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :data : data to send
-*OUTPUT       :none
-****************************************************************/
-void HAL_HC05::set2Rx(void)
-{
-  req2Tx();
-  setRxMode();
-}
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :data : data to send
-*OUTPUT       :none
-****************************************************************/
-void HAL_HC05::req2Tx(void)
-{
-  putc(XON_BYTE);
-}
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :data : data to send
-*OUTPUT       :none
-****************************************************************/
-void HAL_HC05::req2Rx(void)
-{
-  putc(XOFF_BYTE);
-}
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :data : data to send
-*OUTPUT       :none
-****************************************************************/
-void HAL_HC05::setTxMode(void)
-{
-  //CP2102TxFlag = 1;
-  //CP2102RxFlag = 0;
-}
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :data : data to send
-*OUTPUT       :none
-****************************************************************/
-void HAL_HC05::setRxMode(void)
-{
-  //CP2102TxFlag = 0;
-  //CP2102RxFlag = 1 ; 
-}
-/****************************************************************
-*FUNCTION NAME:set2Tx
-*FUNCTION     :send data in UART
-*INPUT        :data : data to send
-*OUTPUT       :none
-****************************************************************/
-void HAL_HC05::flowControl(void)
-{
-  byte temp;
-   
-  temp = getc();
-  
-  if(temp == XOFF_BYTE)
-  {
-    setRxMode();
-  } 
-  else if(temp == XON_BYTE)
-  {
-    setTxMode();
-  }
-}
-/****************************************************************
-*FUNCTION NAME:write
-*FUNCTION     :send data in UART
-*INPUT        :data : data to send
-*OUTPUT       :none
-****************************************************************/
-void  HAL_HC05::putc(byte ch)                        
-{
-  while(!(USART_GetFlagStatus(HC05_USART_CH, USART_FLAG_TXE)));
 
-  USART_SendData(HC05_USART_CH, ch);
-  //delay_us(500);
-}
-/****************************************************************
-*FUNCTION NAME:write
-*FUNCTION     :send data in UART
-*INPUT        :data : data to send
-*OUTPUT       :none
-****************************************************************/
-byte  HAL_HC05::getc(void)                            
-{
-  while (!(USART_GetFlagStatus(HC05_USART_CH, USART_FLAG_RXNE)));
-
-  return USART_ReceiveData(HC05_USART_CH);
-}
-/****************************************************************
-*FUNCTION NAME:HAL_UART_Transmit
-*FUNCTION     :HAL_UART_Transmit
-*INPUT        :USARTx,str,size, timeout;
-*OUTPUT       :none
-****************************************************************/
-void HAL_HC05::HAL_UART_Transmit(USART_TypeDef* USARTx,uint8_t *str,
-uint8_t size,uint8_t timeout)
-{
-  char temp;
-  for(uint8_t i=0;i<size;i++)
-  {
-      temp = *str;
-      putc(temp);
-      str++;
-  }
-
-}
 /****************************************************************
 *FUNCTION NAME:write8
-*FUNCTION     :write8
-*INPUT        :unsigned i, char *a, unsigned r
-*OUTPUT       :byte
+*FUNCTION     :write only 1 byte of hex
+*INPUT        :data
+*OUTPUT       :void
 ****************************************************************/
 void  HAL_HC05::write8(uint8_t *data) // ASK BHARAT FOR CONFIRMATION
 {
-  USART_ITConfig(LORA_USART_CH, USART_IT_RXNE, ENABLE);	
+  USART_ITConfig(HC05_USART_CH, USART_IT_RXNE, ENABLE);	
 
   #if (_SIM80X_DMA_TRANSMIT==1)
     while(_SIM80X_USART.hdmatx->State != HAL_DMA_STATE_READY)
       delay_ms(10);
-      HAL_UART_Transmit_DMA(&_SIM80X_USART,Data,len);
+      HAL_UART_Transmit_DMA(&_SIM80X_USART,data,len);
     while(_SIM80X_USART.hdmatx->State != HAL_DMA_STATE_READY)
       delay_ms(10);
   #else
-    HAL_UART_Transmit(LORA_USART_CH, data, 1,100);
-    //delay_ms(10);
+    HAL_UART_Transmit(data, 1,100);
+    delay_ms(10);
   #endif
 }
+
 /****************************************************************
 *FUNCTION NAME:writeRaw
-*FUNCTION     :writeRaw
-*INPUT        :unsigned i, char *a, unsigned r
-*OUTPUT       :byte
+*FUNCTION     :write multiple bytes in hex
+*INPUT        :data, len
+*OUTPUT       :void
 ****************************************************************/
 void  HAL_HC05::writeRaw(uint8_t *data, uint16_t len)
 {
-  USART_ITConfig(LORA_USART_CH, USART_IT_RXNE, ENABLE);	
+  USART_ITConfig(HC05_USART_CH, USART_IT_RXNE, ENABLE);	
 
   #if (_SIM80X_DMA_TRANSMIT==1)
     while(_SIM80X_USART.hdmatx->State != HAL_DMA_STATE_READY)
       delay_ms(10);
-      HAL_UART_Transmit_DMA(&_SIM80X_USART,Data,len);
+      HAL_UART_Transmit_DMA(&_SIM80X_USART,data,len);
     while(_SIM80X_USART.hdmatx->State != HAL_DMA_STATE_READY)
       delay_ms(10);
   #else
-    HAL_UART_Transmit(LORA_USART_CH,data,len,100);
-    //delay_ms(10);
+    HAL_UART_Transmit(data,len,100);
+    delay_ms(10);
+  #endif
+
+}
+
+/****************************************************************
+*FUNCTION NAME:writeString
+*FUNCTION     :Transmit bytes until null character
+*INPUT        :str
+*OUTPUT       :void
+****************************************************************/
+void	HAL_HC05::writeString(char const *str)
+{
+  USART_ITConfig(HC05_USART_CH, USART_IT_RXNE, ENABLE);	
+
+  #if (_SIM80X_DMA_TRANSMIT==1)
+	  while(_SIM80X_USART.hdmatx->State != HAL_DMA_STATE_READY)
+      delay_ms(10);
+      HAL_UART_Transmit_DMA(&_SIM80X_USART,(uint8_t*)str,strlen(str));
+    while(_SIM80X_USART.hdmatx->State != HAL_DMA_STATE_READY)
+      delay_ms(10);
+  #else
+    HAL_UART_Transmit((uint8_t*)str,strlen(str),100);
+    //delay_ms(10); 
   #endif
 }
 
 /****************************************************************
-*FUNCTION NAME:coreSendAtCommand
-*FUNCTION     :coreSendAtCommand
-*INPUT        :unsigned i, char *a, unsigned r
-*OUTPUT       :byte
+*FUNCTION NAME:sendAtCommand
+*FUNCTION     :transmit and read response at commands in uart
+*INPUT        :ATcommand,wait_time, HowMuchAnswers,...
+*OUTPUT       :index
 ****************************************************************/
-uint8_t  HAL_HC05::sendAtCommand(char const *AtCommand,int32_t  MaxWaiting_ms,uint8_t const HowMuchAnswers,...)
+uint8_t  HAL_HC05::sendAtCommand(char const *AtCommand, int32_t  MaxWaiting_ms, uint8_t const HowMuchAnswers,...)
 {
+  uint16_t index=0;
+  
   while(Sim80x.Status.Busy == 1)
-  {
     delay_ms(100);
-  }
+
   Sim80x.Status.Busy = 1;
   Sim80x.AtCommand.FindAnswer = 0;
   Sim80x.AtCommand.ReceiveAnswerExeTime=0;
@@ -375,54 +425,93 @@ uint8_t  HAL_HC05::sendAtCommand(char const *AtCommand,int32_t  MaxWaiting_ms,ui
   Sim80x.AtCommand.ReceiveAnswerMaxWaiting = MaxWaiting_ms;
   
   memset(Sim80x.AtCommand.ReceiveAnswer,0,sizeof(Sim80x.AtCommand.ReceiveAnswer)); // clear buffer
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));                     // clear buffer
+
+  // va_list tag;
+  // va_start (tag,HowMuchAnswers);
   
-  va_list tag;
-  va_start (tag,HowMuchAnswers);
-  
-  char *arg[10];
-  for(uint8_t i=0; i<HowMuchAnswers ; i++)
-  {
-    arg[i] = va_arg (tag, char *);	
-    strncpy(Sim80x.AtCommand.ReceiveAnswer[i],arg[i],sizeof(Sim80x.AtCommand.ReceiveAnswer[0]));
-  }
-  va_end (tag);	
+  // char *arg[10];
+  // for(uint8_t i=0; i<HowMuchAnswers ; i++)
+  // {
+  //   arg[i] = va_arg (tag, char *);	
+  //   strncpy(Sim80x.AtCommand.ReceiveAnswer[i],arg[i],sizeof(Sim80x.AtCommand.ReceiveAnswer[0]));
+  // }
+  // va_end (tag);	
   
   strncpy(Sim80x.AtCommand.SendCommand,AtCommand,sizeof(Sim80x.AtCommand.SendCommand)); 
   writeString(Sim80x.AtCommand.SendCommand); 
   
-  readLine(Sim80x.UsartRxBuffer, sizeof(Sim80x.UsartRxBuffer));
+  index = readLine(Sim80x.UsartRxBuffer, sizeof(Sim80x.UsartRxBuffer));
   
-  while(MaxWaiting_ms > 0)
-  {
-    delay_ms(10);
-    if(Sim80x.AtCommand.FindAnswer > 0)
-      return Sim80x.AtCommand.FindAnswer;    
-    MaxWaiting_ms-=10;
-  }
-  memset(Sim80x.AtCommand.ReceiveAnswer,0,sizeof(Sim80x.AtCommand.ReceiveAnswer));
-  
+  if(index == 0)
+      memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+    
+  // while(MaxWaiting_ms > 0)
+  // {
+  //   delay_ms(10);
+  //   if(Sim80x.AtCommand.FindAnswer > 0)
+  //     return Sim80x.AtCommand.FindAnswer;    
+  //   MaxWaiting_ms-=10;
+  // }
+
+  delay_ms(MaxWaiting_ms);
+
   Sim80x.Status.Busy=0;
   return Sim80x.AtCommand.FindAnswer;
 }
+
 /****************************************************************
-*FUNCTION NAME:writeString
-*FUNCTION     :write string to UART
-*INPUT        :data : data to send
-*OUTPUT       :none
+*FUNCTION NAME:readLine
+*FUNCTION     :read AT command response from uart
+*INPUT        :message, buf_size
+*OUTPUT       :uint16_t
 ****************************************************************/
-void HAL_HC05::writeString(char const *data)
+uint16_t HAL_HC05::readLine(char *buffer, size_t buffer_size)
 {
-  uint16_t size = strlen(data);
+  char temp1[10];
+  uint16_t index = 0;
+  char *temp2;
+  uint8_t i, size;
+
+  if (!buffer || buffer_size <= 1)
+    return 0;
+
+  char *p = buffer;
   
-  //m_uart->print(data);
-  
-  for(uint16_t i=0;i<size;i++)
+  while(index < buffer_size)
   {
-    putc(data[i]);  // CHANGE TO write8
+    if (isOperationTimedOut())
+      goto EXIT_LOOP;
+    else
+     *p = getc(); 
+      
+    if(*p == '\n')
+    {     
+      size = sizeof(temp1)-1;
+      for(i=0;i<=size;i++)
+        temp1[size-i] = p[-i];
+      
+      i=0;
+      
+      while(temp1[i] =='\0')
+        temp1[i++]+=1;
+
+      temp2 = strstr(temp1, "OK\r\n");    
+      if(strncmp(temp2, "OK\r\n", strlen("OK\r\n")) == 0)
+        goto EXIT_LOOP;
+      
+      temp2 = strstr(temp1, "ERROR\r\n");
+      if(strncmp( temp2, "ERROR\r\n", strlen("ERROR\r\n")) == 0)
+        return 0;
+    }
+
+    p++;
+    index++;
   }
-
+    
+  EXIT_LOOP:
+  return index;
 }
-
 
 /****************************************************************
 *FUNCTION NAME:writeCommand
@@ -686,61 +775,6 @@ bool HAL_HC05::readOperationResult()
   return strcmp(response, "OK") == 0;
 }
 
-
-/****************************************************************
-*FUNCTION NAME:getLine     // move to the top
-*FUNCTION     :getLine
-*INPUT        :buffer,buffer_size; //refer defines in header file
-*OUTPUT       :uint16_t
-****************************************************************/
-uint16_t HAL_HC05::readLine(char *buffer, size_t buffer_size)
-{
-  uint8_t index = 0;
-  if (!buffer || buffer_size <= 1)
-    return 0;
-
-  char *p = buffer;
-  *p = 0;
-  
-  while(index < buffer_size)
-  {
-      if (isOperationTimedOut())
-        goto EXIT_LOOP;
-      else
-      {
-        *p = getc();
-        p++;
-        index++;    
-        
-        if(p[-1] == '\n' )
-        {
-          
-          p -= 1;       // setting '/n' as null char
-          *p = 0;
-          
-          p -= 1;       // setting '/r' as null char
-          *p = 0;
-          
-           goto EXIT_LOOP;
-        }
-        
-      }
-    
-
-
-  }
-    EXIT_LOOP:
-
-  //PGM_STRING_MAPPED_TO_RAM(error_prefix, "ERROR:(");
-
-  if (char *error_code_str = skipPrefix(buffer, buffer_size, "ERROR:("))
-    m_errCode = static_cast<HC05_Result>(htoul(error_code_str));
-  else if (strcmp(buffer, "FAIL") == 0)
-    m_errCode = HC05_FAIL;
-
-  uint16_t num_bytes = p - buffer;
-  return num_bytes;
-}
 
 
 #endif

@@ -38,12 +38,13 @@
 
 #define HC05_RCC_APB_UART RCC_APB2Periph_USART1 
 
-
 #define HC05_USART_CH USART1        
 #define HC05_GPIO_AF GPIO_AF_USART1 
 
-#define HC05_GPIO       GPIOA       
+#define HC05_GPIO_TX       GPIOA       
 #define HC05_PIN_TX GPIO_Pin_9 
+
+#define HC05_GPIO_RX       GPIOA       
 #define HC05_PIN_RX GPIO_Pin_10 
 
 #define HC05_AF_PIN_TX GPIO_PinSource9 
