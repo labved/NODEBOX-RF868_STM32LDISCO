@@ -23,6 +23,7 @@ public:
   void RegConfigSettings(void);
   void setAtMode(void);
   void setDataMode(void);
+  void debugTerminal(char *msg);
 
 public:
   //HardwareSerial *m_uart;

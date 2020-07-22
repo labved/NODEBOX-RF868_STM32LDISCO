@@ -93,7 +93,6 @@ void LIB_SIM800C::debugTerminal(char *msg)
   #endif
 }
 
-
 /****************************************************************
 *FUNCTION NAME:startSim80xBuffTask
 *FUNCTION     :startSim80xBuffTask

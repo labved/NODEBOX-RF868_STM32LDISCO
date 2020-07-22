@@ -20,8 +20,6 @@
 
 HAL_HC05 hc05;
 
-
-
 /****************************************************************
 *FUNCTION NAME:PoweronReset
 *FUNCTION     :Switch reset //details refer datasheet of CC1101/CC1100//
@@ -105,14 +103,51 @@ void LIB_HC05::setDataMode(void)
 ****************************************************************/
 void LIB_HC05::testCommand(void)
 {
+  char      *strStart,*str1;
   setAtMode();
-  hc05.writeString("AT\r\n");
   
-  getVersion(Sim80x.UsartRxBuffer, sizeof(Sim80x.UsartRxBuffer), 200);
+  hc05.sendAtCommand("AT+VERSION?\r\n", 200, 0);
   
-  hc05.sendAtCommand("AT+VERSION?\r\n", 200, 2, "+VERSION:", "OK\r\n");
+  // Read & Update Operation
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+
+  str1 = strstr(strStart,"+VERSION:");
+  
+  if(str1!=NULL)
+    sscanf(str1,"+VERSION:%s",Sim80x.IMEI);    
+
+  debugTerminal("HC05_getVersion");
+
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
                      
 }
+/****************************************************************
+*FUNCTION NAME:debugTerminal
+*FUNCTION     :Prints response to terminal IO
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_HC05::debugTerminal(char *msg)
+{
+  #if (_SIM80X_DEBUG== 1 || _SIM80X_DEBUG==2)
+     char      *strStart,*str1;
+
+     strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+      str1 = strstr(strStart,"\r\nOK\r\n");
+
+      if(str1!=NULL)
+      {
+        #if (_SIM80X_DEBUG==2)
+          printf("\r\nAT Respone : %s",Sim80x.UsartRxBuffer);
+        #endif
+        printf("\r\n%s ---> OK\r\n", msg);
+      }
+      else
+        printf("\r\n% ---> FAILED\r\n", msg);
+
+  #endif
+}
+
 /****************************************************************
 *FUNCTION NAME:probe
 *FUNCTION     :probe
@@ -125,7 +160,6 @@ bool LIB_HC05::probe(unsigned long timeout)
   hc05.writeCommand(0);
   return hc05.readOperationResult();
 }
-
 
 /****************************************************************
 *FUNCTION NAME:softReset
@@ -186,9 +220,7 @@ bool LIB_HC05::getVersion(char *buffer, size_t buffer_size, unsigned long timeou
 
 bool LIB_HC05::restoreDefaults(unsigned long timeout)
 {
-  
-  //PGM_STRING_MAPPED_TO_RAM(command, "ORGL");
-  return hc05.simpleCommand(AT_ORGL, 0, timeout);
+  return hc05.sendAtCommand("AT+ORGL\r\n", 200, 0);
 }
 
 
@@ -1405,42 +1437,42 @@ bool LIB_HC05::sendData(byte *msg)
   
   return 1;
 }
-/****************************************************************
-*FUNCTION NAME:getData
-*FUNCTION     :getData 
-*INPUT        :timeout
-*OUTPUT       :bool
-****************************************************************/
-bool LIB_HC05::getData(byte *buffer, size_t buffer_size)
-{
-  uint16_t index = 0;
-  if (!buffer || buffer_size <= 1)
-    return 0;
+// /****************************************************************
+// *FUNCTION NAME:getData
+// *FUNCTION     :getData 
+// *INPUT        :timeout
+// *OUTPUT       :bool
+// ****************************************************************/
+// bool LIB_HC05::getData(byte *buffer, size_t buffer_size)
+// {
+//   uint16_t index = 0;
+//   if (!buffer || buffer_size <= 1)
+//     return 0;
 
-  char *p = buffer;
-  *p = 0;
+//   char *p = buffer;
+//   *p = 0;
   
-  while(index < buffer_size)
-  {
-    *p = hc05.getc();
-    p++;
-    index++;  
-    if(p[-1] == '\n' )
-    { 
-      p -= 1;       // setting '/n' as null char
-      *p = 0;
+//   while(index < buffer_size)
+//   {
+//     *p = hc05.getc();
+//     p++;
+//     index++;  
+//     if(p[-1] == '\n' )
+//     { 
+//       p -= 1;       // setting '/n' as null char
+//       *p = 0;
       
-      p -= 1;       // setting '/r' as null char
-      *p = 0;
+//       p -= 1;       // setting '/r' as null char
+//       *p = 0;
       
-       goto EXIT_LOOP;
-    }
-  }
+//        goto EXIT_LOOP;
+//     }
+//   }
   
-  EXIT_LOOP:
+//   EXIT_LOOP:
     
-  return 1;
-}
+//   return 1;
+// }
 
 extern LIB_HC05 bl; 
 
