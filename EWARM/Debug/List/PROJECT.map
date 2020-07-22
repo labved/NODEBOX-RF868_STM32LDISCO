@@ -1,203 +1,141 @@
 ###############################################################################
 #
-# IAR ELF Linker V8.40.1.212/W32 for ARM                  21/Jul/2020  13:25:01
+# IAR ELF Linker V8.40.1.212/W32 for ARM                  22/Jul/2020  11:09:09
 # Copyright 2007-2019 IAR Systems AB.
 #
 #    Output file  =
 #        E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Exe\PROJECT.out
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Exe\PROJECT.out
 #    Map file     =
 #        E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\List\PROJECT.map
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\List\PROJECT.map
 #    Command line =
-#        -f C:\Users\BHARAT~1.VIS\AppData\Local\Temp\EWECDB.tmp
+#        -f C:\Users\BHARAT~1.VIS\AppData\Local\Temp\EWC2CD.tmp
 #        ("E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\Bluetooth.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\BluetoothUser.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\Conversions.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\EN.o" "E:\Dropbox\LABVED TECHNOLOGIES
-#        PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\ff.o" "E:\Dropbox\LABVED TECHNOLOGIES
-#        PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\Functions.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\GPRS.o" "E:\Dropbox\LABVED TECHNOLOGIES
-#        PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\GPRSUser.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\Gsm.o" "E:\Dropbox\LABVED TECHNOLOGIES
-#        PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\GsmUser.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\HAL_E70-868T30S.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\HAL_HC05.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\HAL_LCD.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\HAL_MODEL.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\HAL_PCF8574.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\HAL_SDCARD.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\HAL_SIM800C.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\HAL_W25Q.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\LIB_E70-868T30S.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\LIB_FLASH.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\LIB_HC05.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\LIB_LCD.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\LIB_MODEL.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\LIB_NODEBOXRF868.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\LIB_SDMMC.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\LIB_SIM800C.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\main.o" "E:\Dropbox\LABVED TECHNOLOGIES
-#        PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\misc.o" "E:\Dropbox\LABVED TECHNOLOGIES
-#        PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\mmc.o" "E:\Dropbox\LABVED TECHNOLOGIES
-#        PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\Sim80xUser.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_adc.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_aes.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_aes_util.o"
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\Bluetooth.o"
 #        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_comp.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_crc.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_dac.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_dbgmcu.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_dma.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_exti.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_flash.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_flash_ramfunc.o"
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\BluetoothUser.o"
 #        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_fsmc.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_gpio.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_i2c.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_it.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_iwdg.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_lcd.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_opamp.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_pwr.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_rcc.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_rtc.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_sdio.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_spi.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_syscfg.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_tim.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_usart.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\stm32l1xx_wwdg.o" "E:\Dropbox\LABVED
-#        TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Obj\system_stm32l1xx.o" --no_out_extension
-#        -o "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\Exe\PROJECT.out" --redirect
-#        _Printf=_PrintfSmallNoMb --redirect _Scanf=_ScanfSmallNoMb --map
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\Conversions.o"
 #        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM\Debug\List\PROJECT.map" --config
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\EN.o"
 #        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
-#        SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0
-#        20-7-2020\Rev0\EWARM/settings/stm32l1xx_flash.icf" --semihosting
-#        --entry __iar_program_start --vfe --text_out locale)
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\ff.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\Functions.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\GPRS.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\GPRSUser.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\Gsm.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\GsmUser.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\HAL_E70-868T30S.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\HAL_HC05.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\HAL_LCD.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\HAL_MODEL.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\HAL_PCF8574.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\HAL_SDCARD.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\HAL_SIM800C.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\HAL_W25Q.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\LIB_E70-868T30S.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\LIB_FLASH.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\LIB_HC05.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\LIB_LCD.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\LIB_MODEL.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\LIB_NODEBOXRF868.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\LIB_SDMMC.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\LIB_SIM800C.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\main.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\misc.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\mmc.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\Sim80xUser.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_adc.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_aes.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_aes_util.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_comp.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_crc.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_dac.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_dbgmcu.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_dma.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_exti.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_flash.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_flash_ramfunc.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_fsmc.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_gpio.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_i2c.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_it.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_iwdg.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_lcd.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_opamp.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_pwr.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_rcc.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_rtc.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_sdio.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_spi.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_syscfg.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_tim.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_usart.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\stm32l1xx_wwdg.o"
+#        "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj\system_stm32l1xx.o"
+#        --no_out_extension -o "E:\Dropbox\LABVED TECHNOLOGIES PVT
+#        LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Exe\PROJECT.out"
+#        --redirect _Printf=_PrintfSmallNoMb --redirect _Scanf=_ScanfSmallNoMb
+#        --map "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\List\PROJECT.map"
+#        --config "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture
+#        SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM/settings/stm32l1xx_flash.icf"
+#        --semihosting --entry __iar_program_start --vfe --text_out locale)
 #
 ###############################################################################
 
@@ -367,7 +305,7 @@ command line/config:
     ----------------------------------------------
     Total:
 
-E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0 20-7-2020\Rev0\EWARM\Debug\Obj: [1]
+E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj: [1]
     Functions.o               30
     HAL_SIM800C.o            948       20
     LIB_NODEBOXRF868.o       152                 1
@@ -589,7 +527,7 @@ strtoul                  0x800'0859    0x2  Code  Gb  iar_Stoulx.o [2]
 ttio_guard              0x2000'0a3b    0x1  Data  Lc  XShttio.o [2]
 
 
-[1] = E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture SaaS\Technical\Electronics\Firmware\NodeBox - RF868_STM32L- Disco\Rev0 20-7-2020\Rev0\EWARM\Debug\Obj
+[1] = E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\Debug\Obj
 [2] = dl7M_tln.a
 [3] = m7M_tl.a
 [4] = rt7M_tl.a

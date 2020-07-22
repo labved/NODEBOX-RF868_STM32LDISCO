@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Technical\SVN_Github\NODEBOX-RF868_STM32LDISCO\trunk\EWARM\settings\PROJECT.Debug.general.xcl" --backend -f "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Technical\SVN_Github\NODEBOX-RF868_STM32LDISCO\trunk\EWARM\settings\PROJECT.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\settings\PROJECT.Debug.general.xcl" --backend -f "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\settings\PROJECT.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Technical\SVN_Github\NODEBOX-RF868_STM32LDISCO\trunk\EWARM\settings\PROJECT.Debug.general.xcl" "--debug_file=%~1" --backend -f "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Technical\SVN_Github\NODEBOX-RF868_STM32LDISCO\trunk\EWARM\settings\PROJECT.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\settings\PROJECT.Debug.general.xcl" "--debug_file=%~1" --backend -f "E:\Dropbox\LABVED TECHNOLOGIES PVT LTD\Project\Agriculture SaaS\Technical\Electronics\Firmware\NODEBOX-RF868_STM32LDISCO.git\trunk\EWARM\settings\PROJECT.Debug.driver.xcl" 
 
 @echo off 
 :end
