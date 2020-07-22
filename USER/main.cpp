@@ -21,6 +21,7 @@ LIB_MODEL gen;
 char msg[255] = "TESTING";
 
 //testing githhub
+//Viveks inputs
 
 int main()
 {
