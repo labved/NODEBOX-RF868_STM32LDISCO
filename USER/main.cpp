@@ -21,6 +21,7 @@ LIB_MODEL gen;
 char msg[255] = "TESTING";
 
 //bharath comments
+//vivek comments
 
 int main()
 {
