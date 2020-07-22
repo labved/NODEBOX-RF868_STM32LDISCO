@@ -20,6 +20,8 @@ NODEBOX_RF868 node;
 LIB_MODEL gen;
 char msg[255] = "TESTING";
 
+//bharath comments
+
 int main()
 {
     __enable_interrupt();
