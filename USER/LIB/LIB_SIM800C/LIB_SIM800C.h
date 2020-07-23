@@ -18,8 +18,6 @@
 
 #if(_USE_GSM==1)
 
-
-
 class LIB_SIM800C   
 {
   private:
@@ -37,30 +35,46 @@ class LIB_SIM800C
     void                    bufferProcess(void);
     void                    startSim80xTask(void const * argument);
 
-    // SIM800C LIBRARY     
-    void                    saveParameters(void);
-    void                    setPower(bool turnon);
+
+    // CUSTOM LIBRARY
+    void setAtMode(void);
+    void setDataMode(void);
+    void setActiveProfile(void);
+    void setDefaultConfig(void);
     void                    setFactoryDefault(void);
-    void                    setBaudRate(uint16_t baudrate);
     void                    setAtEcho(bool turnon);
+    void                    setBaudRate(uint16_t baudrate);
+    void                    setPower(bool turnon);      //need to check
+    void                    saveParameters(void);
+
+    void getManNo(void);
+    void getModelNo(void);
+    void getGlobalNo(void);
+    void getLastCommand(void);
+    void getCurrentConfig(void);
+    void getTaCapabilities(void);
     void                    getIMEI(char *IMEI);
-    uint8_t                 getRingVol(void);
-    bool                    setRingVol(uint8_t vol_0_to_100);
-    uint8_t                 getLoadVol(void);//need to check
-    bool                    setLoadVol(uint8_t vol_0_to_100);
-    Sim80xWave_t            waveGetState(void);
-    bool                    waveRecord(uint8_t ID,uint8_t timelimitinsecond);  
-    bool                    wavePlay(uint8_t ID);  
-    bool                    waveStop(void);  
-    bool                    waveDelete(uint8_t ID);
-    bool                    setMicGain(uint8_t channel_0_to_4,uint8_t gain_0_to_15);
-    bool                    getMicGain(void);
-    bool                    tonePlay(Sim80xTone_t sim80xtone,uint32_t  time_ms);
-    bool                    toneStop(void);
-    uint8_t                 getToneVol(void);
-    bool                    setToneVol(uint8_t vol_0_to_100);
-    bool                    setRingTone(uint8_t tone_0_to_19,bool save);
-    bool                    setEchoParameters(uint8_t  selectmic_0_or_1,uint16_t nonlinearprocessingremove,uint16_t acousticechocancellation,uint16_t noisereduction,uint16_t noisesuppression);
+
+
+    // SIM800C LIBRARY     
+  
+    uint8_t                 getRingVol(void);           // to be deleted
+    bool                    setRingVol(uint8_t vol_0_to_100);             // to be deleted
+    uint8_t                 getLoadVol(void);            // to be deleted
+    bool                    setLoadVol(uint8_t vol_0_to_100);           // to be deleted
+    Sim80xWave_t            waveGetState(void);           // to be deleted
+    bool                    waveRecord(uint8_t ID,uint8_t timelimitinsecond);             // to be deleted
+    bool                    wavePlay(uint8_t ID);             // to be deleted
+    bool                    waveStop(void);             // to be deleted
+    bool                    waveDelete(uint8_t ID);           // to be deleted
+    bool                    setMicGain(uint8_t channel_0_to_4,uint8_t gain_0_to_15);           // to be deleted
+    bool                    getMicGain(void);           // to be deleted
+    bool                    tonePlay(Sim80xTone_t sim80xtone,uint32_t  time_ms);           // to be deleted
+    bool                    toneStop(void);           // to be deleted
+    uint8_t                 getToneVol(void);           // to be deleted
+    bool                    setToneVol(uint8_t vol_0_to_100);           // to be deleted
+    bool                    setRingTone(uint8_t tone_0_to_19,bool save);           // to be deleted
+    bool                    setEchoParameters(uint8_t  selectmic_0_or_1,uint16_t nonlinearprocessingremove,uint16_t acousticechocancellation,uint16_t noisereduction,uint16_t noisesuppression);            // to be deleted
    
     // GSM
     void                    Gsm_user(uint32_t startupTime);
@@ -121,15 +135,10 @@ class LIB_SIM800C
     bool                    GPRS_connectToNetwork(char *Name,char *username,char *password,bool EnableMultiConnection);
     bool                    GPRS_getHttp(char *URL); 
     
-    
-    //UPDATE
-    
-    
+// UPDATE FUNCTIONS
+    bool updateIMEI(uint16_t addrs);
 
-  
 };
-
-
 
 extern LIB_SIM800C gsm;
 

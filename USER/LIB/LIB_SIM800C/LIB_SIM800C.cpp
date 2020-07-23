@@ -20,6 +20,7 @@ Sim80x_t                        Sim80x;
 //osThreadId    Sim80xTaskHandle;       // RTOS
 //osThreadId    Sim80xBuffTaskHandle;   // RTOS
 
+
 /****************************************************************
 *FUNCTION NAME:test
 *FUNCTION     :test codes
@@ -1010,10 +1011,10 @@ void LIB_SIM800C::startSim80xTask(void const * argument)
 ****************************************************************/
 void   LIB_SIM800C::saveParameters(void)
 {
-  sim800c.sendAtCommand("AT&W\r\n",1000,1,"AT&W\r\r\nOK\r\n");
-  #if (_SIM80X_DEBUG==1)
-  printf("\r\nSim80x_SaveParameters() ---> OK\r\n");
-  #endif
+  sim800c.sendAtCommand("AT&W0\r\n",200,1,"AT&W0\r\r\nOK\r\n");
+  debugTerminal("GSM_saveParameters()");
+
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
 }
 
 /****************************************************************
@@ -1135,21 +1136,11 @@ void LIB_SIM800C::setAtEcho(bool turnon)
 ****************************************************************/
 void  LIB_SIM800C::getIMEI(char *IMEI)
 {
-  char      *strStart,*str1;
+
 
   sim800c.sendAtCommand("AT+CGSN\r\n",200, 0);
 
-  // Read & Update Operation
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
-     
-  str1 = strstr(strStart,"AT+CGSN\r\r\n");
-  
-  if(str1!=NULL)
-    sscanf(str1,"AT+CGSN\r\r\n%s",Sim80x.IMEI);    
-
-  debugTerminal("Sim80x_getIMEI");
-  
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+  updateIMEI();
 }
 
 /****************************************************************
@@ -1621,6 +1612,29 @@ uint16_t AcousticEchoCancellation,uint16_t NoiseReduction,uint16_t NoiseSuppress
   }         
 }
 
+/****************************************************************
+*FUNCTION NAME:updateIMEI
+*FUNCTION     :updateIMEI
+*INPUT        :none; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::updateIMEI(uint16_t addrs)
+{	
+	char      *strStart,*str1;
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+     
+  str1 = strstr(strStart,"AT+CGSN\r\r\n");
+  
+  if(str1!=NULL)
+    sscanf(str1,"AT+CGSN\r\r\n%s",Sim80x.IMEI);
+
+  // update Flash IC here
+		
+  debugTerminal("Sim80x_getIMEI");
+  
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+	
+}
 /****************************************************************
 *FUNCTION NAME:GSM_IRQHandler
 *FUNCTION     :GSM_IRQHandler
