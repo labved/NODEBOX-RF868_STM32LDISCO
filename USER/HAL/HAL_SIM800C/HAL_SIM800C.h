@@ -1,17 +1,25 @@
-#include "stm32l1xx.h"  
-#include "Settings.h"
+#include "stm32l1xx.h" 
+#include "Settings.h" 
+#include "Pinouts.h"
+#include "Shortcodes.h"
+#include "Variables.h"
+
+#include "Functions.h"
+#include "Conversions.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
 
 #ifndef HAL_SIM800C_H
   #define HAL_SIM800C_H
 
 #if(_USE_GSM==1)
 
-#include "Shortcodes.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
+
+
 
 class HAL_SIM800C   
 {

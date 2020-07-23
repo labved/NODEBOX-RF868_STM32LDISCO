@@ -1,9 +1,5 @@
-#include "stm32l1xx.h"
-#include "Settings.h"
-
-#ifdef HAL_HC05_H
-  
-#if(_USE_BT==1)
+#include "stm32l1xx.h" 
+#include "Settings.h" 
 #include "Pinouts.h"
 #include "Shortcodes.h"
 #include "Variables.h"
@@ -19,6 +15,10 @@
 #include "stdlib.h"
 #include "string.h"
 #include "stdarg.h"
+
+#ifdef HAL_HC05_H
+  
+#if(_USE_BT==1)
 
 extern Sim80x_t               Sim80x;
 HC05_Result                   m_errCode;
@@ -436,7 +436,7 @@ uint8_t  HAL_HC05::sendAtCommand(char const *atcommand, int32_t  maxwaiting_ms, 
   // }
   // va_end (tag);	
   
-  strncpy(Sim80x.AtCommand.SendCommand,AtCommand,sizeof(Sim80x.AtCommand.SendCommand)); 
+  strncpy(Sim80x.AtCommand.SendCommand,atcommand,sizeof(Sim80x.AtCommand.SendCommand)); 
   writeString(Sim80x.AtCommand.SendCommand); 
   
   index = readLine(Sim80x.UsartRxBuffer, sizeof(Sim80x.UsartRxBuffer));

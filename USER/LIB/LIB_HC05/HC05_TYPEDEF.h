@@ -1,7 +1,14 @@
-#include "stm32l1xx.h"
-#include "Settings.h"
+#include "stm32l1xx.h" 
+#include "Settings.h" 
+#include "Pinouts.h"
+#include "Shortcodes.h"
+#include "Variables.h"
 
-#ifdef LIB_HC05_H
+#include "Functions.h"
+#include "Conversions.h"
+
+#ifndef HC05_TYPEDEF_H
+  #define HC05_TYPEDEF_H
 
 #if (_USE_BT == 1)
 
@@ -60,8 +67,6 @@ enum
   HC05_ADDRESS_MAXLEN = 14,
   HC05_ADDRESS_BUFSIZE = HC05_ADDRESS_MAXLEN + 1,
 };
-
-
 
 enum HC05_Role { HC05_ROLE_SLAVE = 0, HC05_ROLE_MASTER = 1, HC05_ROLE_SLAVE_LOOP = 2 };
 enum HC05_InquiryMode { HC05_INQUIRY_STANDARD, HC05_INQUIRY_RSSI };

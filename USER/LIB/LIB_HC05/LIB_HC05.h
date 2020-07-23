@@ -1,13 +1,19 @@
-#include "stm32l1xx.h"
-#include "Settings.h"
+#include "stm32l1xx.h" 
+#include "Settings.h" 
+#include "Pinouts.h"
+#include "Shortcodes.h"
+#include "Variables.h"
+
+#include "Functions.h"
+#include "Conversions.h"
+
+#include "HC05_TYPEDEF.h"
 
 #ifndef LIB_HC05_H
   #define LIB_HC05_H
 
-
 #if (_USE_BT == 1)
 
-#include "HC05_TYPEDEF.h"
 
 
 typedef uint8_t BluetoothAddress[6];
@@ -16,7 +22,7 @@ typedef void (*InquiryCallback)(const BluetoothAddress &address);
 class LIB_HC05
 {
 private:
-  void                    PoweronReset(void);
+  void                    powerOnReset(void);
   void                    regConfigSettings(void);
   void                    setAtMode(void);
   void                    setDataMode(void);
@@ -69,9 +75,8 @@ public:
   bool                    setPortState(uint8_t port_num, uint8_t port_state, unsigned long timeout = HC05_DEFAULT_TIMEOUT);
   bool                    getMultiplePorts(uint16_t &port_states, unsigned long timeout = HC05_DEFAULT_TIMEOUT);
   bool                    setMultiplePorts(uint16_t port_states, unsigned long timeout = HC05_DEFAULT_TIMEOUT);
-  bool                    getInquiryAndPagingParams(uint16_t &inquiry_interval, uint16_t &inquiry_duration,
-                                                    uint16_t &paging_interval, uint16_t &paging_duration,
-                                                    signed long timeout = HC05_DEFAULT_TIMEOUT);
+  bool                    getInquiryAndPagingParams(uint16_t &inquiry_interval, uint16_t &inquiry_duration, uint16_t &paging_interval, uint16_t &paging_duration, unsigned long timeout);
+
   bool                    setInquiryAndPagingParams(uint16_t inquiry_interval, uint16_t inquiry_duration,
                                                     uint16_t paging_interval, uint16_t paging_duration,
                                                     unsigned long timeout = HC05_DEFAULT_TIMEOUT);
@@ -102,6 +107,9 @@ public:
   
 
 };
+
+
+extern LIB_HC05 bluetooth;
 
 #endif
 

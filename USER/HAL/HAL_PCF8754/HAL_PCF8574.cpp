@@ -18,6 +18,7 @@
 #include "Conversions.h"
 
 #include "HAL_PCF8574.h"
+#include "PCF8574_SHORTCODES.h"
 
 /****************************************************************
 *FUNCTION NAME:I2CInit

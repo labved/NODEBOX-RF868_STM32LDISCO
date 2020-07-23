@@ -9,15 +9,17 @@
 
 #include "HAL_SIM800C.h"
 
-#ifdef HAL_SIM800C_H
-
-#if(_USE_GSM==1)
-
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
 #include "stdarg.h"
 #include "intrinsics.h"
+
+#ifdef HAL_SIM800C_H
+
+#if(_USE_GSM==1)
+
+
 
 extern Sim80x_t               Sim80x;
 

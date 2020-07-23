@@ -1,4 +1,10 @@
-#include "stm32l1xx.h"
+#include "stm32l1xx.h" 
+#include "Settings.h" 
+#include "Shortcodes.h"
+#include "Variables.h"
+
+#include "Functions.h"
+#include "Conversions.h"
 
 #ifndef PINOUTS_H
   #define PINOUTS_H

@@ -1,19 +1,24 @@
-#include "stm32l1xx.h"  
-#include "Settings.h"
-
-#ifndef LIB_SIM800C_H
-  #define LIB_SIM800C_H
-
-#if(_USE_GSM==1)
-
+#include "stm32l1xx.h" 
+#include "Settings.h" 
+#include "Pinouts.h"
 #include "Shortcodes.h"
 #include "Variables.h"
+
+#include "Functions.h"
+#include "Conversions.h"
 
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+
+#ifndef LIB_SIM800C_H
+  #define LIB_SIM800C_H
+
+#if(_USE_GSM==1)
+
+
 
 class LIB_SIM800C   
 {

@@ -1,12 +1,18 @@
-#include "stm32l1xx.h"
-#include "Settings.h"
+#include "stm32l1xx.h" 
+#include "Settings.h" 
+#include "Pinouts.h"
+#include "Shortcodes.h"
+#include "Variables.h"
+
+#include "Functions.h"
+#include "Conversions.h"
+
+#include "string.h"
 
 #ifndef HAL_HC05_H
   #define HAL_HC05_H
 
 #if(_USE_BT==1)
-
-#include "string.h"
 
 typedef uint8_t BluetoothAddress[6];
 
@@ -62,6 +68,6 @@ class HAL_HC05
 
 #endif
 
-extern HAL_HC05 GW040;
+extern HAL_HC05 hc05;
 
 #endif

@@ -1,4 +1,11 @@
+#include "stm32l1xx.h" 
+#include "Settings.h" 
+#include "Pinouts.h"
 #include "Shortcodes.h"
+
+#include "Functions.h"
+#include "Conversions.h"
+
 #include "SIM800C_TYPEDEF.h"
 
 #ifndef VARIABLES_H

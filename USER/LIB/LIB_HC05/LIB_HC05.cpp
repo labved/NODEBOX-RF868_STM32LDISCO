@@ -1,21 +1,21 @@
-  #include "stm32l1xx.h"
-#include "Settings.h"
-
-#ifdef LIB_HC05_H
-
-
-#if (_USE_BT == 1)
-
+#include "stm32l1xx.h" 
+#include "Settings.h" 
 #include "Pinouts.h"
 #include "Shortcodes.h"
 #include "Variables.h"
+
 #include "Functions.h"
 #include "Conversions.h"
 
-
-#include "HC05_SHORTCODES.h"
 #include "HAL_HC05.h"
 #include "LIB_HC05.h"
+
+#include "HC05_SHORTCODES.h"
+#include "HC05_TYPEDEF.h"
+
+#ifdef LIB_HC05_H
+
+#if (_USE_BT == 1)
 
 HAL_HC05 hc05;
 
@@ -47,12 +47,12 @@ void LIB_HC05::test(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:PoweronReset
+*FUNCTION NAME:powerOnReset
 *FUNCTION     :Switch reset 
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_HC05::PoweronReset(void)
+void LIB_HC05::powerOnReset(void)
 {
     hc05.hardReset(); 
 }
@@ -143,9 +143,9 @@ void LIB_HC05::Init(void)
 {
   hc05.gpioInit();
   hc05.uartInit(HC05_BAUDRATE_AT);
-  PoweronReset();
+  powerOnReset();
 
-  RegConfigSettings();
+  regConfigSettings();
 }
 
 /****************************************************************
@@ -865,9 +865,7 @@ bool LIB_HC05::setMultiplePorts(uint16_t port_states, unsigned long timeout)
 *INPUT        :inquiry_interval , inquiry_duration , paging_interval , paging_duration , timeout
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_HC05::getInquiryAndPagingParams(
-  uint16_t &inquiry_interval, uint16_t &inquiry_duration,
-  uint16_t &paging_interval, uint16_t &paging_duration, unsigned long timeout)
+bool LIB_HC05::getInquiryAndPagingParams(uint16_t &inquiry_interval, uint16_t &inquiry_duration, uint16_t &paging_interval, uint16_t &paging_duration, unsigned long timeout)
 {
   startOperation(timeout);
 
@@ -1338,8 +1336,6 @@ bool LIB_HC05::disconnect(unsigned long timeout)
 
    return hc05.readOperationResult();
 }
-
-extern LIB_HC05 bl; 
 
 #endif
 

@@ -1,8 +1,8 @@
-#include "stm32l1xx.h"
-
-#include "Settings.h"
+#include "stm32l1xx.h" 
+#include "Settings.h" 
 #include "Pinouts.h"
 #include "Shortcodes.h"
+#include "Variables.h"
 
 #include "Functions.h"
 #include "Conversions.h"
@@ -19,6 +19,9 @@
 #include "LIB_SIM800C.h"
 #include "HAL_PCF8574.h"
 #include "LIB_E70-868T30S.h"
+
+#include "PCF8574_SHORTCODES.h"
+#include "HC05_TYPEDEF.h"
 
 SD_MMC sdCard;
 LIB_QFLASH w25qFlash;
@@ -350,16 +353,17 @@ void NODEBOX_RF868::testIOEXP8(void)
     
     ioexp8.I2CInit();
     
-    ioexp8.writeRegister(PCF8574_DEV7_ADDR, 0);  
-    reg = ioexp8.readRegister(PCF8574_DEV7_ADDR, reg);
     
-    ioexp8.writeRegister(PCF8574_DEV7_ADDR, 1);  
-    reg = ioexp8.readRegister(PCF8574_DEV7_ADDR, reg);
-    test = ioexp8.readPin(PCF8574_DEV7_ADDR,0x00, val);
-    
-    ioexp8.writePin(PCF8574_DEV7_ADDR,0x00, 0);
-    reg = ioexp8.readRegister(PCF8574_DEV7_ADDR, reg);
-    test = ioexp8.readPin(PCF8574_DEV7_ADDR,0x00, val);
+   ioexp8.writeRegister(PCF8574_DEV7_ADDR, 0);  
+   reg = ioexp8.readRegister(PCF8574_DEV7_ADDR, reg);
+   
+   ioexp8.writeRegister(PCF8574_DEV7_ADDR, 1);  
+   reg = ioexp8.readRegister(PCF8574_DEV7_ADDR, reg);
+   test = ioexp8.readPin(PCF8574_DEV7_ADDR,0x00, val);
+   
+   ioexp8.writePin(PCF8574_DEV7_ADDR,0x00, 0);
+   reg = ioexp8.readRegister(PCF8574_DEV7_ADDR, reg);
+   test = ioexp8.readPin(PCF8574_DEV7_ADDR,0x00, val);
 
     
 }
