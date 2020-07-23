@@ -115,13 +115,10 @@ void LIB_SIM800C::RegConfigSettings(void)
   Gsm_getMsgServiceNumber();
   Gsm_getMsgTextModeParameter();
   getIMEI(NULL);
-  getLoadVol();
-  getRingVol();
-  getMicGain();
-  getToneVol();
-    #if (_SIM80X_USE_BLUETOOTH==1)
+  
+#if (_SIM80X_USE_BLUETOOTH==1)
     Bluetooth_setAutoPair(true);
-    #endif
+#endif
   sim800c.sendAtCommand("AT+CREG?\r\n",200,1,"\r\n+CREG:");  
   //coreUserInit();
 }
@@ -1004,17 +1001,101 @@ void LIB_SIM800C::startSim80xTask(void const * argument)
 }
 
 /****************************************************************
-*FUNCTION NAME:saveParameters
-*FUNCTION     :saveParameters
+*FUNCTION NAME:setAtMode
+*FUNCTION     :setAtMode
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void   LIB_SIM800C::saveParameters(void)
+void LIB_SIM800C::setAtMode(void)
 {
-  sim800c.sendAtCommand("AT&W0\r\n",200,1,"AT&W0\r\r\nOK\r\n");
-  debugTerminal("GSM_saveParameters()");
+  sim800c.sendAtCommand("+++\r\n",200, 0);
+  debugTerminal("setAtMode");
+}
 
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+/****************************************************************
+*FUNCTION NAME:setDataMode
+*FUNCTION     :setDataMode
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setDataMode(void)
+{
+  sim800c.sendAtCommand("ATO\r\n",200, 0);
+  debugTerminal("setDataMode");
+}
+
+/****************************************************************
+*FUNCTION NAME:setActiveProfile
+*FUNCTION     :setActiveProfile
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setActiveProfile(void)
+{
+}
+
+/****************************************************************
+*FUNCTION NAME:setDefaultConfig
+*FUNCTION     :setDefaultConfig
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setDefaultConfig(void)
+{
+  sim800c.sendAtCommand("ATZ\r\r",200, 0);
+
+  debugTerminal("setDefaultConfig");
+}
+
+/****************************************************************
+*FUNCTION NAME:setFactoryDefault
+*FUNCTION     :setFactoryDefault
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setFactoryDefault(void)
+{
+  sim800c.sendAtCommand("AT&F0\r\n",200,0);
+
+  debugTerminal("Sim80x_setFactoryDefault");
+
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+
+}
+
+/****************************************************************
+*FUNCTION NAME:setAtEcho
+*FUNCTION     :change command echo mode
+*INPUT        :turnon
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setAtEcho(bool turnon)
+{
+  char temp[20];
+  snprintf(temp, sizeof(temp), "ATE%d\r\n", turnon); 
+  sim800c.sendAtCommand(temp, 200, 0);
+
+  debugTerminal("Sim80x_setAtEcho");//need to check as response changes can be on or off
+
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+
+}
+
+/****************************************************************
+*FUNCTION NAME:setBaudRate
+*FUNCTION     :AT command to change baud rate
+*INPUT        :baudrate
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setBaudRate(uint16_t baudrate)
+{
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+IPR=%d\r\n", baudrate); 
+  sim800c.sendAtCommand(temp, 200, 0);
+
+  debugTerminal("Sim80x_setBaudRate");
+
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
 }
 
 /****************************************************************
@@ -1078,52 +1159,116 @@ void  LIB_SIM800C::setPower(bool turnon)
 }
 
 /****************************************************************
-*FUNCTION NAME:setFactoryDefault
-*FUNCTION     :setFactoryDefault
+*FUNCTION NAME:saveParameters
+*FUNCTION     :saveParameters
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::setFactoryDefault(void)
+void   LIB_SIM800C::saveParameters(void)
 {
-  sim800c.sendAtCommand("AT&F0\r\n",200,0);
+  sim800c.sendAtCommand("AT&W0\r\n",200,1,"AT&W0\r\r\nOK\r\n");
+  debugTerminal("GSM_saveParameters()");
+
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+}
+
+/****************************************************************
+*FUNCTION NAME:getManNo
+*FUNCTION     :getManNo 
+*INPUT        :IMEI
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getManNo(void)
+{
+  sim800c.sendAtCommand("AT+GMI\r\n",200,0);
+
+  debugTerminal("Sim80x_getManNo");
+
+  //update
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+
+  
+}
+
+/****************************************************************
+*FUNCTION NAME:getModelNo
+*FUNCTION     :getModelNo 
+*INPUT        :IMEI
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getModelNo(void)
+{
+  sim800c.sendAtCommand("AT+GMM\r\n",200,0);
+
+  debugTerminal("Sim80x_getModelNo");
+
+  //update
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+
+  
+}
+
+/****************************************************************
+*FUNCTION NAME:getGlobalNo
+*FUNCTION     :getGlobalNo 
+*INPUT        :IMEI
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getGlobalNo(void)
+{
+  sim800c.sendAtCommand("AT+GOI\r\n",200,0);
+
+  debugTerminal("Sim80x_getGlobalNo");
+
+  //update
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+
+  
+}
+
+/****************************************************************
+*FUNCTION NAME:getLastCommand
+*FUNCTION     :getLastCommand 
+*INPUT        :IMEI
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getLastCommand(void)
+{
+   sim800c.sendAtCommand("A/",200, 0);
+   //RESPONSE CANT BE DETERMINED
+}
+
+/****************************************************************
+*FUNCTION NAME:getCurrentConfig
+*FUNCTION     :getCurrentConfig 
+*INPUT        :IMEI
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getCurrentConfig(void)
+{
+  sim800c.sendAtCommand("AT&V0\r\n",200,0);
 
   debugTerminal("Sim80x_setFactoryDefault");
 
+  //update
   memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
 
+  
 }
 
 /****************************************************************
-*FUNCTION NAME:setBaudRate
-*FUNCTION     :AT command to change baud rate
-*INPUT        :baudrate
+*FUNCTION NAME:getTaCapabilities
+*FUNCTION     :getTaCapabilities 
+*INPUT        :IMEI
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::setBaudRate(uint16_t baudrate)
+void  LIB_SIM800C::getTaCapabilities(void)
 {
-  char temp[20];
-  snprintf(temp, sizeof(temp), "AT+IPR=%d\r\n", baudrate); 
-  sim800c.sendAtCommand(temp, 200, 0);
+  sim800c.sendAtCommand("AT+GCAP\r\n",200,0);
 
-  debugTerminal("Sim80x_setBaudRate");
+  debugTerminal("Sim80x_getTaCapabilities");
 
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
-}
-
-/****************************************************************
-*FUNCTION NAME:setAtEcho
-*FUNCTION     :change command echo mode
-*INPUT        :turnon
-*OUTPUT       :void
-****************************************************************/
-void LIB_SIM800C::setAtEcho(bool turnon)
-{
-  char temp[20];
-  snprintf(temp, sizeof(temp), "ATE%d\r\n", turnon); 
-  sim800c.sendAtCommand(temp, 200, 0);
-
-  debugTerminal("Sim80x_setAtEcho");
-
+  //update
   memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
 
 }
@@ -1143,479 +1288,170 @@ void  LIB_SIM800C::getIMEI(char *IMEI)
   updateIMEI();
 }
 
+
+
+
+
+
+
+
+
+
 /****************************************************************
-*FUNCTION NAME:getRingVol
-*FUNCTION     :getRingVol
-*INPUT        :void
-*OUTPUT       :Ringing volume
+*FUNCTION NAME:updateManNo
+*FUNCTION     :updateManNo
+*INPUT        :addrs; 
+*OUTPUT       :bool
 ****************************************************************/
-uint8_t  LIB_SIM800C::getRingVol(void)
-{
-  uint8_t answer;
-  answer=sim800c.sendAtCommand("AT+CRSL?\r\n",1000,2,"\r\nOK\r\n","\r\n+CME ERROR:");
+bool LIB_SIM800C::updateManNo(uint16_t addrs)
+{	
+	char      *strStart,*str1;
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+     
+  str1 = strstr(strStart,"AT+GMI\r\r\n");
   
-  if(answer==1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_GetRingVol(%d) <--- OK\r\n",Sim80x.RingVol);
-    #endif    
-    return Sim80x.RingVol;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_GetRingVol() <--- ERROR\r\n");
-    #endif    
-    return 0;
-  }
-}
+  if(str1!=NULL)
+    sscanf(str1,"AT+GMI\r\r\n%s",Sim80x.IMEI);
 
-/****************************************************************
-*FUNCTION NAME:setRingVol
-*FUNCTION     :setRingVol
-*INPUT        :vol_0_to_100
-*OUTPUT       :bool
-****************************************************************/
-bool  LIB_SIM800C::setRingVol(uint8_t vol_0_to_100)
-{
-  uint8_t answer;
-  char str[16];
-  snprintf(str,sizeof(str),"AT+CRSL=%d\r\n",vol_0_to_100);
-  answer=sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR:");
-  if(answer==1)
-  {
-    Sim80x.RingVol=vol_0_to_100;
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetRingVol(%d) ---> OK\r\n",Sim80x.RingVol);
-    #endif    
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetRingVol(%d) ---> ERROR\r\n",Sim80x.RingVol);
-    #endif    
-    return false;
-  }
-}
-
-/****************************************************************
-*FUNCTION NAME:getLoadVol
-*FUNCTION     :receive loud speaker volume
-*INPUT        :void
-*OUTPUT       :loud speaker volume
-****************************************************************/
-uint8_t  LIB_SIM800C::getLoadVol(void)
-{
-  uint8_t answer;
-  answer=sim800c.sendAtCommand("AT+CLVL?\r\n",1000,2,"\r\nOK\r\n","\r\n+CME ERROR:");
-  if(answer==1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_GetLoadVol(%d) <--- OK\r\n",Sim80x.LoadVol);
-    #endif    
-    return Sim80x.LoadVol;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_GetLoaStartSim80xTaskdVol() <--- ERROR\r\n");
-    #endif      
-    return 0;  
-  }
-}
-
-/****************************************************************
-*FUNCTION NAME:setLoadVol
-*FUNCTION     :setLoadVol
-*INPUT        :vol_0_to_100
-*OUTPUT       :bool
-****************************************************************/
-bool  LIB_SIM800C::setLoadVol(uint8_t vol_0_to_100)
-{
-  uint8_t answer;
-  char str[16];
-  snprintf(str,sizeof(str),"AT+CLVL=%d\r\n",vol_0_to_100);
-  answer=sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR:");
-  if(answer==1)
-  {
-    Sim80x.LoadVol=vol_0_to_100;
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetLoadVol(%d) ---> OK\r\n",Sim80x.LoadVol);
-    #endif    
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetLoadVol(%d) ---> ERROR\r\n",Sim80x.LoadVol);
-    #endif 
-    return false;
-  }
-}
-
-/****************************************************************
-*FUNCTION NAME:waveGetState
-*FUNCTION     :waveGetState
-*INPUT        :void
-*OUTPUT       :Wave status //ask bharath
-****************************************************************/
-Sim80xWave_t   LIB_SIM800C::waveGetState(void)
-{
-  sim800c.sendAtCommand("AT+CREC?\r\n",1000,1,"\r\n+CREC:");
-  #if (_SIM80X_DEBUG==1)
-  printf("\r\nSim80x_WaveGetState(%d) ---> OK\r\n",Sim80x.WaveState);
-  #endif   
-  return Sim80x.WaveState;
-}
-
-/****************************************************************
-*FUNCTION NAME:waveRecord
-*FUNCTION     :waveRecord
-*INPUT        :ID, timelimitinsecond
-*OUTPUT       :bool
-****************************************************************/
-bool  LIB_SIM800C::waveRecord(uint8_t ID,uint8_t timelimitinsecond)
-{
-  uint8_t answer;
-  char str[32];
-  snprintf(str,sizeof(str),"AT+CREC=1,\"C:\\User\\%d.amr\",0,%d\r\n",ID,timelimitinsecond);
-  answer = sim800c.sendAtCommand(str,3000,1,"\r\nOK\r\n");
-  if(answer == 1)
-  {
-    Sim80x.WaveState = Sim80xWave_Recording;
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_WaveRecord(Recording) ---> OK\r\n");
-    #endif     
-    return true;
-  }
-  else
-  {
-    Sim80x.WaveState = Sim80xWave_Idle;
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_WaveRecord(Recording) ---> ERROR\r\n");
-    #endif     
-    return false;
-  }  
-}
-
-/****************************************************************
-*FUNCTION NAME:wavePlay
-*FUNCTION     :wavePlay
-*INPUT        :ID
-*OUTPUT       :bool
-****************************************************************/
-bool  LIB_SIM800C::wavePlay(uint8_t ID)
-{
-  uint8_t answer;
-  char str[64];
-  snprintf(str,sizeof(str),"AT+CREC=4,\"C:\\User\\%d.amr\",0,%d\r\n",ID,Sim80x.LoadVol);
-  answer = sim800c.sendAtCommand(str,3000,1,"\r\nOK\r\n");
-  if(answer == 1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_WavePlay() ---> OK\r\n");
-    #endif     
-    Sim80x.WaveState = Sim80xWave_Playing;
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_WavePlay() ---> ERROR\r\n");
-    #endif     
-    Sim80x.WaveState = Sim80xWave_Idle;
-    return false;
-  }   
-}
-
-/****************************************************************
-*FUNCTION NAME:waveStop
-*FUNCTION     :waveStop
-*INPUT        :void
-*OUTPUT       :bool
-****************************************************************/
-bool  LIB_SIM800C::waveStop(void)
-{
-  uint8_t answer;
-  answer = sim800c.sendAtCommand("AT+CREC=5\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
-  if(answer == 1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_WaveStop() ---> OK\r\n");
-    #endif     
-    Sim80x.WaveState = Sim80xWave_Idle;
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_WaveStop() ---> ERROR\r\n");
-    #endif     
-    return false;
-  }   
-}
-
-/****************************************************************
-*FUNCTION NAME:waveDelete
-*FUNCTION     :waveDelete
-*INPUT        :ID
-*OUTPUT       :bool
-****************************************************************/
-bool  LIB_SIM800C::waveDelete(uint8_t ID)
-{
-  uint8_t answer;
-  char str[32];
-  snprintf(str,sizeof(str),"AT+CREC=3,\"C:\\User\\%d.amr\"\r\n",ID);
-  answer = sim800c.sendAtCommand(str,1000,1,"\r\nOK\r\n");
-  if(answer == 1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_WaveDelete(%d.amr) ---> OK\r\n",ID);
-    #endif     
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_WaveDelete(%d.amr) ---> ERROR\r\n",ID);          
-    //printf("\r\nSim80x_WaveDelete(%d.amr) ---> ERROR\r\n",ID_1_to_20);          
-    #endif     
-    return false;
-  }
-}
-
-/****************************************************************
-*FUNCTION NAME:setMicGain
-*FUNCTION     :setMicGain
-*INPUT        :channel_0_to_4,gain_0_to_15; 
-*OUTPUT       :bool
-****************************************************************/
-bool  LIB_SIM800C::setMicGain(uint8_t channel_0_to_4,uint8_t gain_0_to_15)
-{
-   uint8_t answer;
-  char str[32];
-  snprintf(str,sizeof(str),"AT+CMIC=%d,%d\r\n",channel_0_to_4,gain_0_to_15);
-  answer = sim800c.sendAtCommand(str,1000,1,"\r\nOK\r\n");
-  if(answer == 1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetMicGain(%d,%d) ---> OK\r\n",channel_0_to_4,gain_0_to_15);
-    #endif  
-    getMicGain();    
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetMicGain(%d,%d) ---> ERROR\r\n",channel_0_to_4,gain_0_to_15);
-    #endif     
-    return false;
-  }  
-}
-
-/****************************************************************
-*FUNCTION NAME:getMicGain
-*FUNCTION     :getMicGain
-*INPUT        :void
-*OUTPUT       :bool
-****************************************************************/
-bool  LIB_SIM800C::getMicGain(void)
-{
-  uint8_t answer;
-  answer=sim800c.sendAtCommand("AT+CMIC?\r\n",1000,2,"\r\nOK\r\n","\r\n+CME ERROR:");
-  if(answer==1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_GetMicGain(%d,%d,%d,%d) <--- OK\r\n",Sim80x.MicGainMain,Sim80x.MicGainAux,Sim80x.MicGainMainHandsfree,Sim80x.MicGainAuxHandsfree);   
-    #endif    
-    return Sim80x.LoadVol;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_GetMicGain() <--- ERROR\r\n");
-    #endif      
-    return 0;  
-  }  
-}
-
-/****************************************************************
-*FUNCTION NAME:tonePlay
-*FUNCTION     :tonePlay
-*INPUT        :sim80xtone, Time_ms
-*OUTPUT       :void
-****************************************************************/
-bool  LIB_SIM800C::tonePlay(Sim80xTone_t sim80xtone,uint32_t  Time_ms)
-{
-  uint8_t answer;
-  char str[32];
-  snprintf(str,sizeof(str),"AT+STTONE=1,%d,%d\r\n",sim80xtone,Time_ms);
-  answer = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR\r\n");
-  if(answer == 1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_TonePlay(%d,%d) ---> OK\r\n",sim80xtone,Time_ms);
-    #endif     
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_TonePlay() ---> ERROR\r\n");
-    #endif     
-    return false;
-  }     
-}
-
-/****************************************************************
-*FUNCTION NAME:toneStop
-*FUNCTION     :toneStop
-*INPUT        :void
-*OUTPUT       :bool
-****************************************************************/
-bool  LIB_SIM800C::toneStop(void)
-{
-  uint8_t answer;
-  answer=sim800c.sendAtCommand("AT+STTONE=0\r\n",1000,2,"\r\nOK\r\n","\r\n+CME ERROR:");
-  if(answer==1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_ToneStop() <--- OK\r\n"); 
-    #endif    
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_ToneStop() <--- ERROR\r\n");
-    #endif      
-    return false;  
-  }  
-}
-
-/****************************************************************
-*FUNCTION NAME:getToneVol
-*FUNCTION     :getToneVol
-*INPUT        :void
-*OUTPUT       :tone volume
-****************************************************************/
-uint8_t LIB_SIM800C::getToneVol(void)
-{
-  uint8_t answer;
-  answer=sim800c.sendAtCommand("AT+SNDLEVEL?\r\n",1000,2,"\r\nOK\r\n","\r\n+CME ERROR:");
-  if(answer==1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_GetToneVol(%d) <--- OK\r\n",Sim80x.ToneVol);   
-    #endif    
-    return Sim80x.ToneVol;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_GetToneVol() <--- ERROR\r\n");
-    #endif      
-    return 0;  
-  }  
+  // update Flash IC here
+		
+  debugTerminal("Sim80x_getManNo");
   
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+	
 }
 
 /****************************************************************
-*FUNCTION NAME:setToneVol
-*FUNCTION     :setToneVol
-*INPUT        :vol_0_to_100; 
+*FUNCTION NAME:updateModelNo
+*FUNCTION     :updateModelNo
+*INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool  LIB_SIM800C::setToneVol(uint8_t vol_0_to_100)
-{
-  uint8_t answer;
-  char str[32];
-  snprintf(str,sizeof(str),"AT+SNDLEVEL=0,%d\r\n",vol_0_to_100);
-  answer = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR\r\n");
-  if(answer == 1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetToneVol(%d) ---> OK\r\n",vol_0_to_100);
-    #endif 
-    getToneVol();    
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetToneVol(%d) ---> ERROR\r\n",vol_0_to_100);
-    #endif     
-    return false;
-  }     
+bool LIB_SIM800C::updateModelNo(uint16_t addrs)
+{	
+	char      *strStart,*str1;
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+     
+  str1 = strstr(strStart,"AT+GMM\r\r\n");
   
+  if(str1!=NULL)
+    sscanf(str1,"AT+GMM\r\r\n%s",Sim80x.IMEI);
+
+  // update Flash IC here
+		
+  debugTerminal("Sim80x_getModelNo");
+  
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+	
+}//complete
+
+/****************************************************************
+*FUNCTION NAME:updateGlobalNo
+*FUNCTION     :updateGlobalNo
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::updateGlobalNo(uint16_t addrs)
+{	
+	char      *strStart,*str1;
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+     
+  str1 = strstr(strStart,"AT+GOI\r\r\n");
+  
+  if(str1!=NULL)
+    sscanf(str1,"AT+GOI\r\r\n%s",Sim80x.IMEI);
+
+  // update Flash IC here
+		
+  debugTerminal("Sim80x_getGlobalNo");
+  
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+	
 }
 
 /****************************************************************
-*FUNCTION NAME:setRingTone
-*FUNCTION     :setRingTone
-*INPUT        :Tone_0_to_19,Save; 
+*FUNCTION NAME:updateLastCommand
+*FUNCTION     :updateLastCommand
+*INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool  LIB_SIM800C::setRingTone(uint8_t Tone_0_to_19,bool Save)
-{
-  uint8_t answer;
-  char str[32];
-  snprintf(str,sizeof(str),"AT+CALS=%d\r\n",Tone_0_to_19);
-  answer = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR\r\n");
-  if(answer == 1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetRingTone(%d) ---> OK\r\n",Tone_0_to_19);
-    #endif    
-    if(Save==true)
-      saveParameters();
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetRingTone(%d) ---> ERROR\r\n",Tone_0_to_19);
-    #endif     
-    return false;
-  }       
-} 
+bool LIB_SIM800C::updateLastCommand(uint16_t addrs)
+{	
+	char      *strStart,*str1;
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+     
+  str1 = strstr(strStart,"A/\r\r\n");
+  
+  if(str1!=NULL)
+    sscanf(str1,"A/\r\r\n%s",Sim80x.IMEI);
+
+  // update Flash IC here
+		
+  debugTerminal("Sim80x_getLastCommand");
+  
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+	
+}
 
 /****************************************************************
-*FUNCTION NAME:setEchoParameters
-*FUNCTION     :setEchoParameters
-*INPUT        :selectmic_0_or_1,NonlinearProcessingRemove,AcousticEchoCancellation, NoiseReduction, NoiseSuppression; 
+*FUNCTION NAME:updateCurrentConfig
+*FUNCTION     :updateCurrentConfig
+*INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool  LIB_SIM800C::setEchoParameters(uint8_t  selectmic_0_or_1,uint16_t NonlinearProcessingRemove,
-uint16_t AcousticEchoCancellation,uint16_t NoiseReduction,uint16_t NoiseSuppression)
-{
-  uint8_t answer;
-  char str[64];
-  snprintf(str,sizeof(str),"AT+ECHO=%d,%d,%d,%d,%d,1\r\n",selectmic_0_or_1,NonlinearProcessingRemove,AcousticEchoCancellation,NoiseReduction,NoiseSuppression);
-  answer = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\n+CME ERROR\r\n");
-  if(answer == 1)
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetEchoParameters() ---> OK\r\n");
-    #endif   
-    sim800c.sendAtCommand("AT+ECHO?\r\n",200,1,"\r\nOK\r\n");    
-    return true;
-  }
-  else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\nSim80x_SetEchoParameters() ---> ERROR\r\n");
-    #endif     
-    sim800c.sendAtCommand("AT+ECHO?\r\n",200,1,"\r\nOK\r\n");
-    return false;
-  }         
+bool LIB_SIM800C::updateCurrentConfig(uint16_t addrs)
+{	
+	char      *strStart,*str1;
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+     
+  str1 = strstr(strStart,"AT&V0\r\r\n");
+  
+  if(str1!=NULL)
+    sscanf(str1,"AT&V0\r\r\n%s",Sim80x.IMEI);
+
+  // update Flash IC here
+		
+  debugTerminal("Sim80x_getCurrentConfig");
+  
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+	
 }
+
+/****************************************************************
+*FUNCTION NAME:updateTaCapabilities
+*FUNCTION     :updateTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::updateTaCapabilities(uint16_t addrs)
+{	
+	char      *strStart,*str1;
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+     
+  str1 = strstr(strStart,"AT+GCAP\r\r\n");
+  
+  if(str1!=NULL)
+    sscanf(str1,"AT+GCAP\r\r\n%s",Sim80x.IMEI);
+
+  // update Flash IC here
+		
+  debugTerminal("Sim80x_getTaCapabilities");
+  
+  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+	
+}
+
+
+
+
+
+
+
 
 /****************************************************************
 *FUNCTION NAME:updateIMEI
 *FUNCTION     :updateIMEI
-*INPUT        :none; 
+*INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::updateIMEI(uint16_t addrs)
@@ -1635,6 +1471,7 @@ bool LIB_SIM800C::updateIMEI(uint16_t addrs)
   memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
 	
 }
+
 /****************************************************************
 *FUNCTION NAME:GSM_IRQHandler
 *FUNCTION     :GSM_IRQHandler

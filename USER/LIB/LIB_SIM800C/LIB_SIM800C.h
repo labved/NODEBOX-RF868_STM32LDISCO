@@ -37,7 +37,7 @@ class LIB_SIM800C
 
 
     // CUSTOM LIBRARY
-    void setAtMode(void);
+    void setAtMode(void); //need to check
     void setDataMode(void);
     void setActiveProfile(void);
     void setDefaultConfig(void);
@@ -50,7 +50,7 @@ class LIB_SIM800C
     void getManNo(void);
     void getModelNo(void);
     void getGlobalNo(void);
-    void getLastCommand(void);
+    void getLastCommand(void); //need to check
     void getCurrentConfig(void);
     void getTaCapabilities(void);
     void                    getIMEI(char *IMEI);
@@ -58,23 +58,6 @@ class LIB_SIM800C
 
     // SIM800C LIBRARY     
   
-    uint8_t                 getRingVol(void);           // to be deleted
-    bool                    setRingVol(uint8_t vol_0_to_100);             // to be deleted
-    uint8_t                 getLoadVol(void);            // to be deleted
-    bool                    setLoadVol(uint8_t vol_0_to_100);           // to be deleted
-    Sim80xWave_t            waveGetState(void);           // to be deleted
-    bool                    waveRecord(uint8_t ID,uint8_t timelimitinsecond);             // to be deleted
-    bool                    wavePlay(uint8_t ID);             // to be deleted
-    bool                    waveStop(void);             // to be deleted
-    bool                    waveDelete(uint8_t ID);           // to be deleted
-    bool                    setMicGain(uint8_t channel_0_to_4,uint8_t gain_0_to_15);           // to be deleted
-    bool                    getMicGain(void);           // to be deleted
-    bool                    tonePlay(Sim80xTone_t sim80xtone,uint32_t  time_ms);           // to be deleted
-    bool                    toneStop(void);           // to be deleted
-    uint8_t                 getToneVol(void);           // to be deleted
-    bool                    setToneVol(uint8_t vol_0_to_100);           // to be deleted
-    bool                    setRingTone(uint8_t tone_0_to_19,bool save);           // to be deleted
-    bool                    setEchoParameters(uint8_t  selectmic_0_or_1,uint16_t nonlinearprocessingremove,uint16_t acousticechocancellation,uint16_t noisereduction,uint16_t noisesuppression);            // to be deleted
    
     // GSM
     void                    Gsm_user(uint32_t startupTime);
@@ -136,6 +119,12 @@ class LIB_SIM800C
     bool                    GPRS_getHttp(char *URL); 
     
 // UPDATE FUNCTIONS
+    bool updateManNo(uint16_t addrs);
+    bool updateModelNo(uint16_t addrs);
+    bool updateGlobalNo(uint16_t addrs);
+    bool updateLastCommand(uint16_t addrs);
+    bool updateCurrentConfig(uint16_t addrs);
+    bool updateTaCapabilities(uint16_t addrs);
     bool updateIMEI(uint16_t addrs);
 
 };
