@@ -368,7 +368,7 @@ void	HAL_SIM800C::writeString(char const *str)
 *INPUT        :atcommand,wait_time, howmuchanswers,...
 *OUTPUT       :index
 ****************************************************************/
-uint8_t  HAL_SIM800C::sendAtCommand(char const *AtCommand,int32_t  maxwaiting_ms,uint8_t const howmuchanswers,...)
+uint8_t  HAL_SIM800C::sendAtCommand(char const *atcommand, int32_t  maxwaiting_ms, uint8_t const howmuchanswers,...)
 {
   uint16_t index=0;
   
@@ -395,7 +395,7 @@ uint8_t  HAL_SIM800C::sendAtCommand(char const *AtCommand,int32_t  maxwaiting_ms
   // }
   // va_end (tag);	
   
-  strncpy(Sim80x.AtCommand.SendCommand,AtCommand,sizeof(Sim80x.AtCommand.SendCommand)); 
+  strncpy(Sim80x.AtCommand.SendCommand,atcommand,sizeof(Sim80x.AtCommand.SendCommand)); 
   writeString(Sim80x.AtCommand.SendCommand); 
   
   index = readLine(Sim80x.UsartRxBuffer, sizeof(Sim80x.UsartRxBuffer));

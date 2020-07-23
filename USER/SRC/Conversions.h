@@ -1,10 +1,5 @@
 #include "stm32l1xx.h" 
-#include "Settings.h" 
-#include "Pinouts.h"
 #include "Shortcodes.h"
-#include "Variables.h"
-
-#include "Functions.h"
 
 #ifndef CONVERSIONS_H
   #define CONVERSIONS_H

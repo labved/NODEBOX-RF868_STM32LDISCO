@@ -18,9 +18,6 @@
 #if(_USE_GSM==1)
 
 
-
-
-
 class HAL_SIM800C   
 {
   private:

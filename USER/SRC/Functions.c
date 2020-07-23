@@ -1,11 +1,6 @@
 #include "stm32l1xx.h" 
-#include "Settings.h" 
-#include "Pinouts.h"
-#include "Shortcodes.h"
-#include "Variables.h"
 
 #include "Functions.h"
-#include "Conversions.h"
 
 #include "intrinsics.h"
 
