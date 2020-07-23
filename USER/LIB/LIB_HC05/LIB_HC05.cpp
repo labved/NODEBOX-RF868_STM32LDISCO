@@ -48,7 +48,7 @@ void LIB_HC05::test(void)
 
 /****************************************************************
 *FUNCTION NAME:PoweronReset
-*FUNCTION     :Switch reset //details refer datasheet of CC1101/CC1100//
+*FUNCTION     :Switch reset 
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
@@ -59,7 +59,7 @@ void LIB_HC05::PoweronReset(void)
 
 /****************************************************************
 *FUNCTION NAME:RegConfigSettings
-*FUNCTION     :HC05 register config //details refer datasheet of ST7586S//
+*FUNCTION     :HC05 register config 
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
@@ -135,7 +135,7 @@ void LIB_HC05::debugTerminal(char *msg)
 
 /****************************************************************
 *FUNCTION NAME:Init
-*FUNCTION     :HC05 initialization
+*FUNCTION     :initialization
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
@@ -150,7 +150,7 @@ void LIB_HC05::Init(void)
 
 /****************************************************************
 *FUNCTION NAME:softReset
-*FUNCTION     :Reset on command
+*FUNCTION     :soft Reset
 *INPUT        :timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -175,7 +175,7 @@ bool LIB_HC05::probe(unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:setFactoryDefault
-*FUNCTION     :set to factory settings// check with bharath
+*FUNCTION     :set to factory settings
 *INPUT        :timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -186,7 +186,7 @@ bool LIB_HC05::setFactoryDefault(unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getVersion
-*FUNCTION     :HC05 version number // check with bharath
+*FUNCTION     :get version number 
 *INPUT        :buffer , buffer_size , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -223,7 +223,7 @@ bool LIB_HC05::getVersion(char *buffer, size_t buffer_size, unsigned long timeou
 
 /****************************************************************
 *FUNCTION NAME:getAddress
-*FUNCTION     :getAddress// check with bharath
+*FUNCTION     :getAddress
 *INPUT        :address : BluetoothAddress , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -235,7 +235,7 @@ bool LIB_HC05::getAddress(BluetoothAddress &address, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getName
-*FUNCTION     :get Name from external device// check with bharath
+*FUNCTION     :get Name from external device
 *INPUT        :buffer , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -276,8 +276,8 @@ bool LIB_HC05::getName(char *buffer, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:setName
-*FUNCTION     :set Name to extenal device// check with bharath
-*INPUT        :name , timeout
+*FUNCTION     :set Name to extenal device
+*INPUT        :name, timeout
 *OUTPUT       :bool
 ****************************************************************/
 bool LIB_HC05::setName(const char *name, unsigned long timeout)
@@ -288,8 +288,8 @@ bool LIB_HC05::setName(const char *name, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getRemoteDeviceName
-*FUNCTION     :get Remote Device Name // check with bharath
-*INPUT        :address : BluetoothAddress , buffer , buffer_size , timeout
+*FUNCTION     :get Remote Device Name 
+*INPUT        :address, buffer, buffer_size, timeout
 *OUTPUT       :bool
 ****************************************************************/
 bool LIB_HC05::getRemoteDeviceName(const BluetoothAddress &address,
@@ -332,8 +332,8 @@ bool LIB_HC05::getRemoteDeviceName(const BluetoothAddress &address,
 
 /****************************************************************
 *FUNCTION NAME:getRole
-*FUNCTION     :getRole// check with bharath
-*INPUT        :role:  HC05 role , timeout
+*FUNCTION     :getRole
+*INPUT        :HC05 role , timeout
 *OUTPUT       :bool
 ****************************************************************/
 bool LIB_HC05::getRole(HC05_Role &role, unsigned long timeout)
@@ -361,8 +361,8 @@ bool LIB_HC05::getRole(HC05_Role &role, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:setRole
-*FUNCTION     :setRole// check with bharath
-*INPUT        :role:  HC05 role , timeout
+*FUNCTION     :setRole
+*INPUT        :role , timeout
 *OUTPUT       :bool
 ****************************************************************/
 bool LIB_HC05::setRole(HC05_Role role, unsigned long timeout)
@@ -377,7 +377,7 @@ bool LIB_HC05::setRole(HC05_Role role, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getDeviceClass
-*FUNCTION     :get Device Class // check with bharath
+*FUNCTION     :get Device Class 
 *INPUT        :device_class , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -408,7 +408,7 @@ bool LIB_HC05::getDeviceClass(uint32_t &device_class, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:setDeviceClass
-*FUNCTION     :set Device Class// check with bharath
+*FUNCTION     :set Device Class
 *INPUT        :device_class , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -424,7 +424,7 @@ bool LIB_HC05::setDeviceClass(uint32_t device_class, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getInquiryAccessCode
-*FUNCTION     :getInquiryAccessCode// check with bharath
+*FUNCTION     :getInquiryAccessCode
 *INPUT        :iac , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -459,7 +459,7 @@ bool LIB_HC05::getInquiryAccessCode(uint32_t &iac, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:setInquiryAccessCode
-*FUNCTION     :setInquiryAccessCode// check with bharath
+*FUNCTION     :setInquiryAccessCode
 *INPUT        :iac , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -475,7 +475,7 @@ bool LIB_HC05::setInquiryAccessCode(uint32_t iac, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getInquiryMode
-*FUNCTION     :getInquiryMode// check with bharath
+*FUNCTION     :getInquiryMode
 *INPUT        :inq_mode , max_devices , max_duration , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -521,7 +521,7 @@ bool LIB_HC05::getInquiryMode(HC05_InquiryMode &inq_mode,
 
 /****************************************************************
 *FUNCTION NAME:setInquiryMode
-*FUNCTION     :setInquiryMode// check with bharath
+*FUNCTION     :setInquiryMode
 *INPUT        :inq_mode , max_devices , max_duration , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -546,7 +546,7 @@ bool LIB_HC05::setInquiryMode(HC05_InquiryMode inq_mode,
 
 /****************************************************************
 *FUNCTION NAME:getPassword
-*FUNCTION     :getPassword// check with bharath
+*FUNCTION     :getPassword
 *INPUT        :buffer , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -588,7 +588,7 @@ bool LIB_HC05::getPassword(char *buffer, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:setPassword
-*FUNCTION     :setPassword// check with bharath
+*FUNCTION     :setPassword
 *INPUT        :password , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -600,7 +600,7 @@ bool LIB_HC05::setPassword(const char *password, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getSerialMode
-*FUNCTION     :getSerialMode// check with bharath
+*FUNCTION     :getSerialMode
 *INPUT        :speed , stop_bits ,  parity , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -647,7 +647,7 @@ bool LIB_HC05::getSerialMode(uint32_t &speed, uint8_t &stop_bits,
 
 /****************************************************************
 *FUNCTION NAME:setSerialMode
-*FUNCTION     :setSerialMode// check with bharath
+*FUNCTION     :setSerialMode
 *INPUT        :speed , stop_bits ,  parity , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -666,7 +666,7 @@ bool LIB_HC05::setSerialMode(uint32_t speed,
 
 /****************************************************************
 *FUNCTION NAME:getConnectionMode
-*FUNCTION     :getConnectionMode  // check with bharath
+*FUNCTION     :getConnectionMode  
 *INPUT        :connection_mode , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -696,7 +696,7 @@ bool LIB_HC05::getConnectionMode(
 
 /****************************************************************
 *FUNCTION NAME:setConnectionMode
-*FUNCTION     :setConnectionMode// check with bharath
+*FUNCTION     :setConnectionMode
 *INPUT        :connection_mode , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -714,7 +714,7 @@ bool LIB_HC05::setConnectionMode(
 
 /****************************************************************
 *FUNCTION NAME:bind
-*FUNCTION     :bind// check with bharath
+*FUNCTION     :bind
 *INPUT        :address : BluetoothAddress , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -726,7 +726,7 @@ bool LIB_HC05::bind(const BluetoothAddress &address, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getAddressBound
-*FUNCTION     :getAddressBound// check with bharath
+*FUNCTION     :getAddressBound
 *INPUT        :address : BluetoothAddress , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -738,7 +738,7 @@ bool LIB_HC05::getAddressBound(BluetoothAddress &address, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getLeds
-*FUNCTION     :get Leds status// check with bharath
+*FUNCTION     :get Leds status
 *INPUT        :led_status , led_connection , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -779,7 +779,7 @@ bool LIB_HC05::getLeds(bool &led_status,
 
 /****************************************************************
 *FUNCTION NAME:setLeds
-*FUNCTION     :set Leds status// check with bharath
+*FUNCTION     :set Leds status
 *INPUT        :led_status , led_connection , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -797,7 +797,7 @@ bool LIB_HC05::setLeds(bool led_status,
 
 /****************************************************************
 *FUNCTION NAME:setPortState
-*FUNCTION     :set HC05 Ports States// check with bharath
+*FUNCTION     :set HC05 Ports States
 *INPUT        :port_states , port_num , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -814,7 +814,7 @@ bool LIB_HC05::setPortState(uint8_t port_num,
 
 /****************************************************************
 *FUNCTION NAME:getMultiplePorts
-*FUNCTION     :getMultiplePorts// check with bharath
+*FUNCTION     :getMultiplePorts
 *INPUT        :port_states , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -845,7 +845,7 @@ bool LIB_HC05::getMultiplePorts(uint16_t &port_states, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:setMultiplePorts
-*FUNCTION     :setMultiplePorts  // check with bharath
+*FUNCTION     :setMultiplePorts  
 *INPUT        :port_states , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -861,7 +861,7 @@ bool LIB_HC05::setMultiplePorts(uint16_t port_states, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getInquiryAndPagingParams
-*FUNCTION     :getInquiryAndPagingParams// check with bharath
+*FUNCTION     :getInquiryAndPagingParams
 *INPUT        :inquiry_interval , inquiry_duration , paging_interval , paging_duration , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -912,7 +912,7 @@ bool LIB_HC05::getInquiryAndPagingParams(
 
 /****************************************************************
 *FUNCTION NAME:setInquiryAndPagingParams
-*FUNCTION     :setInquiryAndPagingParams// check with bharath
+*FUNCTION     :setInquiryAndPagingParams
 *INPUT        :inquiry_interval , inquiry_duration , paging_interval , paging_duration , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -932,7 +932,7 @@ bool LIB_HC05::setInquiryAndPagingParams(
 
 /****************************************************************
 *FUNCTION NAME:getSniffParams
-*FUNCTION     :getSniffParams// check with bharath
+*FUNCTION     :getSniffParams
 *INPUT        :max_time , min_time , retry_interval , sniff_timeout , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -980,7 +980,7 @@ bool LIB_HC05::getSniffParams(uint16_t &max_time, uint16_t &min_time,
 
 /****************************************************************
 *FUNCTION NAME:setSniffParams
-*FUNCTION     :set Sniff Parameter// check with bharath
+*FUNCTION     :set Sniff Parameter
 *INPUT        :max_time , min_time , retry_interval , sniff_timeout , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -998,7 +998,7 @@ bool LIB_HC05::setSniffParams(uint16_t max_time, uint16_t min_time,
 
 /****************************************************************
 *FUNCTION NAME:enterSniffMode
-*FUNCTION     :enterSniffMode// check with bharath
+*FUNCTION     :enterSniffMode
 *INPUT        :timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1010,7 +1010,7 @@ bool LIB_HC05::enterSniffMode(unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:exitSniffMode
-*FUNCTION     :exitSniffMode// check with bharath
+*FUNCTION     :exitSniffMode
 *INPUT        :timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1022,7 +1022,7 @@ bool LIB_HC05::exitSniffMode(unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getSecurityAndEncryption
-*FUNCTION     :getSecurityAndEncryption // check with bharath
+*FUNCTION     :getSecurityAndEncryption 
 *INPUT        :Security,encryption , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1058,7 +1058,7 @@ bool LIB_HC05::getSecurityAndEncryption(HC05_Security &security,
 
 /****************************************************************
 *FUNCTION NAME:setSecurityAndEncryption
-*FUNCTION     :setSecurityAndEncryption// check with bharath
+*FUNCTION     :setSecurityAndEncryption
 *INPUT        :security , encryption , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1076,7 +1076,7 @@ bool LIB_HC05::setSecurityAndEncryption(HC05_Security security,
 
 /****************************************************************
 *FUNCTION NAME:deleteDeviceFromList
-*FUNCTION     :deleteDeviceFromList// check with bharath
+*FUNCTION     :deleteDeviceFromList
 *INPUT        :address : BluetoothAddress , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1089,7 +1089,7 @@ bool LIB_HC05::deleteDeviceFromList(
 
 /****************************************************************
 *FUNCTION NAME:deleteAllDevicesFromList
-*FUNCTION     :deleteAllDevicesFromList// check with bharath
+*FUNCTION     :deleteAllDevicesFromList
 *INPUT        :timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1101,7 +1101,7 @@ bool LIB_HC05::deleteAllDevicesFromList(unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:findDeviceInList
-*FUNCTION     :findDeviceInList // check with bharath
+*FUNCTION     :findDeviceInList 
 *INPUT        :address : Bluetoothaddress , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1114,7 +1114,7 @@ bool LIB_HC05::findDeviceInList(
 
 /****************************************************************
 *FUNCTION NAME:countDevicesInList
-*FUNCTION     :countDevicesInList  // check with bharath
+*FUNCTION     :countDevicesInList  
 *INPUT        :device_count , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1143,7 +1143,7 @@ bool LIB_HC05::countDevicesInList(uint8_t &device_count, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:getLastAuthenticatedDevice
-*FUNCTION     :getLastAuthenticatedDevice  // check with bharath
+*FUNCTION     :getLastAuthenticatedDevice  
 *INPUT        :address : BluetoothAddress , timeout;
 *OUTPUT       :bool
 ****************************************************************/
@@ -1156,7 +1156,7 @@ bool LIB_HC05::getLastAuthenticatedDevice(
 
 /****************************************************************
 *FUNCTION NAME:getState
-*FUNCTION     :getState// check with bharath
+*FUNCTION     :getState
 *INPUT        :state , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1214,7 +1214,7 @@ bool LIB_HC05::getState(HC05_State &state, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:initSerialPortProfile
-*FUNCTION     :initSerialPortProfile  // check with bharath
+*FUNCTION     :initSerialPortProfile  
 *INPUT        :timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1226,7 +1226,7 @@ bool LIB_HC05::initSerialPortProfile(unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:inquire
-*FUNCTION     :inquire// check with bharath
+*FUNCTION     :inquire
 *INPUT        :callback , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1261,7 +1261,7 @@ bool LIB_HC05::inquire(InquiryCallback callback, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:cancelInquiry
-*FUNCTION     :cancelInquiry  // check with bharath
+*FUNCTION     :cancelInquiry  
 *INPUT        :timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1273,7 +1273,7 @@ bool LIB_HC05::cancelInquiry(unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:pair
-*FUNCTION     :pairing AT commands  // check with bharath
+*FUNCTION     :pairing AT commands  
 *INPUT        :address : BluetoothAddress , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1292,7 +1292,7 @@ bool LIB_HC05::pair(const BluetoothAddress &address, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:connect
-*FUNCTION     :connect  // check with bharath
+*FUNCTION     :connect  
 *INPUT        :address : BluetoothAddress , timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1303,7 +1303,7 @@ bool LIB_HC05::connect(const BluetoothAddress &address, unsigned long timeout)
 
 /****************************************************************
 *FUNCTION NAME:disconnect
-*FUNCTION     :disconnect commands// check with bharath
+*FUNCTION     :disconnect commands
 *INPUT        :timeout
 *OUTPUT       :bool
 ****************************************************************/
@@ -1338,56 +1338,6 @@ bool LIB_HC05::disconnect(unsigned long timeout)
 
    return hc05.readOperationResult();
 }
-
-/****************************************************************
-*FUNCTION NAME:sendData
-*FUNCTION     :send hex Data 
-*INPUT        :message
-*OUTPUT       :bool
-****************************************************************/
-bool LIB_HC05::sendData(byte *msg)
-{
-  hc05.writeString(msg);
-  
-  return 1;
-}
-
-// /****************************************************************
-// *FUNCTION NAME:getData
-// *FUNCTION     :getData 
-// *INPUT        :timeout
-// *OUTPUT       :bool
-// ****************************************************************/
-// bool LIB_HC05::getData(byte *buffer, size_t buffer_size)
-// {
-//   uint16_t index = 0;
-//   if (!buffer || buffer_size <= 1)
-//     return 0;
-
-//   char *p = buffer;
-//   *p = 0;
-  
-//   while(index < buffer_size)
-//   {
-//     *p = hc05.getc();
-//     p++;
-//     index++;  
-//     if(p[-1] == '\n' )
-//     { 
-//       p -= 1;       // setting '/n' as null char
-//       *p = 0;
-      
-//       p -= 1;       // setting '/r' as null char
-//       *p = 0;
-      
-//        goto EXIT_LOOP;
-//     }
-//   }
-  
-//   EXIT_LOOP:
-    
-//   return 1;
-// }
 
 extern LIB_HC05 bl; 
 

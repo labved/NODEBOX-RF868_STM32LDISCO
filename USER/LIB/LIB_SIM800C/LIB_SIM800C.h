@@ -18,9 +18,9 @@
 class LIB_SIM800C   
 {
   private:
-    void PoweronReset(void);
-    void RegConfigSettings(void);
-    void debugTerminal(char *msg);
+    void                    PoweronReset(void);
+    void                    RegConfigSettings(void);
+    void                    debugTerminal(char *msg);
 
   public:
     void                    test(void);  // to be deleted
