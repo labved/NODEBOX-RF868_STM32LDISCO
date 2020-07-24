@@ -20,6 +20,8 @@ NODEBOX_RF868 node;
 LIB_MODEL gen;
 char msg[255] = "TESTING";
 
+//test
+
 int main()
 {
     __enable_interrupt();
@@ -49,6 +51,115 @@ int main()
    
 }
 
+/* 
+
+3GPP TS 27.007 (GENERIC) 
+AT+CGMI 
+AT+CGMM
+AT+CGSN
+AT+CSCS
+AT+CSTA
+AT+CIMI
+AT+COPS
+AT+CREG
+AT+CRLP
+AT+CSQ
+AT+CPOL
+AT+COPN
+AT+CFUN
+AT+CCLK
+AT+CSIM
+AT+CBC
 
 
+// 3GPP TS 27.005 -> only name change & ordering
 
+//SMS
+AT+CMGD deleteMSG-> deleteSmsMsg
+AT+CMGF Gsm_getMsgFormat -> getSmsFormat
+AT+CMGL
+AT+CMGR Gsm_readMsg  -> getSmsMsg
+AT+CMGS Gsm_sendMsgText -> setSmsMsgTxt
+AT+CMGW
+AT+CMSS
+AT+CNMI
+AT+CPMS Gsm_getMsgMemoryStatus -> getSmsMsgMemorySts
+AT+CRES
+AT+CSAS
+AT+CSCA Gsm_setMsgServiceNumber -> setSmsMsgServiceNo
+AT+CSCB
+AT+CSDH
+AT+CSMP Gsm_getMsgTextModeParameter -> getSmsMsgTextModeParam
+AT+CSMS
+
+//GPRS
+AT+CGATT
+AT+CGDCONT
+AT+CGQMIN
+AT+CGQREQ
+AT+CGACT
+AT+CGDATA
+AT+CGPADDR
+AT+CGCLASS
+AT+CGEREP
+AT+CGREG
+AT+CGSMS
+
+
+// TCP/IP (NETWORK) -> only name change & ordering
+AT+CIPMUX GPRS_getMultiConnection, GPRS_setMultiConnection -> getNetMultiConnection, setNetMultiConnection
+CIPSTART
+CIPSEND
+CIPQSEND
+CIPACK
+CIPCLOSE
+CIPSHUT GPRS_deactivatePDPContext -> deactivateNetPDPContext
+CLPORT
+CSTT  GPRS_getAPN, GPRS_setAPN  -> getNetAPN, setNetAPN
+CIICR   GPRS_startUpGPRS        -> startupNetGPRS
+CIFSR GPRS_getLocalIP           -> getNetLocalIP
+CIPSTATUS GPRS_getCurrentConnectionStatus -> getNetCurrentConnectionSts
+CDNSCFG
+CDNSCFG
+CDNSGIP
+CIPHEAD
+CIPSPRT
+CIPSERVER
+CIPCSGP
+CIPSRIP
+CIPDPDP
+CIPMODE
+CIPCCFG
+CIPSHOWTP
+SIPUDPMODE
+CIPRXGET
+CIPSCONT
+CIPRDTIMER
+CIPSGTXT
+CIPTKA
+
+// IP (NETWORK)
+SAPBR GPRS_getHttp  -> get
+
+//PING
+CIPPING
+CIPCTL
+CIPFLT
+CIPBEIPING
+
+//HTTP -> new write
+HTTPINIT  httpInit()
+HTTPTERM  httpTerminate
+HTTPPARA  getHttpParam, setHttpParam
+HTTPDATA  getHttpData, setHttpData
+HTTPACTION getHttpAction, setHttpAction
+HTTPREAD getHttpRead, setHttpRead
+HTTPCONT  getHttpContext
+HTTPSTATUS getHttpStatus
+HTTPHEAD getHttpHeader
+
+// GPS
+CIPGSMLOC
+
+
+*/

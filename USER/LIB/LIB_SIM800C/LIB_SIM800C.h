@@ -41,12 +41,15 @@ class LIB_SIM800C
     void setDataMode(void);
     void setActiveProfile(void);
     void setDefaultConfig(void);
+
+    // 0.25V
     void                    setFactoryDefault(void);
     void                    setAtEcho(bool turnon);
     void                    setBaudRate(uint16_t baudrate);
     void                    setPower(bool turnon);      //need to check
-    void                    saveParameters(void);
+    void                    setParameters(void);
 
+    // 3GPP TS 27.007
     void getManNo(void);
     void getModelNo(void);
     void getGlobalNo(void);
@@ -55,21 +58,23 @@ class LIB_SIM800C
     void getTaCapabilities(void);
     void                    getIMEI(char *IMEI);
 
+    // 3GPP TS 27.005
+
 
     // SIM800C LIBRARY     
   
    
     // GSM
     void                    Gsm_user(uint32_t startupTime);
-    void                    Gsm_userNewCall(const char *CallerNumber);
+    void                    Gsm_userNewCall(const char *CallerNumber); // to be deleted
     void                    Gsm_userNewMsg(char *number,char *Date,char *Time,char *msg);
 
     bool                    Gsm_ussd(char *send,char *receive);
 
-    bool                    Gsm_callAnswer(void);
-    bool                    Gsm_callDisconnect(void);
-    GsmVoiceStatus_t        Gsm_dial(char *number,uint8_t WaitForAnswer_second); 
-    GsmVoiceStatus_t        Gsm_getLastVoiceActivity(void);
+    bool                    Gsm_callAnswer(void); // to be deleted
+    bool                    Gsm_callDisconnect(void); // to be deleted
+    GsmVoiceStatus_t        Gsm_dial(char *number,uint8_t WaitForAnswer_second);  // to be deleted
+    GsmVoiceStatus_t        Gsm_getLastVoiceActivity(void); // to be deleted
     GsmMsgFormat_t          Gsm_getMsgFormat(void);
     bool                    Gsm_setMsgFormat(GsmMsgFormat_t GsmMsgFormat);  
     GsmMsgMemory_t          Gsm_getMsgMemoryStatus(void);
@@ -134,3 +139,5 @@ extern LIB_SIM800C gsm;
 #endif
 
 #endif
+
+//
