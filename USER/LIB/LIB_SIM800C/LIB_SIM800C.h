@@ -50,37 +50,37 @@ class LIB_SIM800C
     void                    setParameters(void);
 
     // 3GPP TS 27.007
-    void getManNo(void);
-    void getModelNo(void);
-    void getGlobalNo(void);
-    void getLastCommand(void); //need to check
-    void getCurrentConfig(void);
-    void getTaCapabilities(void);
-    void                    getIMEI(char *IMEI);
+    bool getManNo(void);
+    bool getModelNo(void);
+    bool getGlobalNo(void);
+    bool getLastCommand(void); //need to check
+    bool getCurrentConfig(void);
+    bool getTaCapabilities(void);
+    bool                    getIMEI(char *IMEI);
     
-    void getTeChar(void);
-    void getAddrsType(void);
-    void getIMSI(void);
-    void getSelOperator(void);
-    void getNetworkReg(void);
-    void getRLPParams(void);
-    void getCSQ(void);
-    void getPrefOperLst(void);   
-    void getOperName(void);
-    void getPhoneFunc(void);
-    void getClockData(void);
-    void getBattChar(void);
+    bool getTeChar(void);
+    bool getAddrsType(void);
+    bool getIMSI(void);
+    bool getOperator(void);
+    bool getNetworkReg(void);
+    bool getRLPParams(void);
+    bool getCSQ(void);
+    bool getPrefOperLst(void);   
+    bool getOperName(void);
+    bool getPhoneFunc(void);
+    bool getClockData(void);
+    bool getBattChar(void);
 
     
-    void setTeChar(void);
-    void setAddrsType(void);
-    void setSelOperator(void); //need to check
-    void setNetworkReg(void);
-    void setRLPParams(void);
-    void setPrefOperLst(void);
-    void setPhoneFunc(void);
-    void setClockData(void);
-    void setSimAccess(void);
+    void setTeChar(char *chset);
+    void setAddrsType(uint8_t type);
+    void setSelOperator(uint8_t mode, uint8_t format, uint8_t oper); //need to check
+    void setNetworkReg(bool turnon);
+    void setRLPParams(uint16_t iws,uint16_t mws,uint16_t t2,uint16_t n2,uint16_t t4);
+    void setPrefOperLst(uint8_t index, uint8_t  format, char *oper);  //need to check
+    void setPhoneFunc(uint8_t fun, uint16_t  rst);
+    void setClockData(char *time);
+    void setSimAccess(uint16_t length, char command);
 
 
 
@@ -92,15 +92,10 @@ class LIB_SIM800C
    
     // GSM
     void                    Gsm_user(uint32_t startupTime);
-    void                    Gsm_userNewCall(const char *CallerNumber); // to be deleted
     void                    Gsm_userNewMsg(char *number,char *Date,char *Time,char *msg);
 
     bool                    Gsm_ussd(char *send,char *receive);
 
-    bool                    Gsm_callAnswer(void); // to be deleted
-    bool                    Gsm_callDisconnect(void); // to be deleted
-    GsmVoiceStatus_t        Gsm_dial(char *number,uint8_t WaitForAnswer_second);  // to be deleted
-    GsmVoiceStatus_t        Gsm_getLastVoiceActivity(void); // to be deleted
     GsmMsgFormat_t          getSmsFormat(void);
     bool                    Gsm_setMsgFormat(GsmMsgFormat_t GsmMsgFormat);  
     GsmMsgMemory_t          getSmsMsgMemorySts(void);

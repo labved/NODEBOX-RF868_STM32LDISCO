@@ -35,60 +35,6 @@ bool  LIB_SIM800C::Gsm_ussd(char *send,char *receive)
   return false;
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_callAnswer(void)
-{
-  uint8_t answer = sim800c.sendAtCommand("ATA\r\n",20000,2,"\r\nOK\r\n","\r\nERROR\r\n");
-  if(answer == 1)
-  {
-    Sim80x.Gsm.GsmVoiceStatus = GsmVoiceStatus_IAnswerTheCall;
-    return true;
-  }
-  else
-    return false;
-}
-//######################################################################################################
-bool  LIB_SIM800C::Gsm_callDisconnect(void)
-{
-  uint8_t answer = sim800c.sendAtCommand("AT+HVOIC\r\n",20000,2,"AT+HVOIC\r\r\nOK\r\n","AT+HVOIC\r\r\nERROR\r\n");
-  if(answer == 1)
-  {
-    Sim80x.Gsm.GsmVoiceStatus = GsmVoiceStatus_Idle;
-    return true;
-  }
-  else
-    return false;
-}
-//######################################################################################################
-GsmVoiceStatus_t     LIB_SIM800C::Gsm_dial(char *Number,uint8_t WaitForAnswer_second)
-{
-  char str[24];
-  uint32_t  wait = WaitForAnswer_second*1000;
-  Sim80x.Gsm.GsmVoiceStatus = GsmVoiceStatus_Calling;
-  snprintf(Sim80x.Gsm.DiallingNumber,sizeof(Sim80x.Gsm.DiallingNumber),"%s",Number);
-  snprintf(str,sizeof(str),"ATD%s;\r\n",Number);
-  sim800c.writeString(str);
-  while(wait>0)
-  {    
-    if(Sim80x.Gsm.GsmVoiceStatus != GsmVoiceStatus_Calling)
-      return Sim80x.Gsm.GsmVoiceStatus;
-    delay_ms(100);
-    wait-=100;
-  } 
-  if(wait==0)
-  {
-    Gsm_callDisconnect();
-    Sim80x.Gsm.GsmVoiceStatus=GsmVoiceStatus_ReturnNoAnswer;
-    return  Sim80x.Gsm.GsmVoiceStatus; 
-  }
-  Sim80x.Gsm.GsmVoiceStatus = GsmVoiceStatus_ReturnError;
-  return Sim80x.Gsm.GsmVoiceStatus;
-}
-//######################################################################################################
-GsmVoiceStatus_t     LIB_SIM800C::Gsm_getLastVoiceActivity(void)
-{ 
-  return Sim80x.Gsm.GsmVoiceStatus;  
-}
-//######################################################################################################
 //######################################################################################################
 //######################################################################################################
 GsmMsgFormat_t  LIB_SIM800C::getSmsFormat(void)
