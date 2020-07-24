@@ -1369,10 +1369,10 @@ void  LIB_SIM800C::getNetworkReg(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void  LIB_SIM800C::getRLPParams(void)
+void  LIB_SIM800C::getRLPParams(uint16_t iws,uint16_t mws,uint16_t t2,uint16_t n2,uint16_t t4)
 {
   char temp[20];
-  snprintf(temp, sizeof(temp), "AT+CSTA=%d[,%d[,%d[,%d[,%d]]]]\r\n", type); 
+  snprintf(temp, sizeof(temp), "AT+CRLP=%d[,%d[,%d[,%d[,%d]]]]\r\n", iws, mws, t2, n2, t4); 
 
 
   sim800c.sendAtCommand(temp,200, 0);
