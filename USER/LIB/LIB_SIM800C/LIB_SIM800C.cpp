@@ -1479,7 +1479,6 @@ void  LIB_SIM800C::getBattChar(void)
 ****************************************************************/
 void LIB_SIM800C::setTeChar(char *chset)
 {
-
    char temp[20];
    snprintf(temp, sizeof(temp), "AT+CSCS%s\r\n", chset); 
    sim800c.sendAtCommand(temp, 200, 0);

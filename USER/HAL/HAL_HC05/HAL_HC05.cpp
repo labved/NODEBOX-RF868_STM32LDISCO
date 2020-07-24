@@ -182,7 +182,7 @@ byte  HAL_HC05::getc(void)
 ****************************************************************/
 void HAL_HC05::HAL_UART_Transmit(uint8_t *data, uint8_t size,uint8_t timeout)
 {
-  char temp;
+
   for(uint8_t i=0;i<size;i++)
   {
       temp = *data;
