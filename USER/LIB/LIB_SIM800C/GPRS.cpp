@@ -22,27 +22,27 @@ extern Sim80x_t                 Sim80x;
 
 
 //####################################################################################################
-bool  LIB_SIM800C::GPRS_startUpGPRS(void)
+bool  LIB_SIM800C::startupNetGPRS(void)
 {
   uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CIICR\r\n",85000,2,"\r\nOK\r\n","\r\nERROR\r\n");
   if(answer == 1)
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nGPRS_startUpGPRS() ---> OK\r\n");
+    printf("\r\nstartupNetGPRS() ---> OK\r\n");
     #endif
     return true;
   }
   else  
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nGPRS_startUpGPRS() --->ERROR\r\n");
+    printf("\r\nstartupNetGPRS() --->ERROR\r\n");
     #endif
     return false;
   }
 }  
 //####################################################################################################
-bool  LIB_SIM800C::GPRS_getAPN(char *Name,char *username,char *password)
+bool  LIB_SIM800C::getNetAPN(char *Name,char *username,char *password)
 {
   uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CSTT?\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
@@ -55,20 +55,20 @@ bool  LIB_SIM800C::GPRS_getAPN(char *Name,char *username,char *password)
     if(password!=NULL)
       strcpy(password,Sim80x.GPRS.APN_Password);
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nGPRS_getAPN(%s,%s,%s) <--- OK\r\n",Sim80x.GPRS.APN,Sim80x.GPRS.APN_UserName,Sim80x.GPRS.APN_Password);
+    printf("\r\ngetNetAPN(%s,%s,%s) <--- OK\r\n",Sim80x.GPRS.APN,Sim80x.GPRS.APN_UserName,Sim80x.GPRS.APN_Password);
     #endif
     return true;
   }
   else
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nGPRS_getAPN() <--- ERROR\r\n");
+    printf("\r\ngetNetAPN() <--- ERROR\r\n");
     #endif
     return false;
   }
 }
 //####################################################################################################
-bool  LIB_SIM800C::GPRS_setAPN(char *Name,char *username,char *password)
+bool  LIB_SIM800C::setNetAPN(char *Name,char *username,char *password)
 {
   char str[64];
   uint8_t answer;
@@ -80,68 +80,68 @@ bool  LIB_SIM800C::GPRS_setAPN(char *Name,char *username,char *password)
     strcpy(Sim80x.GPRS.APN_UserName,username);
     strcpy(Sim80x.GPRS.APN_Password,password);
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nGPRS_setAPN(\"%s\",\"%s\",\"%s\") ---> OK\r\n",Name,username,password);
+    printf("\r\nsetNetAPN(\"%s\",\"%s\",\"%s\") ---> OK\r\n",Name,username,password);
     #endif    
     return true;
   }
   else
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nGPRS_setAPN(\"%s\",\"%s\",\"%s\") ---> ERROR\r\n",Name,username,password);
+    printf("\r\nsetNetAPN(\"%s\",\"%s\",\"%s\") ---> ERROR\r\n",Name,username,password);
     #endif    
     return false;  
   }  
 }
 //####################################################################################################
-bool  LIB_SIM800C::GPRS_deactivatePDPContext(void)
+bool  LIB_SIM800C::deactivateNetPDPContext(void)
 {
   uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CIPSHUT\r\n",65000,2,"\r\nSHUT OK\r\n","\r\nERROR\r\n");
   if(answer == 1)
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nGPRS_deactivatePDPContext() ---> OK\r\n");
+    printf("\r\ndeactivateNetPDPContext() ---> OK\r\n");
     #endif    
     return true;
   }
   else
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nGPRS_deactivatePDPContext() ---> ERROR\r\n");
+    printf("\r\ndeactivateNetPDPContext() ---> ERROR\r\n");
     #endif    
     return false;  
   }
 }
 //####################################################################################################
-void  LIB_SIM800C::GPRS_getLocalIP(char *IP)
+void  LIB_SIM800C::getNetLocalIP(char *IP)
 {
   uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CIFSR\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
   if((IP!=NULL) && (answer==1))
     strcpy(IP,Sim80x.GPRS.LocalIP);
   #if (_SIM80X_DEBUG==1)
-  printf("\r\nGPRS_getLocalIP(%s) <--- OK\r\n",Sim80x.GPRS.LocalIP);
+  printf("\r\ngetNetLocalIP(%s) <--- OK\r\n",Sim80x.GPRS.LocalIP);
   #endif    
 }
 //####################################################################################################
-void  LIB_SIM800C::GPRS_getCurrentConnectionStatus(void)
+void  LIB_SIM800C::getNetCurrentConnectionSts(void)
 {
   sim800c.sendAtCommand(" AT+CIPSTATUS\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");  
   #if (_SIM80X_DEBUG==1)
-  printf("\r\nGPRS_getCurrentConnectionStatus() <--- OK\r\n");
+  printf("\r\ngetNetCurrentConnectionSts() <--- OK\r\n");
   #endif      
 }
 //####################################################################################################
-bool  LIB_SIM800C::GPRS_getMultiConnection(void)
+bool  LIB_SIM800C::getNetMultiConnection(void)
 {
   sim800c.sendAtCommand(" AT+CIPMUX?\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");  
   #if (_SIM80X_DEBUG==1)
-  printf("\r\nGPRS_getMultiConnection(%d) <--- OK\r\n",Sim80x.GPRS.MultiConnection);
+  printf("\r\ngetNetMultiConnection(%d) <--- OK\r\n",Sim80x.GPRS.MultiConnection);
   #endif  
   return Sim80x.GPRS.MultiConnection;
 }
 //####################################################################################################
-bool  LIB_SIM800C::GPRS_setMultiConnection(bool Enable)
+bool  LIB_SIM800C::setNetMultiConnection(bool Enable)
 {
   uint8_t answer;
   if(Enable==true)
@@ -151,7 +151,7 @@ bool  LIB_SIM800C::GPRS_setMultiConnection(bool Enable)
   if(answer == 1)
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nGPRS_setMultiConnection(%d) ---> OK\r\n",Enable);
+    printf("\r\nsetNetMultiConnection(%d) ---> OK\r\n",Enable);
     #endif  
     Sim80x.GPRS.MultiConnection=Enable;
     return true;
@@ -159,7 +159,7 @@ bool  LIB_SIM800C::GPRS_setMultiConnection(bool Enable)
   else
   {
     #if (_SIM80X_DEBUG==1)
-    printf("\r\nGPRS_setMultiConnection(%d) ---> ERROR\r\n",Enable);
+    printf("\r\nsetNetMultiConnection(%d) ---> ERROR\r\n",Enable);
     #endif  
     return false;
   }
@@ -170,36 +170,36 @@ bool  LIB_SIM800C::GPRS_setMultiConnection(bool Enable)
 bool  LIB_SIM800C::GPRS_connectToNetwork(char *Name,char *username,char *password,bool EnableMultiConnection)
 {
   
-  if(GPRS_deactivatePDPContext()==false)
+  if(deactivateNetPDPContext()==false)
   {
     #if (_SIM80X_DEBUG==1)
     printf("\r\nGPRS_ConnectToNetwork() ---> ERROR\r\n");
     #endif 
     return false;
   }
-  GPRS_setMultiConnection(EnableMultiConnection);
-  if(GPRS_setAPN(Name,username,password)==false)
+  setNetMultiConnection(EnableMultiConnection);
+  if(setNetAPN(Name,username,password)==false)
   {
     #if (_SIM80X_DEBUG==1)
     printf("\r\nGPRS_ConnectToNetwork() ---> ERROR\r\n");
     #endif 
     return false;
   }
-  if(GPRS_startUpGPRS()==false)
+  if(startupNetGPRS()==false)
   {
     #if (_SIM80X_DEBUG==1)
     printf("\r\nGPRS_ConnectToNetwork() ---> ERROR\r\n");
     #endif 
     return false;
   }
-  GPRS_getLocalIP(NULL);  
+  getNetLocalIP(NULL);  
   #if (_SIM80X_DEBUG==1)
   printf("\r\nGPRS_ConnectToNetwork() ---> OK\r\n");
   #endif 
   return true;
 }
 //####################################################################################################
-bool  LIB_SIM800C::GPRS_getHttp(char *URL)
+bool  LIB_SIM800C::getHttp(char *URL)
 {
   uint16_t timeout;
   uint8_t answer;

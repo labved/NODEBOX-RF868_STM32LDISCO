@@ -103,17 +103,17 @@ void LIB_SIM800C::RegConfigSettings(void)
   sim800c.sendAtCommand("AT+COLP=1\r\n",200,1,"AT+COLP=1\r\r\nOK\r\n");
   sim800c.sendAtCommand("AT+CLIP=1\r\n",200,1,"AT+CLIP=1\r\r\nOK\r\n");
   sim800c.sendAtCommand("AT+FSHEX=0\r\n",200,1,"AT+FSHEX=0\r\r\nOK\r\n");
-  sim800c.sendAtCommand("AT+CREG=1\r\n",200,1,"AT+CREG=1\r\r\nOK\r\n");
+ // sim800c.sendAtCommand("AT+CREG=1\r\n",200,1,"AT+CREG=1\r\r\nOK\r\n");
   sim800c.sendAtCommand("AT+ECHO?\r\n",200,1,"\r\nOK\r\n");
   Gsm_setMsgMemoryLocation(GsmMsgMemory_OnModule);
   Gsm_setMsgFormat(GsmMsgFormat_Text);
   Gsm_setMsgTextModeParameter(17,167,0,0);
   Gsm_getMsgCharacterFormat();
-  Gsm_getMsgFormat();
+  getSmsFormat();
   if(Sim80x.Gsm.MsgFormat != GsmMsgFormat_Text)
     Gsm_setMsgFormat(GsmMsgFormat_Text);
   Gsm_getMsgServiceNumber();
-  Gsm_getMsgTextModeParameter();
+  getSmsMsgTextModeParam();
   getIMEI(NULL);
   
 #if (_SIM80X_USE_BLUETOOTH==1)
@@ -950,27 +950,27 @@ void LIB_SIM800C::startSim80xTask(void const * argument)
     {
       if(Sim80x.Gsm.HaveNewMsg[i] > 0)
       {
-        //Gsm_getMsgMemoryStatus();        
-        if(Gsm_readMsg(Sim80x.Gsm.HaveNewMsg[i])==true)
+        //getSmsMsgMemorySts();        
+        if(getSmsMsg(Sim80x.Gsm.HaveNewMsg[i])==true)
         {
 					delay_ms(100);
           Gsm_userNewMsg(Sim80x.Gsm.MsgNumber,Sim80x.Gsm.MsgDate,Sim80x.Gsm.MsgTime,Sim80x.Gsm.Msg);
 					delay_ms(100);
-          Gsm_deleteMsg(Sim80x.Gsm.HaveNewMsg[i]);
+          deleteSmsMsg(Sim80x.Gsm.HaveNewMsg[i]);
 					delay_ms(100);
         }
-        Gsm_getMsgMemoryStatus();  
+        getSmsMsgMemorySts();  
         Sim80x.Gsm.HaveNewMsg[i]=0;
       }        
     }    
     //###########################################
     if(Sim80x.Gsm.MsgUsed > 0)
     {   
-      if(Gsm_readMsg(UnreadMsgCounter)==true)
+      if(getSmsMsg(UnreadMsgCounter)==true)
       {
         Gsm_userNewMsg(Sim80x.Gsm.MsgNumber,Sim80x.Gsm.MsgDate,Sim80x.Gsm.MsgTime,Sim80x.Gsm.Msg);
-        Gsm_deleteMsg(UnreadMsgCounter);
-        Gsm_getMsgMemoryStatus();
+        deleteSmsMsg(UnreadMsgCounter);
+        getSmsMsgMemorySts();
       }
       UnreadMsgCounter++;
       if(UnreadMsgCounter==150)
@@ -989,7 +989,7 @@ void LIB_SIM800C::startSim80xTask(void const * argument)
       sim800c.sendAtCommand("AT+CSQ\r\n",200,1,"\r\n+CSQ:");  
       sim800c.sendAtCommand("AT+CBC\r\n",200,1,"\r\n+CBC:"); 
       sim800c.sendAtCommand("AT+CREG?\r\n",200,1,"\r\n+CREG:");  
-      Gsm_getMsgMemoryStatus();      
+      getSmsMsgMemorySts();      
       //TimeForSlowRun=HAL_GetTick();
     }
     //###########################################
@@ -1164,10 +1164,10 @@ void  LIB_SIM800C::setPower(bool turnon)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void   LIB_SIM800C::saveParameters(void)
+void   LIB_SIM800C::setParameters(void)
 {
   sim800c.sendAtCommand("AT&W0\r\n",200,1,"AT&W0\r\r\nOK\r\n");
-  debugTerminal("GSM_saveParameters()");
+  debugTerminal("setParameters()");
 
   memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
 }
@@ -1175,12 +1175,12 @@ void   LIB_SIM800C::saveParameters(void)
 /****************************************************************
 *FUNCTION NAME:getManNo
 *FUNCTION     :getManNo 
-*INPUT        :IMEI
+*INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
 void  LIB_SIM800C::getManNo(void)
 {
-  sim800c.sendAtCommand("AT+GMI\r\n",200,0);
+  sim800c.sendAtCommand("AT+CGMI\r\n",200,0);
 
   debugTerminal("Sim80x_getManNo");
 
@@ -1193,12 +1193,12 @@ void  LIB_SIM800C::getManNo(void)
 /****************************************************************
 *FUNCTION NAME:getModelNo
 *FUNCTION     :getModelNo 
-*INPUT        :IMEI
+*INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
 void  LIB_SIM800C::getModelNo(void)
 {
-  sim800c.sendAtCommand("AT+GMM\r\n",200,0);
+  sim800c.sendAtCommand("AT+CGMM\r\n",200,0);
 
   debugTerminal("Sim80x_getModelNo");
 
@@ -1211,7 +1211,7 @@ void  LIB_SIM800C::getModelNo(void)
 /****************************************************************
 *FUNCTION NAME:getGlobalNo
 *FUNCTION     :getGlobalNo 
-*INPUT        :IMEI
+*INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
 void  LIB_SIM800C::getGlobalNo(void)
@@ -1229,7 +1229,7 @@ void  LIB_SIM800C::getGlobalNo(void)
 /****************************************************************
 *FUNCTION NAME:getLastCommand
 *FUNCTION     :getLastCommand 
-*INPUT        :IMEI
+*INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
 void  LIB_SIM800C::getLastCommand(void)
@@ -1241,7 +1241,7 @@ void  LIB_SIM800C::getLastCommand(void)
 /****************************************************************
 *FUNCTION NAME:getCurrentConfig
 *FUNCTION     :getCurrentConfig 
-*INPUT        :IMEI
+*INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
 void  LIB_SIM800C::getCurrentConfig(void)
@@ -1259,7 +1259,7 @@ void  LIB_SIM800C::getCurrentConfig(void)
 /****************************************************************
 *FUNCTION NAME:getTaCapabilities
 *FUNCTION     :getTaCapabilities 
-*INPUT        :IMEI
+*INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
 void  LIB_SIM800C::getTaCapabilities(void)
@@ -1288,6 +1288,311 @@ void  LIB_SIM800C::getIMEI(char *IMEI)
   updateIMEI();
 }
 
+/****************************************************************
+*FUNCTION NAME:getTeChar
+*FUNCTION     :getTeChar 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getTeChar(void)
+{
+
+
+  sim800c.sendAtCommand("AT+CSCS?\r\n",200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getIMEI
+*FUNCTION     :recieve module IMEI number 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getAddrsType(void)
+{
+
+
+  sim800c.sendAtCommand("AT+CSTA?\r\n",200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getIMSI
+*FUNCTION     :getIMSI 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getIMSI(void)
+{
+
+
+  sim800c.sendAtCommand("AT+CIMI\r\n",200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getSelOperator
+*FUNCTION     :getSelOperator
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getSelOperator(void)
+{
+
+
+  sim800c.sendAtCommand("AT+COPS?\r\n",200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getNetworkReg
+*FUNCTION     :getNetworkReg 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getNetworkReg(void)
+{
+
+
+  sim800c.sendAtCommand("AT+CREG?\r\n",200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getRLPParams
+*FUNCTION     :getRLPParams 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getRLPParams(void)
+{
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+CSTA=%d[,%d[,%d[,%d[,%d]]]]\r\n", type); 
+
+
+  sim800c.sendAtCommand(temp,200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getCSQ
+*FUNCTION     :getCSQ 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getCSQ(void)
+{
+
+
+  sim800c.sendAtCommand("AT+CSQ\r\n",200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getPrefOperLst
+*FUNCTION     :getPrefOperLst 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getPrefOperLst(void)
+{
+
+
+  sim800c.sendAtCommand("AT+CPOL?\r\n",200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getOperName
+*FUNCTION     :getOperName 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getOperName(void)
+{
+
+
+  sim800c.sendAtCommand("AT+COPN\r\n",200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getPhoneFunc
+*FUNCTION     :getPhoneFunc 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getPhoneFunc(void)
+{
+
+
+  sim800c.sendAtCommand("AT+CFUN?\r\n",200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getClockData
+*FUNCTION     :getClockData 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getClockData(char *time)
+{
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+CCLK=%s\r\n", time); 
+  sim800c.sendAtCommand(temp,200, 0);
+
+  //update
+}
+
+/****************************************************************
+*FUNCTION NAME:getBattChar
+*FUNCTION     :getBattChar 
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void  LIB_SIM800C::getBattChar(void)
+{
+
+
+  sim800c.sendAtCommand("AT+CBC\r\n",200, 0);
+
+  //update
+}
+
+
+/****************************************************************
+*FUNCTION NAME:setTeChar
+*FUNCTION     :setTeChar
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setTeChar(char *chset)
+{
+
+   char temp[20];
+   snprintf(temp, sizeof(temp), "AT+CSCS%s\r\n", chset); 
+   sim800c.sendAtCommand(temp, 200, 0);
+   debugTerminal("setTeChar");
+}
+
+/****************************************************************
+*FUNCTION NAME:setAddrsType
+*FUNCTION     :setAddrsType
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setAddrsType(uint16_t type)
+{
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+CSTA=%d\r\n", type); 
+  sim800c.sendAtCommand(temp,200, 0);
+  debugTerminal("setAddrsType");
+}
+
+/****************************************************************
+*FUNCTION NAME:setSelOperator
+*FUNCTION     :setSelOperator
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setSelOperator(uint16_t mode, uint16_t format, uint16_t oper)
+{
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+COPS=%d,%d,%d\r\n", mode, format, oper); 
+  sim800c.sendAtCommand(temp,200, 0);
+  debugTerminal("setSelOperator");
+}
+
+/****************************************************************
+*FUNCTION NAME:setNetworkReg
+*FUNCTION     :setNetworkReg
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setNetworkReg(bool turnon)
+{
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+CREG=%d\r\n", turnon); 
+  sim800c.sendAtCommand(temp,200, 0);
+  debugTerminal("setNetworkReg");
+}
+
+/****************************************************************
+*FUNCTION NAME:setRLPParams
+*FUNCTION     :setRLPParams
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setRLPParams(void)
+{
+  sim800c.sendAtCommand("AT+CRLP?\r\n",200, 0);
+  debugTerminal("setRLPParams");
+}
+
+/****************************************************************
+*FUNCTION NAME:setPrefOperLst
+*FUNCTION     :setPrefOperLst
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setPrefOperLst(uint16_t index, uint16_t  format, char *oper)
+{
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+CPOL=%d[,%d,%s]\r\n", index, format, oper); 
+  sim800c.sendAtCommand(temp,200, 0);
+  debugTerminal("setPrefOperLst");
+}
+
+/****************************************************************
+*FUNCTION NAME:setPhoneFunc
+*FUNCTION     :setPhoneFunc
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setPhoneFunc(uint16_t fun, uint16_t  rst)
+{
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+CFUN=%d[,%d]\r\n", fun, rst); 
+  sim800c.sendAtCommand(temp,200, 0);
+  debugTerminal("setPhoneFunc");
+}
+
+/****************************************************************
+*FUNCTION NAME:setClockData
+*FUNCTION     :setClockData
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setClockData(void)
+{
+  sim800c.sendAtCommand("AT+CCLK?\r\n",200, 0);
+  debugTerminal("setClockData");
+}
+
+/****************************************************************
+*FUNCTION NAME:setSimAccess
+*FUNCTION     :setSimAccess
+*INPUT        :void
+*OUTPUT       :void
+****************************************************************/
+void LIB_SIM800C::setSimAccess(uint16_t length,char command)
+{
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+CSIM=%d,%s\r\n", length, command); 
+  sim800c.sendAtCommand(temp,200, 0);
+  debugTerminal("setSimAccess");
+}
 
 
 
@@ -1308,10 +1613,10 @@ bool LIB_SIM800C::updateManNo(uint16_t addrs)
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
-  str1 = strstr(strStart,"AT+GMI\r\r\n");
+  str1 = strstr(strStart,"AT+CGMI\r\r\n");
   
   if(str1!=NULL)
-    sscanf(str1,"AT+GMI\r\r\n%s",Sim80x.IMEI);
+    sscanf(str1,"AT+CGMI\r\r\n%s",Sim80x.IMEI);
 
   // update Flash IC here
 		
@@ -1332,10 +1637,10 @@ bool LIB_SIM800C::updateModelNo(uint16_t addrs)
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
-  str1 = strstr(strStart,"AT+GMM\r\r\n");
+  str1 = strstr(strStart,"AT+CGMM\r\r\n");
   
   if(str1!=NULL)
-    sscanf(str1,"AT+GMM\r\r\n%s",Sim80x.IMEI);
+    sscanf(str1,"AT+CGMM\r\r\n%s",Sim80x.IMEI);
 
   // update Flash IC here
 		

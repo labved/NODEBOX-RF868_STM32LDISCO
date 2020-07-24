@@ -39,7 +39,7 @@ class LIB_SIM800C
     // CUSTOM LIBRARY
     void setAtMode(void); //need to check
     void setDataMode(void);
-    void setActiveProfile(void);
+    void setActiveProfile(void); //need to check
     void setDefaultConfig(void);
 
     // 0.25V
@@ -57,6 +57,32 @@ class LIB_SIM800C
     void getCurrentConfig(void);
     void getTaCapabilities(void);
     void                    getIMEI(char *IMEI);
+    
+    void getTeChar(void);
+    void getAddrsType(void);
+    void getIMSI(void);
+    void getSelOperator(void);
+    void getNetworkReg(void);
+    void getRLPParams(void);
+    void getCSQ(void);
+    void getPrefOperLst(void);   
+    void getOperName(void);
+    void getPhoneFunc(void);
+    void getClockData(void);
+    void getBattChar(void);
+
+    
+    void setTeChar(void);
+    void setAddrsType(void);
+    void setSelOperator(void); //need to check
+    void setNetworkReg(void);
+    void setRLPParams(void);
+    void setPrefOperLst(void);
+    void setPhoneFunc(void);
+    void setClockData(void);
+    void setSimAccess(void);
+
+
 
     // 3GPP TS 27.005
 
@@ -75,19 +101,19 @@ class LIB_SIM800C
     bool                    Gsm_callDisconnect(void); // to be deleted
     GsmVoiceStatus_t        Gsm_dial(char *number,uint8_t WaitForAnswer_second);  // to be deleted
     GsmVoiceStatus_t        Gsm_getLastVoiceActivity(void); // to be deleted
-    GsmMsgFormat_t          Gsm_getMsgFormat(void);
+    GsmMsgFormat_t          getSmsFormat(void);
     bool                    Gsm_setMsgFormat(GsmMsgFormat_t GsmMsgFormat);  
-    GsmMsgMemory_t          Gsm_getMsgMemoryStatus(void);
+    GsmMsgMemory_t          getSmsMsgMemorySts(void);
     bool                    Gsm_setMsgMemoryLocation(GsmMsgMemory_t GsmMsgMemory);
     GsmTECharacterSet_t     Gsm_getMsgCharacterFormat(void);  
     bool                    Gsm_setMsgCharacterFormat(GsmTECharacterSet_t GsmTECharacterSet);
-    bool                    Gsm_readMsg(uint8_t index);
-    bool                    Gsm_deleteMsg(uint8_t index);
+    bool                    getSmsMsg(uint8_t index);
+    bool                    deleteSmsMsg(uint8_t index);
     bool                    Gsm_getMsgServiceNumber(void);
-    bool                    Gsm_setMsgServiceNumber(char *ServiceNumber);
-    bool                    Gsm_getMsgTextModeParameter(void);
+    bool                    setSmsMsgServiceNo(char *ServiceNumber);
+    bool                    getSmsMsgTextModeParam(void);
     bool                    Gsm_setMsgTextModeParameter(uint8_t fo,uint8_t vp,uint8_t pid,uint8_t dcs);
-    bool                    Gsm_sendMsgText(char *number,char *msg);  
+    bool                    setSmsMsgTxt(char *number,char *msg);  
 
 // BLUETOOTH
     void                    Bluetooth_userNewPairingRequest(char *Name,char *Address,char *Pass);
@@ -109,19 +135,19 @@ class LIB_SIM800C
     bool                    Bluetooth_sppSend(char *DataString);
 
 // GPRS
-    bool                    GPRS_deactivatePDPContext(void);
-    bool                    GPRS_getAPN(char *Name,char *username,char *password);
-    bool                    GPRS_setAPN(char *Name,char *username,char *password);
-    bool                    GPRS_startUpGPRS(void);
-    void                    GPRS_getLocalIP(char *IP);
-    void                    GPRS_getCurrentConnectionStatus(void);
-    bool                    GPRS_getMultiConnection(void);
-    bool                    GPRS_setMultiConnection(bool Enable);
+    bool                    deactivateNetPDPContext(void);
+    bool                    getNetAPN(char *Name,char *username,char *password);
+    bool                    setNetAPN(char *Name,char *username,char *password);
+    bool                    startupNetGPRS(void);
+    void                    getNetLocalIP(char *IP);
+    void                    getNetCurrentConnectionSts(void);
+    bool                    getNetMultiConnection(void);
+    bool                    setNetMultiConnection(bool Enable);
 
 
     void                    GPRS_userHttpGetAnswer(char *data,uint32_t StartAddress,uint16_t dataLen);
     bool                    GPRS_connectToNetwork(char *Name,char *username,char *password,bool EnableMultiConnection);
-    bool                    GPRS_getHttp(char *URL); 
+    bool                    getHttp(char *URL); 
     
 // UPDATE FUNCTIONS
     bool updateManNo(uint16_t addrs);
@@ -131,6 +157,25 @@ class LIB_SIM800C
     bool updateCurrentConfig(uint16_t addrs);
     bool updateTaCapabilities(uint16_t addrs);
     bool updateIMEI(uint16_t addrs);
+
+
+    //HTTP
+
+    
+    void httpInit(void);
+    void httpTerminate(void);
+    void getHttpParam(void);
+    void setHttpParam(void);
+    void getHttpData(void);
+    void setHttpData(void);
+    void getHttpAction(void);
+    void setHttpAction(void);
+    void getHttpRead(void);
+    
+    void setHttpRead(void);
+    void getHttpContext(void);
+    void getHttpStatus(void);
+    void getHttpHeader(void);
 
 };
 

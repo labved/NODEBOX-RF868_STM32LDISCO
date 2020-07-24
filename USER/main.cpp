@@ -54,42 +54,41 @@ int main()
 /* 
 
 3GPP TS 27.007 (GENERIC) 
-AT+CGMI 
-AT+CGMM
-AT+CGSN
-AT+CSCS
-AT+CSTA
-AT+CIMI
-AT+COPS
-AT+CREG
-AT+CRLP
-AT+CSQ
-AT+CPOL
-AT+COPN
-AT+CFUN
-AT+CCLK
-AT+CSIM
-AT+CBC
-
+AT+CGMI           getManNo
+AT+CGMM           getModelNo
+AT+CGSN           getIMEI
+AT+CSCS  NEW ->                   setTeChar,       getTeChar
+AT+CSTA  new ->                   setAddrsType,    getAddrsType
+AT+CIMI new ->                    getIMSI
+AT+COPS new -> ,                  setSelOperator   getSelOperator
+AT+CREG new ->                    getNetworkReg,                      command is already used in buffer setting 
+AT+CRLP new ->                    setRLPParams     getRLPParams, 
+AT+CSQ  new ->                    getCSQ                              command is already used in buffer setting 
+AT+CPOL new -> ,                  setPrefOperLst   getPrefOperLst 
+AT+COPN new ->                    getOperName
+AT+CFUN new ->                    setPhoneFunc     getPhoneFunc,
+AT+CCLK new -> ,                  setClockData     getClockData  
+AT+CSIM new ->                    setSimAccess 
+AT+CBC  new ->                    getBattChar                         command is already used in buffer setting 
 
 // 3GPP TS 27.005 -> only name change & ordering
 
 //SMS
-AT+CMGD deleteMSG-> deleteSmsMsg
-AT+CMGF Gsm_getMsgFormat -> getSmsFormat
+AT+CMGD gsm_deleteMSG->                         deleteSmsMsg
+AT+CMGF Gsm_getMsgFormat ->                     getSmsFormat
 AT+CMGL
-AT+CMGR Gsm_readMsg  -> getSmsMsg
-AT+CMGS Gsm_sendMsgText -> setSmsMsgTxt
+AT+CMGR Gsm_readMsg  ->                         getSmsMsg
+AT+CMGS Gsm_sendMsgText ->                      setSmsMsgTxt
 AT+CMGW
 AT+CMSS
 AT+CNMI
-AT+CPMS Gsm_getMsgMemoryStatus -> getSmsMsgMemorySts
+AT+CPMS Gsm_getMsgMemoryStatus ->               getSmsMsgMemorySts
 AT+CRES
 AT+CSAS
-AT+CSCA Gsm_setMsgServiceNumber -> setSmsMsgServiceNo
+AT+CSCA Gsm_setMsgServiceNumber ->              setSmsMsgServiceNo
 AT+CSCB
 AT+CSDH
-AT+CSMP Gsm_getMsgTextModeParameter -> getSmsMsgTextModeParam
+AT+CSMP Gsm_getMsgTextModeParameter ->          getSmsMsgTextModeParam
 AT+CSMS
 
 //GPRS
@@ -139,7 +138,7 @@ CIPSGTXT
 CIPTKA
 
 // IP (NETWORK)
-SAPBR GPRS_getHttp  -> get
+SAPBR GPRS_getHttp  -> getHttp
 
 //PING
 CIPPING
@@ -148,15 +147,15 @@ CIPFLT
 CIPBEIPING
 
 //HTTP -> new write
-HTTPINIT  httpInit()
-HTTPTERM  httpTerminate
-HTTPPARA  getHttpParam, setHttpParam
-HTTPDATA  getHttpData, setHttpData
-HTTPACTION getHttpAction, setHttpAction
-HTTPREAD getHttpRead, setHttpRead
-HTTPCONT  getHttpContext
-HTTPSTATUS getHttpStatus
-HTTPHEAD getHttpHeader
+AT+HTTPINIT                                 httpInit()
+AT+HTTPTERM                                 httpTerminate
+AT+HTTPPARA                                 getHttpParam, setHttpParam
+AT+HTTPDATA                                 getHttpData, setHttpData
+AT+HTTPACTION                               getHttpAction, setHttpAction
+AT+HTTPREAD                                 getHttpRead, setHttpRead
+AT+HTTPCONT                                 getHttpContext
+AT+HTTPSTATUS                               getHttpStatus
+AT+HTTPHEAD                                 getHttpHeader
 
 // GPS
 CIPGSMLOC

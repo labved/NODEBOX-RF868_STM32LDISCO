@@ -91,7 +91,7 @@ GsmVoiceStatus_t     LIB_SIM800C::Gsm_getLastVoiceActivity(void)
 //######################################################################################################
 //######################################################################################################
 //######################################################################################################
-GsmMsgFormat_t  LIB_SIM800C::Gsm_getMsgFormat(void)
+GsmMsgFormat_t  LIB_SIM800C::getSmsFormat(void)
 {
   uint8_t   answer;
   answer = sim800c.sendAtCommand("AT+CMGF?\r\n",1000,2,"+CMGF: 0\r\n\r\nOK\r\n","+CMGF: 1\r\n\r\nOK\r\n");
@@ -130,7 +130,7 @@ bool  LIB_SIM800C::Gsm_setMsgFormat(GsmMsgFormat_t GsmMsgFormat)
     return false;  
 }
 //######################################################################################################
-GsmMsgMemory_t  LIB_SIM800C::Gsm_getMsgMemoryStatus(void)
+GsmMsgMemory_t  LIB_SIM800C::getSmsMsgMemorySts(void)
 {
   uint8_t   answer;
   answer = sim800c.sendAtCommand("AT+CPMS?\r\n",1000,2,"AT+CPMS?\r\r\n+CPMS: \"SM\"","AT+CPMS?\r\r\n+CPMS: \"ME\"");
@@ -213,7 +213,7 @@ bool  LIB_SIM800C::Gsm_setMsgCharacterFormat(GsmTECharacterSet_t GsmTECharacterS
     return false;
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_readMsg(uint8_t index)
+bool  LIB_SIM800C::getSmsMsg(uint8_t index)
 {
   uint8_t answer;
   char str[16];
@@ -229,7 +229,7 @@ bool  LIB_SIM800C::Gsm_readMsg(uint8_t index)
     return false;    
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_deleteMsg(uint8_t index)
+bool  LIB_SIM800C::deleteSmsMsg(uint8_t index)
 {
   uint8_t answer;
   char str[16];
@@ -255,7 +255,7 @@ bool  LIB_SIM800C::Gsm_getMsgServiceNumber(void)
     return false;
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_setMsgServiceNumber(char *ServiceNumber)
+bool  LIB_SIM800C::setSmsMsgServiceNo(char *ServiceNumber)
 {
   uint8_t answer;
   char str[32];
@@ -269,7 +269,7 @@ bool  LIB_SIM800C::Gsm_setMsgServiceNumber(char *ServiceNumber)
     return false;
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_getMsgTextModeParameter(void)
+bool  LIB_SIM800C::getSmsMsgTextModeParam(void)
 {
   uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CSMP?\r\n",500,1,"\r\nOK\r\n");
@@ -293,7 +293,7 @@ bool  LIB_SIM800C::Gsm_setMsgTextModeParameter(uint8_t fo,uint8_t vp,uint8_t pid
     return false;
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_sendMsgText(char *Number,char *msg)
+bool  LIB_SIM800C::setSmsMsgTxt(char *Number,char *msg)
 {
   uint8_t answer;
   uint8_t Timeout=60;
