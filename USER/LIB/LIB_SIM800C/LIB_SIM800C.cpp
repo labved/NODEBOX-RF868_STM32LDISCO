@@ -130,7 +130,7 @@ void LIB_SIM800C::RegConfigSettings(void)
 *INPUT        :message
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::debugTerminal(char *msg)
+void LIB_SIM800C::debugTerminal(char const *msg)
 {
   #if (_SIM80X_DEBUG== 1 || _SIM80X_DEBUG==2)
      char      *strStart,*str1;
@@ -1008,7 +1008,9 @@ void LIB_SIM800C::startSim80xTask(void const * argument)
 ****************************************************************/
 void LIB_SIM800C::setAtMode(void)
 {
+  delay_ms(1000);       // prerequisite for switching to At Command Mode
   sim800c.sendAtCommand("+++\r\n",200, 0);
+  delay_ms(1000);     // prerequisite for switching to At Command Mode
   debugTerminal("setAtMode");
 }
 
@@ -1095,7 +1097,7 @@ void LIB_SIM800C::setBaudRate(uint16_t baudrate)
 
   debugTerminal("Sim80x_setBaudRate");
 
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
 }
 
 /****************************************************************
@@ -1186,7 +1188,7 @@ bool  LIB_SIM800C::getManNo(void)
 
   //update
   
-
+  
   
 }
 
@@ -1281,8 +1283,6 @@ bool  LIB_SIM800C::getTaCapabilities(void)
 ****************************************************************/
 bool  LIB_SIM800C::getIMEI(char *IMEI)
 {
-
-
   sim800c.sendAtCommand("AT+CGSN\r\n",200, 0);
 
   processIMEI(1);
@@ -1296,8 +1296,6 @@ bool  LIB_SIM800C::getIMEI(char *IMEI)
 ****************************************************************/
 bool  LIB_SIM800C::getTeChar(void)
 {
-
-
   sim800c.sendAtCommand("AT+CSCS?\r\n",200, 0);
 
   //update
@@ -1468,12 +1466,15 @@ bool  LIB_SIM800C::getBattChar(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::setTeChar(char *chset)
+bool LIB_SIM800C::setTeChar(char *chset)
 {
-   char temp[20];
-   snprintf(temp, sizeof(temp), "AT+CSCS%s\r\n", chset); 
-   sim800c.sendAtCommand(temp, 200, 0);
-   debugTerminal("setTeChar");
+  bool sucess;
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+CSCS%s\r\n", chset);
+  sucess = sim800c.sendAtCommand(temp, 200, 0);
+  debugTerminal("setTeChar");
+
+  return sucess;
 }
 
 /****************************************************************
@@ -2188,20 +2189,6 @@ void LIB_SIM800C::processGPRSNetMultiConnection(uint16_t addrs)
   
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /****************************************************************
 *FUNCTION NAME:processIMEI
 *FUNCTION     :processIMEI
@@ -2224,22 +2211,6 @@ void LIB_SIM800C::processIMEI(uint16_t addrs)
   
   memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
 	
-}
-
-/****************************************************************
-*FUNCTION NAME:GSM_IRQHandler
-*FUNCTION     :GSM_IRQHandler
-*INPUT        :
-*OUTPUT       :
-****************************************************************/
-//#pragma vector = USART_VECTOR
-GSM_IRQHANDLER {
-  
-  //Sim80x.UsartRxBuffer[index] = USART_ReceiveData(GSM_USART_CH);
-  //index++;
-  USART_ClearITPendingBit(GSM_USART_CH, USART_IT_RXNE);
-
-  USART_ClearFlag(GSM_USART_CH, USART_FLAG_RXNE);
 }
 
 #endif

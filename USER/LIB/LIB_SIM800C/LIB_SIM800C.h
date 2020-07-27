@@ -23,7 +23,7 @@ class LIB_SIM800C
   private:
     void                    PoweronReset(void);
     void                    RegConfigSettings(void);
-    void                    debugTerminal(char *msg);
+    void                    debugTerminal(char const *msg);
 
   public:
     void                    test(void);  // to be deleted
@@ -85,11 +85,8 @@ class LIB_SIM800C
 
 
     // 3GPP TS 27.005
-
-
     // SIM800C LIBRARY     
   
-   
     // GSM
     void                    Gsm_user(uint32_t startupTime);
     void                    Gsm_userNewMsg(char *number,char *Date,char *Time,char *msg);
@@ -102,6 +99,7 @@ class LIB_SIM800C
     bool                    Gsm_setMsgMemoryLocation(GsmMsgMemory_t GsmMsgMemory);
     GsmTECharacterSet_t     Gsm_getMsgCharacterFormat(void);  
     bool                    Gsm_setMsgCharacterFormat(GsmTECharacterSet_t GsmTECharacterSet);
+   
     bool                    getSmsMsg(uint8_t index);
     bool                    deleteSmsMsg(uint8_t index);
     bool                    getSmsMsgServiceNumber(void);
@@ -172,9 +170,7 @@ class LIB_SIM800C
     void processIMEI(uint16_t addrs);
 
 
-    //HTTP
-
-    
+    //HTTP 
     void httpInit(void);
     void httpTerminate(void);
     void getHttpParam(void);

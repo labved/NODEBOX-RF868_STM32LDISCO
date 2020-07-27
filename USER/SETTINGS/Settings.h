@@ -153,7 +153,6 @@
 
 
 // INTERRUPT ROUTINES
-#define CC1101_IRQHANDLER void EXTI9_5_IRQHandler(void)
-#define GSM_IRQHANDLER void USART3_IRQHandler(void)
+
 
 #endif
