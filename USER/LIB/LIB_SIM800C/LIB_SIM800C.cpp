@@ -1185,7 +1185,7 @@ bool  LIB_SIM800C::getManNo(void)
   debugTerminal("Sim80x_getManNo");
 
   //update
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+  
 
   
 }
@@ -1203,7 +1203,7 @@ bool  LIB_SIM800C::getModelNo(void)
   debugTerminal("Sim80x_getModelNo");
 
   //update
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+  
 
   
 }
@@ -1221,7 +1221,7 @@ bool  LIB_SIM800C::getGlobalNo(void)
   debugTerminal("Sim80x_getGlobalNo");
 
   //update
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+  
 
   
 }
@@ -1251,7 +1251,7 @@ bool  LIB_SIM800C::getCurrentConfig(void)
   debugTerminal("Sim80x_setFactoryDefault");
 
   //update
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+  
 
   
 }
@@ -1269,7 +1269,7 @@ bool  LIB_SIM800C::getTaCapabilities(void)
   debugTerminal("Sim80x_getTaCapabilities");
 
   //update
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
+  
 
 }
 
@@ -1762,7 +1762,7 @@ bool LIB_SIM800C::processNetworkReg(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processCSQ(uint16_t addrs)
+void LIB_SIM800C::processCSQ(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -1929,7 +1929,7 @@ void LIB_SIM800C::processSmsMsg(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processMsgServiceNumber(uint16_t addrs)
+void LIB_SIM800C::processSmsMsgServiceNo(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -1956,7 +1956,7 @@ void LIB_SIM800C::processMsgServiceNumber(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-USART3 LIB_SIM800C::processSmsTextModeParam(uint16_t addrs)
+void LIB_SIM800C::processSmsTextModeParam(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -2209,8 +2209,8 @@ void LIB_SIM800C::processGPRSNetMultiConnection(uint16_t addrs)
 *OUTPUT       :bool
 ****************************************************************/
 void LIB_SIM800C::processIMEI(uint16_t addrs)
-{	
-	char      *strStart,*str1;
+{
+  char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
   str1 = strstr(strStart,"AT+CGSN\r\r\n");
