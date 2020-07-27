@@ -180,19 +180,19 @@ void HAL_E70_868T30S::uartInit(void)
   
   USART_Cmd(LORA_USART_CH, ENABLE);
   
-  NVIC_InitTypeDef   NVIC_LORA_InitStruct;
-
-  NVIC_LORA_InitStruct.NVIC_IRQChannel = LORA_USART_CH_IRQn;
-  NVIC_LORA_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_LORA_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_LORA_InitStruct.NVIC_IRQChannelSubPriority = 0;
-
-  NVIC_Init(&NVIC_LORA_InitStruct);
-  
-// NVIC_SetPriority(USART2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
-//NVIC_EnableIRQ(USART2_IRQn);
-  
-  USART_ITConfig(LORA_USART_CH, USART_IT_RXNE, ENABLE);
+//  NVIC_InitTypeDef   NVIC_LORA_InitStruct;
+//
+//  NVIC_LORA_InitStruct.NVIC_IRQChannel = LORA_USART_CH_IRQn;
+//  NVIC_LORA_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+//  NVIC_LORA_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+//  NVIC_LORA_InitStruct.NVIC_IRQChannelSubPriority = 0;
+//
+//  NVIC_Init(&NVIC_LORA_InitStruct);
+//  
+//// NVIC_SetPriority(USART2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
+////NVIC_EnableIRQ(USART2_IRQn);
+//  
+//  //USART_ITConfig(LORA_USART_CH, USART_IT_RXNE, ENABLE);
   
   USART_Cmd(LORA_USART_CH, ENABLE);
     

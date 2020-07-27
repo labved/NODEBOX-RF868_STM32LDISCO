@@ -30,7 +30,10 @@ void LIB_HC05::test(void)
   char      *strStart, *str1;
   setAtMode();
   
+  USART_ITConfig(HC05_USART_CH, USART_IT_RXNE, ENABLE);
   hc05.sendAtCommand("AT+VERSION?\r\n", 200, 0);
+
+  
   
   // Read & Update Operation
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  

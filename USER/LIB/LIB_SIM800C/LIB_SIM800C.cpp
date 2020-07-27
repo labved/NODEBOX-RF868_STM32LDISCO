@@ -113,7 +113,7 @@ void LIB_SIM800C::RegConfigSettings(void)
   getSmsFormat();
   if(Sim80x.Gsm.MsgFormat != GsmMsgFormat_Text)
     Gsm_setMsgFormat(GsmMsgFormat_Text);
-  Gsm_getMsgServiceNumber();
+  getSmsMsgServiceNumber();
   getSmsMsgTextModeParam();
   getIMEI(NULL);
   
@@ -1834,7 +1834,7 @@ void LIB_SIM800C::processCBC(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processSmsMsgTxt(uint16_t addrs)
+void LIB_SIM800C::processSmsMsgTxt(char *number, char *msg, uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;

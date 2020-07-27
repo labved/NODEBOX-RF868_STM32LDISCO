@@ -15,6 +15,7 @@
 #include "LIB_NODEBOXRF868.h"
 #include "LIB_MODEL.h"
 
+#include "stm32l1xx_it.h"
 
 NODEBOX_RF868 node;
 LIB_MODEL gen;
@@ -24,7 +25,6 @@ char msg[255] = "TESTING";
 
 int main()
 {
-    __enable_interrupt();
     // System Clock, GPIO Initialise
     node.Init();
     
@@ -35,7 +35,7 @@ int main()
     //node.testLCD();
     node.testHC05();
     //node.testIOEXP8();
-    node.testGSM();
+    //node.testGSM();
     //node.testLORA();
     //gen.test();
     
@@ -49,6 +49,13 @@ int main()
 
     }
    
+}
+
+void USART1_IRQHandler(void)
+{
+  USART_ClearITPendingBit(USART1, USART_IT_RXNE);
+  
+  USART_ClearFlag(USART1, USART_FLAG_RXNE);
 }
 
 /* 

@@ -220,6 +220,7 @@ void NODEBOX_RF868::testHC05(void)
     bluetooth.Init();
     
     bluetooth.test();
+    
     // Testing Data Mode
     //bluetooth.setDataMode();
     //bluetooth.getData(buf, sizeof(buf));

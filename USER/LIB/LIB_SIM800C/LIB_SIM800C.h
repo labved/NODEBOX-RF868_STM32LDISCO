@@ -154,10 +154,9 @@ class LIB_SIM800C
     bool processNetworkReg(uint16_t addrs);
     
     bool processCSQ(uint16_t addrs);//build
-    bool processCBC(uint16_t addrs);
+    void processCBC(uint16_t addrs);
 
-    void processSmsMsgTxt(char *number, 
-    char *msg, uint16_t addrs);
+    void processSmsMsgTxt(char *number, char *msg, uint16_t addrs);
     void processSmsMsgMemorySts(uint16_t addrs);
     void processSmsMsg(uint16_t addrs);
     void processSmsMsgServiceNo(uint16_t addrs);//done
