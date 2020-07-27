@@ -44,17 +44,17 @@ class HAL_HC05
   public:
     // original HC05
 
-    void writeCommand(const char *command, const char *arg = 0);//checked
-    bool simpleCommand(const char *command_name, const char *arg, unsigned long timeout);//checked
+    void writeCommand(const char *command, const char *arg = 0);//checked  //DELETE TH COMMAND
+    bool simpleCommand(const char *command_name, const char *arg, unsigned long timeout);//checked //DELETE THE COMMAND
     bool readOperationResult(void);
     bool readAddressWithCommand(BluetoothAddress &address, const char *command_name, 
-                                unsigned long timeout); //checked
+                                unsigned long timeout); //checked //need to check
     bool writeAddressWithCommand(const BluetoothAddress &address, const char *command_name,
-                                 unsigned long timeout);        //checked
+                                 unsigned long timeout);        //checked //need to check
     static bool parseBluetoothAddress(BluetoothAddress &address, const char *address_str,
-                                  char delimiter);      //checked
+                                  char delimiter);      //checked  //need to check
     static int printBluetoothAddress(char *address_str, const BluetoothAddress &address,
-                                 char delimiter);
+                                 char delimiter);  //need to check
     char *readResponseWithPrefix(char *buffer, size_t buffer_size, const char *prefix); //checked
     static char *skipPrefix(char *str, uint16_t str_length, const char *prefix);        //checked    
 

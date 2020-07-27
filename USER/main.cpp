@@ -161,4 +161,11 @@ AT+HTTPHEAD                                 getHttpHeader
 CIPGSMLOC
 
 
+// TO BE DELETED
+
+  char temp[20];
+  snprintf(temp, sizeof(temp), "AT+CSTA=%d\r\n", type); 
+  sim800c.sendAtCommand(temp,200, 0);
+
 */
+

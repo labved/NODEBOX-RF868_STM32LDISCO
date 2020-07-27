@@ -258,21 +258,21 @@ void  LIB_SIM800C::bufferProcess(void)
       Sim80x.Status.RegisterdToNetwork=0;
   }
   //##################################################
-  str1 = strstr(strStart,"\r\nCall Ready\r\n");
+  str1 = strstr(strStart,"\r\nCall Ready\r\n");//not used
   if(str1!=NULL)
     Sim80x.Status.CallReady=1;  
   //##################################################
-  str1 = strstr(strStart,"\r\nSMS Ready\r\n");
+  str1 = strstr(strStart,"\r\nSMS Ready\r\n");//not used
   if(str1!=NULL)
     Sim80x.Status.SmsReady=1;  
   //##################################################
-  str1 = strstr(strStart,"\r\n+COLP:");
+  str1 = strstr(strStart,"\r\n+COLP:");//not used
   if(str1!=NULL)
   {
     Sim80x.Gsm.GsmVoiceStatus = GsmVoiceStatus_MyCallAnswerd;
   }  
   //##################################################
-  str1 = strstr(strStart,"\r\n+CLIP:");
+  str1 = strstr(strStart,"\r\n+CLIP:");//not used
   if(str1!=NULL)
   {
     str1 = strchr(str1,'"');
@@ -289,7 +289,7 @@ void  LIB_SIM800C::bufferProcess(void)
     str1++;
     Sim80x.Status.Signal = atoi(str1);      
   }
-  //##################################################
+ /*  //##################################################
   str1 = strstr(strStart,"\r\n+CBC:");
   if(str1!=NULL)
   {
@@ -318,37 +318,37 @@ void  LIB_SIM800C::bufferProcess(void)
     str1++;
     Sim80x.Status.BatteryVoltage = atof(str1)/1000;      
   }
-  //##################################################
-  str1 = strstr(strStart,"\r\nBUSY\r\n");
+  */ //##################################################
+  str1 = strstr(strStart,"\r\nBUSY\r\n");//not used
   if(str1!=NULL)
   {
     Sim80x.Gsm.GsmVoiceStatus=GsmVoiceStatus_ReturnBusy;
   }
   //##################################################
-  str1 = strstr(strStart,"\r\nNO DIALTONE\r\n");
+  str1 = strstr(strStart,"\r\nNO DIALTONE\r\n");//not used
   if(str1!=NULL)
   {
     Sim80x.Gsm.GsmVoiceStatus=GsmVoiceStatus_ReturnNoDialTone;
   }
   //##################################################
-  str1 = strstr(strStart,"\r\nNO CARRIER\r\n");
+  str1 = strstr(strStart,"\r\nNO CARRIER\r\n");//not used
   if(str1!=NULL)
   {
     Sim80x.Gsm.GsmVoiceStatus=GsmVoiceStatus_ReturnNoCarrier;
   }
   //##################################################
-  str1 = strstr(strStart,"\r\nNO ANSWER\r\n");
+  str1 = strstr(strStart,"\r\nNO ANSWER\r\n");//not used
   if(str1!=NULL)
   {
     Sim80x.Gsm.GsmVoiceStatus=GsmVoiceStatus_ReturnNoAnswer;
   }
-  //##################################################  
+  /* //##################################################  
   str1 = strstr(strStart,"\r\n+CMGS:");
   if(str1!=NULL)
   {
     Sim80x.Gsm.MsgSent=1;
   }  
-  //##################################################  
+  *//*  //##################################################  
   str1 = strstr(strStart,"\r\n+CPMS:");
   if(str1!=NULL)
   {
@@ -365,7 +365,7 @@ void  LIB_SIM800C::bufferProcess(void)
     str1++;      
     Sim80x.Gsm.MsgCapacity = atoi(str1);
   }  
-  //##################################################  
+  */ /* //##################################################  
   str1 = strstr(strStart,"\r\n+CMGR:");
   if(str1!=NULL)
   {
@@ -385,9 +385,9 @@ void  LIB_SIM800C::bufferProcess(void)
 
       
     }    
-  }
+   */}
   //################################################## 
-  str1 = strstr(strStart,"\r\n+CRSL:");
+  str1 = strstr(strStart,"\r\n+CRSL:");//not used
   if(str1!=NULL)
   {
     str1 = strchr(str1,':');
@@ -395,7 +395,7 @@ void  LIB_SIM800C::bufferProcess(void)
     Sim80x.RingVol = atoi(str1);    
   }
   //################################################## 
-  str1 = strstr(strStart,"\r\n+CLVL:");
+  str1 = strstr(strStart,"\r\n+CLVL:");//not used
   if(str1!=NULL)
   {
     str1 = strchr(str1,':');
@@ -403,7 +403,7 @@ void  LIB_SIM800C::bufferProcess(void)
     Sim80x.LoadVol = atoi(str1);    
   }
   //################################################## 
-  str1 = strstr(strStart,"\r\n+CMTI:");
+  str1 = strstr(strStart,"\r\n+CMTI:");//not used
   if(str1!=NULL)
   {
     str1 = strchr(str1,',');
@@ -417,7 +417,7 @@ void  LIB_SIM800C::bufferProcess(void)
       }
     }
   }
-  //##################################################  
+ /*  //##################################################  
   str1 = strstr(strStart,"\r\n+CSCA:");
   if(str1!=NULL)
   {
@@ -427,14 +427,14 @@ void  LIB_SIM800C::bufferProcess(void)
     str2 = strchr(str1,'"');
     strncpy(Sim80x.Gsm.MsgServiceNumber,str1,str2-str1);
   }
-  //##################################################  
+  *//*  //##################################################  
   str1 = strstr(strStart,"\r\n+CSMP:");
   if(str1!=NULL)
   {
     tmp_int32_t = sscanf(str1,"\r\n+CSMP: %hhd,%hhd,%hhd,%hhd\r\nOK\r\n",&Sim80x.Gsm.MsgTextModeParameterFo,&Sim80x.Gsm.MsgTextModeParameterVp,&Sim80x.Gsm.MsgTextModeParameterPid,&Sim80x.Gsm.MsgTextModeParameterDcs);
   }
-  //##################################################  
-  str1 = strstr(strStart,"\r\n+CUSD:");
+  */ //##################################################  
+  str1 = strstr(strStart,"\r\n+CUSD:");//not used
   if(str1!=NULL)
   {
     sscanf(str1,"\r\n+CUSD: 0, \"%[^\r]s",Sim80x.Gsm.Msg);    
@@ -446,7 +446,7 @@ void  LIB_SIM800C::bufferProcess(void)
   }
 
   //##################################################  
-  str1 = strstr(strStart,"\r\n+CREC: ");
+  str1 = strstr(strStart,"\r\n+CREC: ");//not used
   if(str1!=NULL)
   {
     str1 = strchr(str1,':');
@@ -454,7 +454,7 @@ void  LIB_SIM800C::bufferProcess(void)
     Sim80x.WaveState = (Sim80xWave_t)atoi(str1);
   }
   //##################################################  
-  str1 = strstr(strStart,"\r\n+CMIC: ");
+  str1 = strstr(strStart,"\r\n+CMIC: ");//not used
   if(str1!=NULL)
   {
     while(strchr(str1,'(')!=NULL)
@@ -488,7 +488,7 @@ void  LIB_SIM800C::bufferProcess(void)
     }    
   }  
   //##################################################  
-  str1 = strstr(strStart,"\r\n+SNDLEVEL:");
+  str1 = strstr(strStart,"\r\n+SNDLEVEL:");//not used
   if(str1!=NULL)
   {
     while(strchr(str1,'(')!=NULL)
@@ -512,7 +512,7 @@ void  LIB_SIM800C::bufferProcess(void)
     }
   }
   //##################################################  
-  str1 = strstr(strStart,"\r\n+ECHO: ");
+  str1 = strstr(strStart,"\r\n+ECHO: ");//not used
   if(str1!=NULL)
   {
     sscanf(str1,"\r\n+ECHO: (0,%hu,%hu,%hu,%hu),(1,%hu,%hu,%hu,%hu)",&Sim80x.EchoHandset_NonlinearProcessing,&Sim80x.EchoHandset_AcousticEchoCancellation,&Sim80x.EchoHandset_NoiseReduction,&Sim80x.EchoHandset_NoiseSuppression,\
@@ -528,13 +528,13 @@ void  LIB_SIM800C::bufferProcess(void)
   //##################################################   
   //################################################## 
   #if( _SIM80X_USE_BLUETOOTH==1)  
-  //################################################## 
+  /* //################################################## 
   str1 = strstr(strStart,"\r\n+BTHOST:");
   if(str1!=NULL)
   {
     sscanf(str1,"\r\n+BTHOST: %[^,],%[^\r]",Sim80x.Bluetooth.HostName,Sim80x.Bluetooth.HostAddress);    
   }  
-  //##################################################  
+   *//* //##################################################  
   str1 = strstr(strStart,"\r\n+BTSTATUS:");
   if(str1!=NULL)
   {
@@ -580,7 +580,7 @@ void  LIB_SIM800C::bufferProcess(void)
       goto CheckAnotherConnectedProfile;
     }    
   }  
-  //##################################################  
+   *///##################################################  
   str1 = strstr(strStart,"\r\n+BTPAIRING:");
   if(str1!=NULL)
   {
@@ -591,13 +591,13 @@ void  LIB_SIM800C::bufferProcess(void)
     if(tmp_int32_t == 3)
       Sim80x.Bluetooth.ConnectedID = 255;      
   }    
-  //##################################################  
+ /*  //##################################################  
   str1 = strstr(strStart,"\r\n+BTPAIR:");
   if(str1!=NULL)
   {
     
   }
-  //##################################################  
+  */ //##################################################  
   str1 = strstr(strStart,"\r\n+BTCONNECT:");
   if(str1!=NULL)
   {
@@ -672,7 +672,7 @@ void  LIB_SIM800C::bufferProcess(void)
     memset(Sim80x.Bluetooth.ConnectedName,0,sizeof(Sim80x.Bluetooth.ConnectedName));    
     Sim80x.Bluetooth.NeedGetStatus=1;
   }
-  //##################################################  
+  /* //##################################################  
   str1 = strstr(strStart,"\r\n+BTVIS:");
   if(str1!=NULL)
   {
@@ -680,7 +680,7 @@ void  LIB_SIM800C::bufferProcess(void)
     str1++;
     Sim80x.Bluetooth.Visibility=atoi(str1);
   }
-  //##################################################  
+   *///##################################################  
   str1 = strstr(strStart,"\r\n+BTSPPDATA:");
   if(str1!=NULL)
   {
@@ -755,19 +755,19 @@ void  LIB_SIM800C::bufferProcess(void)
   {
     
   } 
-  //##################################################  
+ /*  //##################################################  
   str1 = strstr(strStart,"\r\n+CSTT:");
   if(str1!=NULL)
   {
     sscanf(str1,"\r\n+CSTT: \"%[^\"]\",\"%[^\"]\",\"%[^\"]\"\r\n",Sim80x.GPRS.APN,Sim80x.GPRS.APN_UserName,Sim80x.GPRS.APN_Password);    
   }
-  //##################################################  
+  */ /* //##################################################  
   str1 = strstr(strStart,"AT+CIFSR\r\r\n");
   if(str1!=NULL)
   {
     sscanf(str1,"AT+CIFSR\r\r\n%[^\r]",Sim80x.GPRS.LocalIP);
   } 
-  //##################################################  
+   *//* //##################################################  
   str1 = strstr(strStart,"\r\n+CIPMUX:");
   if(str1!=NULL)
   {
@@ -778,7 +778,7 @@ void  LIB_SIM800C::bufferProcess(void)
     else
       Sim80x.GPRS.MultiConnection=1;
   } 
-  //##################################################  
+   *///##################################################  
   str1 = strstr(strStart,"\r\nCONNECT OK\r\n");
   if(str1!=NULL)
   {
@@ -1284,7 +1284,7 @@ bool  LIB_SIM800C::getIMEI(char *IMEI)
 
   sim800c.sendAtCommand("AT+CGSN\r\n",200, 0);
 
-  updateIMEI(1);
+  processIMEI(1);
 }
 
 /****************************************************************
@@ -1338,7 +1338,7 @@ bool  LIB_SIM800C::getIMSI(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-bool  LIB_SIM800C::getSelOperator(void)
+bool  LIB_SIM800C::getOperator(void)
 {
 
 
@@ -1515,6 +1515,7 @@ void LIB_SIM800C::setNetworkReg(bool turnon)
   snprintf(temp, sizeof(temp), "AT+CREG=%d\r\n", turnon); 
   sim800c.sendAtCommand(temp,200, 0);
   debugTerminal("setNetworkReg");
+  processNetworkReg(1);
 }
 
 /****************************************************************
@@ -1594,12 +1595,12 @@ void LIB_SIM800C::setSimAccess(uint16_t length, char command)
 
 
 /****************************************************************
-*FUNCTION NAME:updateManNo
-*FUNCTION     :updateManNo
+*FUNCTION NAME:processManNo
+*FUNCTION     :processManNo
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::updateManNo(uint16_t addrs)
+bool LIB_SIM800C::processManNo(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1618,12 +1619,12 @@ bool LIB_SIM800C::updateManNo(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:updateModelNo
-*FUNCTION     :updateModelNo
+*FUNCTION NAME:processModelNo
+*FUNCTION     :processModelNo
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::updateModelNo(uint16_t addrs)
+bool LIB_SIM800C::processModelNo(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1642,12 +1643,12 @@ bool LIB_SIM800C::updateModelNo(uint16_t addrs)
 }//complete
 
 /****************************************************************
-*FUNCTION NAME:updateGlobalNo
-*FUNCTION     :updateGlobalNo
+*FUNCTION NAME:processGlobalNo
+*FUNCTION     :processGlobalNo
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::updateGlobalNo(uint16_t addrs)
+bool LIB_SIM800C::processGlobalNo(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1666,12 +1667,12 @@ bool LIB_SIM800C::updateGlobalNo(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:updateLastCommand
-*FUNCTION     :updateLastCommand
+*FUNCTION NAME:processLastCommand
+*FUNCTION     :processLastCommand
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::updateLastCommand(uint16_t addrs)
+bool LIB_SIM800C::processLastCommand(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1690,12 +1691,12 @@ bool LIB_SIM800C::updateLastCommand(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:updateCurrentConfig
-*FUNCTION     :updateCurrentConfig
+*FUNCTION NAME:processCurrentConfig
+*FUNCTION     :processCurrentConfig
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::updateCurrentConfig(uint16_t addrs)
+bool LIB_SIM800C::processCurrentConfig(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1714,12 +1715,12 @@ bool LIB_SIM800C::updateCurrentConfig(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:updateTaCapabilities
-*FUNCTION     :updateTaCapabilities
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::updateTaCapabilities(uint16_t addrs)
+bool LIB_SIM800C::processTaCapabilities(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1737,6 +1738,462 @@ bool LIB_SIM800C::updateTaCapabilities(uint16_t addrs)
 	
 }
 
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processNetworkReg(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processCSQ(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+  str1 = strstr(strStart,"\r\n+CREG:");
+  if(str1!=NULL)
+  {
+    str1 = strchr(str1,',');
+    str1++;
+    if(atoi(str1)==1)
+      Sim80x.Status.RegisterdToNetwork=1;
+    else
+      Sim80x.Status.RegisterdToNetwork=0;
+  }
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processCBC(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+ //##################################################
+  str1 = strstr(strStart,"\r\n+CBC:");
+  if(str1!=NULL)
+  {
+    str1 = strchr(str1,':');
+    str1++;
+    tmp_int32_t = atoi(str1);
+    if(tmp_int32_t==0)
+    {
+      Sim80x.Status.BatteryCharging=0;
+      Sim80x.Status.BatteryFull=0;
+    }
+    if(tmp_int32_t==1)
+    {
+      Sim80x.Status.BatteryCharging=1;
+      Sim80x.Status.BatteryFull=0;
+    }
+    if(tmp_int32_t==2)
+    {
+      Sim80x.Status.BatteryCharging=0;
+      Sim80x.Status.BatteryFull=1;
+    }
+    str1 = strchr(str1,',');
+    str1++;
+    Sim80x.Status.BatteryPercent = atoi(str1);
+    str1 = strchr(str1,',');
+    str1++;
+    Sim80x.Status.BatteryVoltage = atof(str1)/1000;      
+  }
+ 
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processSmsMsgTxt(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+ //##################################################  
+  str1 = strstr(strStart,"\r\n+CMGS:");
+  if(str1!=NULL)
+  {
+    Sim80x.Gsm.MsgSent=1;
+  }  
+ 
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processSmsMsgMemorySts(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+//##################################################  
+  str1 = strstr(strStart,"\r\n+CPMS:");
+  if(str1!=NULL)
+  {
+    str1 = strchr(str1,':');
+    str1++;
+    str1++;
+    if(*str1 == '"')
+    {
+      str1 = strchr(str1,',');
+      str1++;
+    }
+    Sim80x.Gsm.MsgUsed = atoi(str1);
+    str1 = strchr(str1,',');
+    str1++;      
+    Sim80x.Gsm.MsgCapacity = atoi(str1);
+  }  
+ 
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processSmsMsg(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+  //##################################################  
+  str1 = strstr(strStart,"\r\n+CMGR:");
+  if(str1!=NULL)
+  {
+    if(Sim80x.Gsm.MsgFormat == GsmMsgFormat_Text)
+    {
+      memset(Sim80x.Gsm.Msg,0,sizeof(Sim80x.Gsm.Msg));
+      memset(Sim80x.Gsm.MsgDate,0,sizeof(Sim80x.Gsm.MsgDate));
+      memset(Sim80x.Gsm.MsgNumber,0,sizeof(Sim80x.Gsm.MsgNumber));
+      memset(Sim80x.Gsm.MsgTime,0,sizeof(Sim80x.Gsm.MsgTime));
+      tmp_int32_t = sscanf(str1,"\r\n+CMGR: %*[^,],\"%[^\"]\",%*[^,],\"%[^,],%[^+-]%*d\"\r\n%[^\r]s\r\nOK\r\n",Sim80x.Gsm.MsgNumber,Sim80x.Gsm.MsgDate,Sim80x.Gsm.MsgTime,Sim80x.Gsm.Msg);      
+      if(tmp_int32_t == 4)
+        Sim80x.Gsm.MsgReadIsOK=1;
+      else
+        Sim80x.Gsm.MsgReadIsOK=0;
+    }else if(Sim80x.Gsm.MsgFormat == GsmMsgFormat_PDU)
+    {
+
+      
+    }    
+  
+
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processMsgServiceNumber(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+ //##################################################  
+  str1 = strstr(strStart,"\r\n+CSCA:");
+  if(str1!=NULL)
+  {
+    memset(Sim80x.Gsm.MsgServiceNumber,0,sizeof(Sim80x.Gsm.MsgServiceNumber));
+    str1 = strchr(str1,'"');
+    str1++;
+    str2 = strchr(str1,'"');
+    strncpy(Sim80x.Gsm.MsgServiceNumber,str1,str2-str1);
+  }
+ 
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processSmsTextModeParam(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+  //##################################################  
+  str1 = strstr(strStart,"\r\n+CSMP:");
+  if(str1!=NULL)
+  {
+    tmp_int32_t = sscanf(str1,"\r\n+CSMP: %hhd,%hhd,%hhd,%hhd\r\nOK\r\n",&Sim80x.Gsm.MsgTextModeParameterFo,&Sim80x.Gsm.MsgTextModeParameterVp,&Sim80x.Gsm.MsgTextModeParameterPid,&Sim80x.Gsm.MsgTextModeParameterDcs);
+  }
+ 
+
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processBTGetHostName(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+  //################################################## 
+  str1 = strstr(strStart,"\r\n+BTHOST:");
+  if(str1!=NULL)
+  {
+    sscanf(str1,"\r\n+BTHOST: %[^,],%[^\r]",Sim80x.Bluetooth.HostName,Sim80x.Bluetooth.HostAddress);    
+  }  
+  
+
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processBTStatus(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0]; 
+  //##################################################  
+  str1 = strstr(strStart,"\r\n+BTSTATUS:");
+  if(str1!=NULL)
+  {
+    str1 = strchr(str1,':');
+    str1++;
+    Sim80x.Bluetooth.Status = (BluetoothStatus_t)atoi(str1);
+    
+    str3 = strstr(str1,"\r\nOK\r\n");
+    CheckAnotherConnectedProfile:
+    str2 = strstr(str1,"\r\nC:");
+    if((str2 != NULL) && (str2 <str3) && (str2 > str1))
+    {
+      tmp_int32_t = sscanf(str2,"\r\nC: %hhd,%[^,],%[^,],%[^\r]",&Sim80x.Bluetooth.ConnectedID,Sim80x.Bluetooth.ConnectedName,Sim80x.Bluetooth.ConnectedAddress,tmp_str);       
+      if(strcmp(tmp_str,"\"HFP\"")==0)
+        tmp_int32_t = BluetoothProfile_HSP_HFP;
+      else if(strcmp(tmp_str,"\"HSP\"")==0)
+        tmp_int32_t = BluetoothProfile_HSP_HFP;
+      else if(strcmp(tmp_str,"\"A2DP\"")==0)
+        tmp_int32_t = BluetoothProfile_A2DP;
+      else if(strcmp(tmp_str,"\"GAP\"")==0)
+        tmp_int32_t = BluetoothProfile_GAP;
+      else if(strcmp(tmp_str,"\"GOEP\"")==0)
+        tmp_int32_t = BluetoothProfile_GOEP;
+      else if(strcmp(tmp_str,"\"OPP\"")==0)
+        tmp_int32_t = BluetoothProfile_OPP;
+      else if(strcmp(tmp_str,"\"SDAP\"")==0)
+        tmp_int32_t = BluetoothProfile_SDAP;
+      else if(strcmp(tmp_str,"\"SPP\"")==0)
+        tmp_int32_t = BluetoothProfile_SSP;
+      else tmp_int32_t = BluetoothProfile_NotSet;
+    
+      for(uint8_t i=0 ;i<sizeof(Sim80x.Bluetooth.ConnectedProfile) ; i++)
+      {
+        if(Sim80x.Bluetooth.ConnectedProfile[i]==(BluetoothProfile_t)tmp_int32_t)
+          break;
+        if(Sim80x.Bluetooth.ConnectedProfile[i]==BluetoothProfile_NotSet)
+        {
+          Sim80x.Bluetooth.ConnectedProfile[i]=(BluetoothProfile_t)tmp_int32_t;
+          break;
+        }
+      }
+      str1+=5;
+      goto CheckAnotherConnectedProfile;
+    }    
+  }  
+   
+
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processBTPair(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+   //##################################################  
+  str1 = strstr(strStart,"\r\n+BTPAIR:");
+  if(str1!=NULL)
+  {
+    
+  }
+ 
+
+
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processBTVisibility(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0]; 
+  //##################################################  
+  str1 = strstr(strStart,"\r\n+BTVIS:");
+  if(str1!=NULL)
+  {
+    str1 = strchr(str1,':');
+    str1++;
+    Sim80x.Bluetooth.Visibility=atoi(str1);
+  }
+   
+
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processGPRSNetApn(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+   //##################################################  
+  str1 = strstr(strStart,"\r\n+CSTT:");
+  if(str1!=NULL)
+  {
+    sscanf(str1,"\r\n+CSTT: \"%[^\"]\",\"%[^\"]\",\"%[^\"]\"\r\n",Sim80x.GPRS.APN,Sim80x.GPRS.APN_UserName,Sim80x.GPRS.APN_Password);    
+  }
+ 
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processGPRSNetLocalIP(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];
+  //##################################################  
+  str1 = strstr(strStart,"AT+CIFSR\r\r\n");
+  if(str1!=NULL)
+  {
+    sscanf(str1,"AT+CIFSR\r\r\n%[^\r]",Sim80x.GPRS.LocalIP);
+  } 
+    
+
+}
+
+/****************************************************************
+*FUNCTION NAME:processTaCapabilities
+*FUNCTION     :processTaCapabilities
+*INPUT        :addrs; 
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processGPRSNetMultiConnection(uint16_t addrs)
+{
+  
+  char      *strStart,*str1,*str2,*str3;
+  int32_t   tmp_int32_t;
+  char      tmp_str[16];
+  
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+
+//##################################################  
+  str1 = strstr(strStart,"\r\n+CIPMUX:");
+  if(str1!=NULL)
+  {
+    str1 =strchr(str1,':');
+    str1++;
+    if(atoi(str1)==0)
+      Sim80x.GPRS.MultiConnection=0;
+    else
+      Sim80x.GPRS.MultiConnection=1;
+  } 
+  
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -1745,12 +2202,12 @@ bool LIB_SIM800C::updateTaCapabilities(uint16_t addrs)
 
 
 /****************************************************************
-*FUNCTION NAME:updateIMEI
-*FUNCTION     :updateIMEI
+*FUNCTION NAME:processIMEI
+*FUNCTION     :processIMEI
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::updateIMEI(uint16_t addrs)
+bool LIB_SIM800C::processIMEI(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  

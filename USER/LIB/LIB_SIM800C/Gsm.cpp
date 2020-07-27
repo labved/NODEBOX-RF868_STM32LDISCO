@@ -191,7 +191,7 @@ bool  LIB_SIM800C::deleteSmsMsg(uint8_t index)
     return false;  
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_getMsgServiceNumber(void)
+bool  LIB_SIM800C::getSmsMsgServiceNumber(void)
 {
   uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CSCA?\r\n",5000,1,"\r\n+CSCA:");

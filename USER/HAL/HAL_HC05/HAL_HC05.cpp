@@ -182,7 +182,7 @@ byte  HAL_HC05::getc(void)
 ****************************************************************/
 void HAL_HC05::HAL_UART_Transmit(uint8_t *data, uint8_t size,uint8_t timeout)
 {
-
+  uint8_t temp;
   for(uint8_t i=0;i<size;i++)
   {
       temp = *data;
@@ -517,7 +517,7 @@ uint16_t HAL_HC05::readLine(char *buffer, size_t buffer_size)
 *INPUT        :command : AT commands, arg : AT arguments
 *OUTPUT       :none
 ****************************************************************/
-void HAL_HC05::writeCommand(const char *command, const char *arg)
+ void HAL_HC05::writeCommand(const char *command, const char *arg)
 {
   //PGM_STRING_MAPPED_TO_RAM(AT, "AT");
   //m_uart->print(AT);
@@ -543,7 +543,7 @@ void HAL_HC05::writeCommand(const char *command, const char *arg)
   //m_uart->print(EOL);
   writeString(AT_EOL);   
 }
-
+ 
 
 /****************************************************************
 *FUNCTION NAME:simpleCommand

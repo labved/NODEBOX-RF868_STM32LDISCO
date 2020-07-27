@@ -78,8 +78,8 @@ class LIB_SIM800C
     void setNetworkReg(bool turnon);
     void setRLPParams(uint16_t iws,uint16_t mws,uint16_t t2,uint16_t n2,uint16_t t4);
     void setPrefOperLst(uint8_t index, uint8_t  format, char *oper);  //need to check
-    void setPhoneFunc(uint8_t fun, uint16_t  rst);
-    void setClockData(char *time);
+    void setPhoneFunc(uint8_t fun, uint8_t  rst);
+    void setClockData(char time);
     void setSimAccess(uint16_t length, char command);
 
 
@@ -104,7 +104,7 @@ class LIB_SIM800C
     bool                    Gsm_setMsgCharacterFormat(GsmTECharacterSet_t GsmTECharacterSet);
     bool                    getSmsMsg(uint8_t index);
     bool                    deleteSmsMsg(uint8_t index);
-    bool                    Gsm_getMsgServiceNumber(void);
+    bool                    getSmsMsgServiceNumber(void);
     bool                    setSmsMsgServiceNo(char *ServiceNumber);
     bool                    getSmsMsgTextModeParam(void);
     bool                    Gsm_setMsgTextModeParameter(uint8_t fo,uint8_t vp,uint8_t pid,uint8_t dcs);
@@ -145,13 +145,31 @@ class LIB_SIM800C
     bool                    getHttp(char *URL); 
     
 // UPDATE FUNCTIONS
-    bool updateManNo(uint16_t addrs);
-    bool updateModelNo(uint16_t addrs);
-    bool updateGlobalNo(uint16_t addrs);
-    bool updateLastCommand(uint16_t addrs);
-    bool updateCurrentConfig(uint16_t addrs);
-    bool updateTaCapabilities(uint16_t addrs);
-    bool updateIMEI(uint16_t addrs);
+    bool processManNo(uint16_t addrs);
+    bool processModelNo(uint16_t addrs);
+    bool processGlobalNo(uint16_t addrs);
+    bool processLastCommand(uint16_t addrs);
+    bool processCurrentConfig(uint16_t addrs);
+    bool processTaCapabilities(uint16_t addrs);
+    bool processNetworkReg(uint16_t addrs);
+    
+    bool processCSQ(uint16_t addrs);//build
+    bool processCBC(uint16_t addrs);
+
+    void processSmsMsgTxt(char *number, 
+    char *msg, uint16_t addrs);
+    void processSmsMsgMemorySts(uint16_t addrs);
+    void processSmsMsg(uint16_t addrs);
+    void processSmsMsgServiceNo(uint16_t addrs);//done
+    void processSmsMsgTextModeParam(uint16_t addrs);//done
+    void processBTGetHostName(uint16_t addrs);//done
+    void processBTGetStatus(uint16_t addrs);//done
+    void processBTPair(uint16_t addrs);//done
+    void processBTVisibility(uint16_t addrs);//done
+    void processGPRSNetApn(uint16_t addrs);//done
+    void processGPRSNetLocalIP(uint16_t addrs);//done
+    void processGPRSNetMultiConnection(uint16_t addrs);//done
+    void processIMEI(uint16_t addrs);
 
 
     //HTTP
