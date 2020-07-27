@@ -29,7 +29,7 @@ extern Sim80x_t                 Sim80x;
 *OUTPUT       :none
 ****************************************************************/
 
-void   LIB_SIM800C::Bluetooth_userNewPairingRequest(char *Name,char *Address,char *Pass)
+void   LIB_SIM800C::userBtNewPairingRequest(char *Name,char *Address,char *Pass)
 {
   //Bluetooth_acceptPair(true);  
   //Bluetooth_acceptPair(false);
@@ -43,10 +43,10 @@ void   LIB_SIM800C::Bluetooth_userNewPairingRequest(char *Name,char *Address,cha
 *OUTPUT       :none
 ****************************************************************/
 
-void  LIB_SIM800C::Bluetooth_userConnectingSpp(void)
+void  LIB_SIM800C::userBtConnectingSpp(void)
 {
-  Bluetooth_sppAllowConnection(true);  
-  //Bluetooth_sppAllowConnection(false);
+  btSppAllowConnection(true);  
+  //btSppAllowConnection(false);
 }
 //###################################################################################################################
 
@@ -57,9 +57,9 @@ void  LIB_SIM800C::Bluetooth_userConnectingSpp(void)
 *OUTPUT       :none
 ****************************************************************/
 
-void  LIB_SIM800C::Bluetooth_userNewSppData(char *NewData,uint16_t len)
+void  LIB_SIM800C::userBtNewSppData(char *NewData,uint16_t len)
 {
-  //Bluetooth_sppSend("Test Back\r\n");  
+  //btSppSend("Test Back\r\n");  
 }
 //###################################################################################################################
 

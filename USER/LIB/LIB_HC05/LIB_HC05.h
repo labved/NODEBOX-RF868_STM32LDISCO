@@ -26,7 +26,7 @@ private:
   void                    regConfigSettings(void);
   void                    setAtMode(void);
   void                    setDataMode(void);
-  bool                    debugTerminal(char *msg);
+  void                    debugTerminal(char const *msg);
 
 
 public:
@@ -40,10 +40,10 @@ public:
   bool                    probe(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
 
   // AT                    COMMANDS METHODS
-  bool                    setFactoryDefault(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
+  bool                    setFactoryDefault(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT   // need to check
   bool                    getVersion(char *buffer, size_t buffer_size, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
   bool                    getAddress(BluetoothAddress &address, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT//need to check
-  bool                    getName(char *buffer, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
+  bool                    getName(char *buffer, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT   //need to check
   bool                    setName(const char *name, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
   bool                    getRemoteDeviceName(const BluetoothAddress &address,
                                                     char *buffer, size_t buffer_size, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT //need to check
@@ -106,7 +106,7 @@ public:
   bool                    disconnect(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT   //need to check
   
   //new
-  bool processVersion(char *buffer, size_t buffer_size, uint16_t addrs);
+  bool processVersion(uint8_t answer, char *buffer, size_t buffer_size, uint16_t addrs);//need to check 
   bool processRemoteDeviceName(const BluetoothAddress &address,
   char *buffer, size_t buffer_size, uint16_t addrs);
   bool processDeviceClass(uint32_t &device_class, uint16_t addrs);
@@ -131,10 +131,11 @@ uint16_t &inquiry_duration, uint16_t &paging_interval, uint16_t &paging_duration
   bool processPair(uint16_t addrs);      //need to check
   bool processDisconnect(uint16_t addrs);    //need to check
   bool processCountDevicesInList(uint8_t &device_count, uint16_t addrs);
-  bool processDeleteAllDevicesFromList( uint16_t addrs);
-  bool processGetSniffParams(uint16_t max_time, uint16_t min_time,
+ // bool processDeleteAllDevicesFromList( uint16_t addrs);
+  bool processSniffParams(uint16_t max_time, uint16_t min_time,
   uint16_t retry_interval, uint16_t sniff_timeout, uint16_t addrs);
-
+  bool processRole(HC05_Role &role, uint16_t addrs);       //need to check
+  bool processName(char *buffer, uint16_t addrs);
   //
 
 };

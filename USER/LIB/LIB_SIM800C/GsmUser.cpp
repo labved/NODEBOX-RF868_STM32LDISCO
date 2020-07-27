@@ -24,7 +24,7 @@ extern Sim80x_t                 Sim80x;
 *INPUT        :StartupTime
 *OUTPUT       :void
 ****************************************************************/
-void  LIB_SIM800C::Gsm_user(uint32_t StartupTime)
+void  LIB_SIM800C::smsUser(uint32_t StartupTime)
 {
   
   
@@ -36,7 +36,7 @@ void  LIB_SIM800C::Gsm_user(uint32_t StartupTime)
 *INPUT        :Number, Date, Time, kmsg
 *OUTPUT       :void
 ****************************************************************/
-void  LIB_SIM800C::Gsm_userNewMsg(char *Number,char *Date,char *Time,char *msg)
+void  LIB_SIM800C::smsUserNewMsg(char *Number,char *Date,char *Time,char *msg)
 {
   
   

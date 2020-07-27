@@ -52,10 +52,15 @@ void LIB_SIM800C::httpTerminate(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::getHttpParam(void)
+bool LIB_SIM800C::getHttpParam(void)
 {
-  sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
+  uint8_t answer;
+  answer =  sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
   debugTerminal("getHttpParam");
+ if(answer == 1)
+    return true;
+  else
+    return false;
 }
 
 
@@ -65,10 +70,15 @@ void LIB_SIM800C::getHttpParam(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::setHttpParam(void)
+bool LIB_SIM800C::setHttpParam(void)
 {
-  sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
+uint8_t answer;
+answer =  sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
   debugTerminal("setHttpParam");
+ if(answer == 1)
+    return true;
+  else
+    return false;
 }
 
 
@@ -78,10 +88,15 @@ void LIB_SIM800C::setHttpParam(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::getHttpData(void)
+bool LIB_SIM800C::getHttpData(void)
 {
-  sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
+  uint8_t answer;
+  answer =  sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
   debugTerminal("getHttpData");
+ if(answer == 1)
+    return true;
+  else
+    return false;
 }
 
 
@@ -91,10 +106,15 @@ void LIB_SIM800C::getHttpData(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::setHttpData(void)
+bool LIB_SIM800C::setHttpData(void)
 {
-  sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
+uint8_t answer;
+answer =  sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
   debugTerminal("setHttpData");
+ if(answer == 1)
+    return true;
+  else
+    return false;
 }
 
 
@@ -104,10 +124,15 @@ void LIB_SIM800C::setHttpData(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::getHttpAction(void)
+bool LIB_SIM800C::getHttpAction(void)
 {
-  sim800c.sendAtCommand("AT+HTTPACTION\r\n",200, 0);
+  uint8_t answer;
+  answer =  sim800c.sendAtCommand("AT+HTTPACTION\r\n",200, 0);
   debugTerminal("getHttpAction");
+ if(answer == 1)
+    return true;
+  else
+    return false;
 }
 
 
@@ -117,10 +142,15 @@ void LIB_SIM800C::getHttpAction(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::setHttpAction(void)
-{
-  sim800c.sendAtCommand("AT+HTTPACTION\r\n",200, 0);
+bool LIB_SIM800C::setHttpAction(void)
+{  
+  uint8_t answer;
+  answer =  sim800c.sendAtCommand("AT+HTTPACTION\r\n",200, 0);
   debugTerminal("setHttpAction");
+ if(answer == 1)
+    return true;
+  else
+    return false;
 }
 
 
@@ -130,10 +160,15 @@ void LIB_SIM800C::setHttpAction(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::getHttpRead(void)
+bool LIB_SIM800C::getHttpRead(void)
 {
-  sim800c.sendAtCommand("AT+HTTPREAD\r\n",200, 0);
+  uint8_t answer;
+  answer =  sim800c.sendAtCommand("AT+HTTPREAD\r\n",200, 0);
   debugTerminal("getHttpRead");
+ if(answer == 1)
+    return true;
+  else
+    return false;
 }
 
 
@@ -143,10 +178,16 @@ void LIB_SIM800C::getHttpRead(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::setHttpRead(void)
+bool LIB_SIM800C::setHttpRead(void)
 {
-  sim800c.sendAtCommand("AT+HTTPREAD\r\n",200, 0);
+  
+uint8_t answer;
+answer = sim800c.sendAtCommand("AT+HTTPREAD\r\n",200, 0);
   debugTerminal("setHttpRead");
+ if((answer == 1) && (Sim80x.Bluetooth.HostName[0] != 0) && (Sim80x.Bluetooth.HostAddress[0] != 0))
+    return true;
+  else
+    return false;
 }
 
 
@@ -156,10 +197,15 @@ void LIB_SIM800C::setHttpRead(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::getHttpContext(void)
+bool LIB_SIM800C::getHttpContext(void)
 {
-  sim800c.sendAtCommand("AT+HTTPCONT\r\n",200, 0);
+uint8_t answer;
+answer =  sim800c.sendAtCommand("AT+HTTPCONT\r\n",200, 0);
   debugTerminal("getHttpContext");
+ if(answer == 1)
+    return true;
+  else
+    return false;
 }
 
 
@@ -169,10 +215,15 @@ void LIB_SIM800C::getHttpContext(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::getHttpStatus(void)
+bool LIB_SIM800C::getHttpStatus(void)
 {
-  sim800c.sendAtCommand("AT+HTTPSTATUS\r\n",200, 0);
+uint8_t answer;
+answer =  sim800c.sendAtCommand("AT+HTTPSTATUS\r\n",200, 0);
   debugTerminal("getHttpStatus");
+ if(answer == 1)
+    return true;
+  else
+    return false;
 }
 
 
@@ -182,10 +233,16 @@ void LIB_SIM800C::getHttpStatus(void)
 *INPUT        :void
 *OUTPUT       :void
 ****************************************************************/
-void LIB_SIM800C::getHttpHeader(void)
+bool LIB_SIM800C::getHttpHeader(void)
 {
-  sim800c.sendAtCommand("AT+HTTPHEAD\r\n",200, 0);
+  uint8_t answer;
+  answer =  sim800c.sendAtCommand("AT+HTTPHEAD\r\n",200, 0);
   debugTerminal("getHttpHeader");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
 }
 
 

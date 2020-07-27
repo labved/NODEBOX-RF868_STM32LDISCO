@@ -37,17 +37,17 @@ class LIB_SIM800C
 
 
     // CUSTOM LIBRARY
-    void setAtMode(void); //need to check
-    void setDataMode(void);
-    void setActiveProfile(void); //need to check
-    void setDefaultConfig(void);
+    bool setAtMode(void); //need to check
+    bool setDataMode(void);
+    bool setActiveProfile(void); //need to check
+    bool setDefaultConfig(void);
 
     // 0.25V
-    void                    setFactoryDefault(void);
-    void                    setAtEcho(bool turnon);
-    void                    setBaudRate(uint16_t baudrate);
-    void                    setPower(bool turnon);      //need to check
-    void                    setParameters(void);
+    bool                    setFactoryDefault(void);
+    bool                    setAtEcho(bool turnon);
+    bool                    setBaudRate(uint16_t baudrate);
+    bool                    setPower(bool turnon);      //need to check //made no changes
+    bool                    setParameters(void);
 
     // 3GPP TS 27.007
     bool getManNo(void);
@@ -72,15 +72,15 @@ class LIB_SIM800C
     bool getBattChar(void);
 
     
-    void setTeChar(char *chset);
-    void setAddrsType(uint8_t type);
-    void setSelOperator(uint8_t mode, uint8_t format, uint8_t oper); //need to check
-    void setNetworkReg(bool turnon);
-    void setRLPParams(uint16_t iws,uint16_t mws,uint16_t t2,uint16_t n2,uint16_t t4);
-    void setPrefOperLst(uint8_t index, uint8_t  format, char *oper);  //need to check
-    void setPhoneFunc(uint8_t fun, uint8_t  rst);
-    void setClockData(char time);
-    void setSimAccess(uint16_t length, char command);
+    bool setTeChar(char *chset);
+    bool setAddrsType(uint8_t type);
+    bool setSelOperator(uint8_t mode, uint8_t format, uint8_t oper); //need to check
+    bool setNetworkReg(bool turnon);
+    bool setRLPParams(uint16_t iws,uint16_t mws,uint16_t t2,uint16_t n2,uint16_t t4);
+    bool setPrefOperLst(uint8_t index, uint8_t  format, char *oper);  //need to check
+    bool setPhoneFunc(uint8_t fun, uint8_t  rst);
+    bool setClockData(char time);
+    bool setSimAccess(uint16_t length, char command);
 
 
 
@@ -88,53 +88,53 @@ class LIB_SIM800C
     // SIM800C LIBRARY     
   
     // GSM
-    void                    Gsm_user(uint32_t startupTime);
-    void                    Gsm_userNewMsg(char *number,char *Date,char *Time,char *msg);
+    void                    smsUser(uint32_t startupTime);
+    void                    smsUserNewMsg(char *number,char *Date,char *Time,char *msg);
 
-    bool                    Gsm_ussd(char *send,char *receive);
+    bool                    smsUssd(char *send,char *receive);
 
     GsmMsgFormat_t          getSmsFormat(void);
-    bool                    Gsm_setMsgFormat(GsmMsgFormat_t GsmMsgFormat);  
+    bool                    setSmsMsgFormat(GsmMsgFormat_t GsmMsgFormat);  
     GsmMsgMemory_t          getSmsMsgMemorySts(void);
-    bool                    Gsm_setMsgMemoryLocation(GsmMsgMemory_t GsmMsgMemory);
-    GsmTECharacterSet_t     Gsm_getMsgCharacterFormat(void);  
-    bool                    Gsm_setMsgCharacterFormat(GsmTECharacterSet_t GsmTECharacterSet);
+    bool                    setSmsMsgMemoryLocation(GsmMsgMemory_t GsmMsgMemory);
+    GsmTECharacterSet_t     getSmsMsgCharacterFormat(void);  
+    bool                    setSmsMsgCharacterFormat(GsmTECharacterSet_t GsmTECharacterSet);
    
     bool                    getSmsMsg(uint8_t index);
     bool                    deleteSmsMsg(uint8_t index);
     bool                    getSmsMsgServiceNumber(void);
     bool                    setSmsMsgServiceNo(char *ServiceNumber);
     bool                    getSmsMsgTextModeParam(void);
-    bool                    Gsm_setMsgTextModeParameter(uint8_t fo,uint8_t vp,uint8_t pid,uint8_t dcs);
+    bool                    setSmsMsgTextModeParameter(uint8_t fo,uint8_t vp,uint8_t pid,uint8_t dcs);
     bool                    setSmsMsgTxt(char *number,char *msg);  
 
 // BLUETOOTH
-    void                    Bluetooth_userNewPairingRequest(char *Name,char *Address,char *Pass);
-    void                    Bluetooth_userConnectingSpp(void);
-    void                    Bluetooth_userNewSppData(char *NewData,uint16_t len);
+    void                    userBtNewPairingRequest(char *Name,char *Address,char *Pass);
+    void                    userBtConnectingSpp(void);
+    void                    userBtNewSppData(char *NewData,uint16_t len);
    
-    bool                    Bluetooth_setPower(bool turnon);
-    bool                    Bluetooth_getHostName(void);  
-    bool                    Bluetooth_setHostName(char *HostName);
-    BluetoothStatus_t       Bluetooth_getStatus(void);
-    bool                    Bluetooth_acceptPair(bool Accept);  
-    bool                    Bluetooth_acceptPairWithPass(char *Pass);  
-    bool                    Bluetooth_setAutoPair(bool  Enable);
-    bool                    Bluetooth_setPairPassword(char  *Pass);
-    bool                    Bluetooth_unpair(uint8_t  Unpair_0_to_all);  
-    bool                    Bluetooth_getVisibility(void);
-    void                    Bluetooth_setVisibility(bool Visible);
-    void                    Bluetooth_sppAllowConnection(bool Accept);
-    bool                    Bluetooth_sppSend(char *DataString);
+    bool                    setBtPower(bool turnon);
+    bool                    getBtHostName(void);  
+    bool                    setBtHostName(char *HostName);
+    BluetoothStatus_t       getBtStatus(void);
+    bool                    acceptPair(bool Accept);  
+    bool                    acceptPairWithPass(char *Pass);  
+    bool                    setBtAutoPair(bool  Enable);
+    bool                    setBtPairPassword(char  *Pass);
+    bool                    btUnpair(uint8_t  Unpair_0_to_all);  
+    bool                    getBtVisibility(void);
+    bool                    setBtVisibility(bool Visible);
+    bool                    btSppAllowConnection(bool Accept);
+    bool                    btSppSend(char *DataString);
 
 // GPRS
     bool                    deactivateNetPDPContext(void);
     bool                    getNetAPN(char *Name,char *username,char *password);
     bool                    setNetAPN(char *Name,char *username,char *password);
     bool                    startupNetGPRS(void);
-    void                    getNetLocalIP(char *IP);
-    void                    getNetCurrentConnectionSts(void);
-    bool                    getNetMultiConnection(void);
+    bool                    getNetLocalIP(char *IP);
+    bool                    getNetCurrentConnectionSts(void);
+    bool                    getNetMultiConnection(void);      //need to check
     bool                    setNetMultiConnection(bool Enable);
 
 
@@ -143,13 +143,13 @@ class LIB_SIM800C
     bool                    getHttp(char *URL); 
     
 // UPDATE FUNCTIONS
-    bool processManNo(uint16_t addrs);
-    bool processModelNo(uint16_t addrs);
-    bool processGlobalNo(uint16_t addrs);
-    bool processLastCommand(uint16_t addrs);
-    bool processCurrentConfig(uint16_t addrs);
-    bool processTaCapabilities(uint16_t addrs);
-    bool processNetworkReg(uint16_t addrs);
+    void processManNo(uint16_t addrs);
+    void processModelNo(uint16_t addrs);
+    void processGlobalNo(uint16_t addrs);
+    void processLastCommand(uint16_t addrs);
+    void processCurrentConfig(uint16_t addrs);
+    void processTaCapabilities(uint16_t addrs);
+    void processNetworkReg(uint16_t addrs);
     
     void processCSQ(uint16_t addrs);//build
     void processCBC(uint16_t addrs);
@@ -173,18 +173,24 @@ class LIB_SIM800C
     //HTTP 
     void httpInit(void);
     void httpTerminate(void);
-    void getHttpParam(void);
-    void setHttpParam(void);
-    void getHttpData(void);
-    void setHttpData(void);
-    void getHttpAction(void);
-    void setHttpAction(void);
-    void getHttpRead(void);
+
+
+    bool getHttpParam(void);
+    bool getHttpData(void);
+    bool getHttpAction(void);
+    bool getHttpRead(void);
+    bool getHttpContext(void);
+    bool getHttpStatus(void);
+    bool getHttpHeader(void);
+
+    bool setHttpParam(void);
+    bool setHttpData(void);
+    bool setHttpAction(void);
+    bool setHttpRead(void);
     
-    void setHttpRead(void);
-    void getHttpContext(void);
-    void getHttpStatus(void);
-    void getHttpHeader(void);
+
+
+
 
 };
 

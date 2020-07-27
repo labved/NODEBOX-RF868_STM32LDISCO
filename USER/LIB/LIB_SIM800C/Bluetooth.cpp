@@ -24,11 +24,11 @@ extern Sim80x_t                 Sim80x;
 *INPUT        :TurnOn
 *OUTPUT       :bool
 ****************************************************************/
-bool  LIB_SIM800C::Bluetooth_setPower(bool TurnOn)
+bool  LIB_SIM800C::setBtPower(bool TurnOn)
 {
   uint8_t answer;
   delay_ms(100);
-  Bluetooth_getStatus();
+  getBtStatus();
   if(TurnOn == true)
   {
     if(Sim80x.Bluetooth.Status == BluetoothStatus_Initial)
@@ -39,9 +39,9 @@ bool  LIB_SIM800C::Bluetooth_setPower(bool TurnOn)
         for(uint8_t i=0 ;i<50 ;i++)
         {
           delay_ms(100);
-          if(Bluetooth_getStatus()>BluetoothStatus_Initial)
+          if(getBtStatus()>BluetoothStatus_Initial)
           {
-            Bluetooth_getStatus();
+            getBtStatus();
             return true;          
           }
         }        
@@ -53,7 +53,7 @@ bool  LIB_SIM800C::Bluetooth_setPower(bool TurnOn)
     }
     else
     {
-      Bluetooth_getStatus();
+      getBtStatus();
       return true;       
     }
   }
@@ -63,9 +63,9 @@ bool  LIB_SIM800C::Bluetooth_setPower(bool TurnOn)
     {
       delay_ms(100);
       answer = sim800c.sendAtCommand("AT+BTPOWER=0\r\n",5000,2,"\r\nOK\r\n","\r\nERROR\r\n");
-      if(Bluetooth_getStatus()==BluetoothStatus_Initial)
+      if(getBtStatus()==BluetoothStatus_Initial)
       {
-        Bluetooth_getStatus();
+        getBtStatus();
         return true;      
       }
     }
@@ -80,7 +80,7 @@ bool  LIB_SIM800C::Bluetooth_setPower(bool TurnOn)
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-bool  LIB_SIM800C::Bluetooth_getHostName(void)
+bool  LIB_SIM800C::getBtHostName(void)
 {
   uint8_t answer;
   memset(Sim80x.Bluetooth.HostName,0,sizeof(Sim80x.Bluetooth.HostName));
@@ -98,7 +98,7 @@ bool  LIB_SIM800C::Bluetooth_getHostName(void)
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-bool  LIB_SIM800C::Bluetooth_setHostName(char *HostName)
+bool  LIB_SIM800C::setBtHostName(char *HostName)
 {
   uint8_t answer;
   char  str[32];
@@ -110,7 +110,7 @@ bool  LIB_SIM800C::Bluetooth_setHostName(char *HostName)
   answer = sim800c.sendAtCommand(str,1000,1,strParam);
   if(answer == 1)
   {
-    Bluetooth_getHostName();
+    getBtHostName();
     return true;
   }
   else
@@ -123,7 +123,7 @@ bool  LIB_SIM800C::Bluetooth_setHostName(char *HostName)
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-BluetoothStatus_t  LIB_SIM800C::Bluetooth_getStatus(void)
+BluetoothStatus_t  LIB_SIM800C::getBtStatus(void)
 {
   uint8_t answer;
   answer = sim800c.sendAtCommand("AT+BTSTATUS?\r\n",1000,1,"\r\n+BTSTATUS:");
@@ -139,7 +139,7 @@ BluetoothStatus_t  LIB_SIM800C::Bluetooth_getStatus(void)
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-bool  LIB_SIM800C::Bluetooth_acceptPair(bool Accept)  
+bool  LIB_SIM800C::acceptPair(bool Accept)  
 {
   uint8_t answer;
   if(Accept == true)
@@ -166,7 +166,7 @@ bool  LIB_SIM800C::Bluetooth_acceptPair(bool Accept)
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-bool  LIB_SIM800C::Bluetooth_acceptPairWithPass(char *Pass)  
+bool  LIB_SIM800C::acceptPairWithPass(char *Pass)  
 {
   uint8_t answer;
   char str[32];
@@ -185,7 +185,7 @@ bool  LIB_SIM800C::Bluetooth_acceptPairWithPass(char *Pass)
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-bool LIB_SIM800C::Bluetooth_setAutoPair(bool  Enable)
+bool LIB_SIM800C::setBtAutoPair(bool  Enable)
 {
   uint8_t answer;
   if(Enable==true)
@@ -204,7 +204,7 @@ bool LIB_SIM800C::Bluetooth_setAutoPair(bool  Enable)
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-bool LIB_SIM800C::Bluetooth_setPairPassword(char  *Pass)
+bool LIB_SIM800C::setBtPairPassword(char  *Pass)
 {
   uint8_t answer;
   char str[32];
@@ -224,7 +224,7 @@ bool LIB_SIM800C::Bluetooth_setPairPassword(char  *Pass)
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-bool LIB_SIM800C::Bluetooth_unpair(uint8_t  Unpair_0_to_all)
+bool LIB_SIM800C::btUnpair(uint8_t  Unpair_0_to_all)
 {
   uint8_t answer;
   char str[32];
@@ -244,7 +244,7 @@ bool LIB_SIM800C::Bluetooth_unpair(uint8_t  Unpair_0_to_all)
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-bool  LIB_SIM800C::Bluetooth_getVisibility(void)
+bool  LIB_SIM800C::getBtVisibility(void)
 {
   sim800c.sendAtCommand("AT+BTVIS?\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
   return Sim80x.Bluetooth.Visibility;
@@ -256,11 +256,13 @@ bool  LIB_SIM800C::Bluetooth_getVisibility(void)
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-void  LIB_SIM800C::Bluetooth_setVisibility(bool Visible)//what should i do here
+bool  LIB_SIM800C::setBtVisibility(bool Visible)//what should i do here
 {
- char str[16];
+  bool sucess;
+  char str[16];
   snprintf(str,sizeof(str),"AT+BTVIS=%d\r\n",Visible);
-  sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
+  sucess = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
+  return sucess;
 }
 
 /****************************************************************
@@ -269,11 +271,13 @@ void  LIB_SIM800C::Bluetooth_setVisibility(bool Visible)//what should i do here
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-void  LIB_SIM800C::Bluetooth_sppAllowConnection(bool Accept)//what should i do here
+bool  LIB_SIM800C::btSppAllowConnection(bool Accept)//what should i do here
 {
+  bool sucess;
   char str[16];
   snprintf(str,sizeof(str),"AT+BTACPT=%d\r\n",Accept);
-  sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\nERROR\r\n");  
+  sucess = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\nERROR\r\n");  
+  return sucess;
 }
 
 /****************************************************************
@@ -282,7 +286,7 @@ void  LIB_SIM800C::Bluetooth_sppAllowConnection(bool Accept)//what should i do h
 *INPUT        :USARTx,UsartRxTemp,state; //refer defines in header file
 *OUTPUT       :none
 ****************************************************************/
-bool  LIB_SIM800C::Bluetooth_sppSend(char *DataString)
+bool  LIB_SIM800C::btSppSend(char *DataString)
 {
   uint8_t answer;
   char str[2];

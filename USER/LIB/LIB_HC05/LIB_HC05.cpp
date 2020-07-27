@@ -110,12 +110,12 @@ void LIB_HC05::setDataMode(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:return debugTerminal
+*FUNCTION NAME:debugTerminal
 *FUNCTION     :Prints response to terminal IO
 *INPUT        :message
 *OUTPUT       :void
 ****************************************************************/
-bool LIB_HC05::debugTerminal(char *msg)
+void LIB_HC05::debugTerminal(char const *msg)
 {
   char      *strStart, *str1;
 
@@ -135,7 +135,6 @@ bool LIB_HC05::debugTerminal(char *msg)
           #endif
           printf("\r\n%s ---> OK\r\n", msg);
         #endif
-        return sizeof(str1);
       }
       else
       {
@@ -143,7 +142,6 @@ bool LIB_HC05::debugTerminal(char *msg)
         #if (_SIM80X_DEBUG== 1 || _SIM80X_DEBUG==2)
           printf("\r\n% ---> FAILED\r\n", msg);
         #endif
-        return 0;
       }
     
   //#endif
@@ -185,6 +183,7 @@ bool LIB_HC05::softReset(unsigned long timeout)
 bool LIB_HC05::probe(unsigned long timeout)
 {
   startOperation(timeout);
+    
   hc05.sendAtCommand("AT\r\n",200,0);
   
   return hc05.readOperationResult();
@@ -198,8 +197,15 @@ bool LIB_HC05::probe(unsigned long timeout)
 ****************************************************************/
 bool LIB_HC05::setFactoryDefault(unsigned long timeout)
 {
-  hc05.sendAtCommand("AT+ORGL\r\n", 200, 0);
-  return debugTerminal("HC05_setFactoryDefault");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand("AT+ORGL\r\n", 200, 0);
+  debugTerminal("HC05_setFactoryDefault");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
   
 }
 
@@ -219,9 +225,9 @@ bool LIB_HC05::getVersion(char *buffer, size_t buffer_size, unsigned long timeou
 
   //PGM_STRING_MAPPED_TO_RAM(command, "VERSION?");
   answer = hc05.sendAtCommand("AT+VERSION?\r\n", 200, 0);
-   processVersion(buffer , buffer_size, 1);
+  return processVersion(answer, buffer , buffer_size, 1);
   /* Response should look like "+VERSION:2.0-20100601" */
-  char response[30];
+ 
 
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+VERSION:");
   
@@ -239,6 +245,9 @@ bool LIB_HC05::getVersion(char *buffer, size_t buffer_size, unsigned long timeou
  
   snprintf(buffer, buffer_size, "%s", version);
   return answer ;*/
+
+  
+
 } 
 
 /****************************************************************
@@ -271,10 +280,12 @@ bool LIB_HC05::getName(char *buffer, unsigned long timeout)
   }
 
   //PGM_STRING_MAPPED_TO_RAM(command, "NAME?");
+    
   hc05.sendAtCommand("AT+NAME?\r\n",200,0);
-  return debugTerminal("HC05_getName");
+  debugTerminal("HC05_getName");
+  return processName(buffer ,1);
   
-
+/* 
   char response[40];
   
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+NAME:");
@@ -294,7 +305,7 @@ bool LIB_HC05::getName(char *buffer, unsigned long timeout)
   
   snprintf(buffer, HC05_NAME_BUFSIZE, "%s", name_part);
 
-  return hc05.readOperationResult();
+  return hc05.readOperationResult(); */
 }
 
 /****************************************************************
@@ -308,9 +319,17 @@ bool LIB_HC05::setName(const char *name, unsigned long timeout)
  
   char temp[20];
   snprintf(temp, sizeof(temp), "AT+NAME=%s\r\n", name); 
-  hc05.sendAtCommand(temp,200, 0);
-  return debugTerminal("HC05_setSimAccess");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand(temp,200, 0);
+  debugTerminal("HC05_setSimAccess");
   //PGM_STRING_MAPPED_TO_RAM(command, "NAME=");
+  
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
  
   
 }
@@ -324,6 +343,7 @@ bool LIB_HC05::setName(const char *name, unsigned long timeout)
 bool LIB_HC05::getRemoteDeviceName(const BluetoothAddress &address,
   char *buffer, size_t buffer_size, unsigned long timeout)
 {
+  
   startOperation(timeout);
 
   if (!buffer || !buffer_size)
@@ -337,13 +357,12 @@ bool LIB_HC05::getRemoteDeviceName(const BluetoothAddress &address,
   
   //PGM_STRING_MAPPED_TO_RAM(command, "RNAME?");
   
-  hc05.sendAtCommand("AT+RNAME?\r\n", timeout, 0); //check
+   hc05.sendAtCommand("AT+RNAME?\r\n", timeout, 0); //check
   debugTerminal("HC05_getRemoteDeviceName");
-  processRemoteDeviceName(address, buffer, buffer_size, 1);
-  char response[40];
+  return processRemoteDeviceName(address, buffer, buffer_size, 1);
   
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+RNAME:");
-  char *name_part = hc05.readResponseWithPrefix(response, sizeof(response), "+RNAME:");
+  /* char *name_part = hc05.readResponseWithPrefix(response, sizeof(response), "+RNAME:");
 
   if (m_errCode != HC05_OK)
     return false;
@@ -357,7 +376,7 @@ bool LIB_HC05::getRemoteDeviceName(const BluetoothAddress &address,
   //PGM_STRING_MAPPED_TO_RAM(format, "%s");
   snprintf(buffer, buffer_size, "%s", name_part);
 
-  return hc05.readOperationResult();
+  return hc05.readOperationResult(); */
 }
 
 /****************************************************************
@@ -372,7 +391,8 @@ bool LIB_HC05::getRole(HC05_Role &role, unsigned long timeout)
 
   //PGM_STRING_MAPPED_TO_RAM(command, "ROLE?");
   hc05.sendAtCommand("AT+ROLE?\r\n", timeout, 0 );
-  return debugTerminal("HC05_setSimAccess");
+  debugTerminal("HC05_setSimAccess");
+  return processRole(role, 1);
 /* 
   char response[20];
  // PGM_STRING_MAPPED_TO_RAM(response_pattern, "+ROLE:");
@@ -388,7 +408,12 @@ bool LIB_HC05::getRole(HC05_Role &role, unsigned long timeout)
   role = static_cast<HC05_Role>(atol(role_str));
 
   return hc05.readOperationResult();
- */}
+
+  
+ */
+
+
+}
 
 /****************************************************************
 *FUNCTION NAME:setRole
@@ -398,12 +423,18 @@ bool LIB_HC05::getRole(HC05_Role &role, unsigned long timeout)
 ****************************************************************/
 bool LIB_HC05::setRole(HC05_Role role, unsigned long timeout)
 {
+  uint8_t answer;
   char temp[20];
   snprintf(temp, sizeof(temp), "AT+ROLE=%d", role);
 
-  //PGM_STRING_MAPPED_TO_RAM(command, "ROLE=");
-  return hc05.sendAtCommand(temp, timeout, 0);
-  return debugTerminal("HC05_setRole");
+  //PGM_STRING_MAPPED_TO_RAM(command, "ROLE=");    
+  answer =hc05.sendAtCommand(temp, timeout, 0);
+  debugTerminal("HC05_setRole");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
 
 }
 
@@ -418,9 +449,9 @@ bool LIB_HC05::getDeviceClass(uint32_t &device_class, unsigned long timeout)
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "CLASS?");
-  hc05.sendAtCommand("AT+CLASS?\r\n", timeout, 0 );
-  return debugTerminal("HC05_getDeviceClass");
-   processDeviceClass(device_class, 1);
+   hc05.sendAtCommand("AT+CLASS?\r\n", timeout, 0 );
+   debugTerminal("HC05_getDeviceClass");
+  return processDeviceClass(device_class, 1);
 
 /* 
   device_class = 0;
@@ -439,7 +470,11 @@ bool LIB_HC05::getDeviceClass(uint32_t &device_class, unsigned long timeout)
   device_class = htoul(class_part);
 
   return hc05.readOperationResult();
- */}
+ */
+
+
+
+}
 
 /****************************************************************
 *FUNCTION NAME:setDeviceClass
@@ -450,12 +485,20 @@ bool LIB_HC05::getDeviceClass(uint32_t &device_class, unsigned long timeout)
 bool LIB_HC05::setDeviceClass(uint32_t device_class, unsigned long timeout)
 {
   char temp[10];
+  uint8_t answer;
   //PGM_STRING_MAPPED_TO_RAM(format, "%lx");
   snprintf(temp, sizeof(temp), "AT+CLASS=%lx", device_class);
 
  // PGM_STRING_MAPPED_TO_RAM(command, "CLASS=");
-  hc05.sendAtCommand(temp, timeout, 0);
-  return debugTerminal("HC05_setDeviceClass");
+    
+  answer =hc05.sendAtCommand(temp, timeout, 0);
+  debugTerminal("HC05_setDeviceClass");
+  
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
 
   }
 
@@ -472,9 +515,9 @@ bool LIB_HC05::getInquiryAccessCode(uint32_t &iac, unsigned long timeout)
  // PGM_STRING_MAPPED_TO_RAM(command, "IAC?");
   hc05.sendAtCommand("AT+IAC?\r\n", timeout, 0);
   debugTerminal("HC05_getInquiryAccessCode");
-  processInquiryAccessCode(iac, 1);
+  return processInquiryAccessCode(iac, 1);
 
-
+/* 
   iac = 0;
 
   if (isOperationTimedOut())
@@ -494,7 +537,8 @@ bool LIB_HC05::getInquiryAccessCode(uint32_t &iac, unsigned long timeout)
 
   iac = htoul(iac_part);
 
-  return hc05.readOperationResult();
+  return hc05.readOperationResult(); */
+
 }
 
 /****************************************************************
@@ -506,12 +550,18 @@ bool LIB_HC05::getInquiryAccessCode(uint32_t &iac, unsigned long timeout)
 bool LIB_HC05::setInquiryAccessCode(uint32_t iac, unsigned long timeout)
 {
   char iac_str[20];
+  uint8_t answer;
   //PGM_STRING_MAPPED_TO_RAM(format, "%lx");
   snprintf(iac_str, sizeof(iac_str), "AT+IAC=%lx", iac);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "IAC=");
-  hc05.sendAtCommand(iac_str, timeout, 0);
-  return debugTerminal("HC05_getInquiryAccessCode");
+  answer =hc05.sendAtCommand(iac_str, timeout, 0);
+  debugTerminal("HC05_getInquiryAccessCode");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
 }
 
 /****************************************************************
@@ -527,8 +577,8 @@ bool LIB_HC05::getInquiryMode(HC05_InquiryMode &inq_mode,
 
   //PGM_STRING_MAPPED_TO_RAM(command, "INQM?");
   hc05.sendAtCommand("AT+INQM?\r\n", timeout, 0);
-  return debugTerminal("HC05_getInquiryMode");
-  processInquiryMode(inq_mode, max_devices, max_duration, 1);
+  debugTerminal("HC05_getInquiryMode");
+  return processInquiryMode(inq_mode, max_devices, max_duration, 1);
 /* 
   inq_mode = HC05_INQUIRY_STANDARD;
   max_devices = 0;
@@ -561,6 +611,7 @@ bool LIB_HC05::getInquiryMode(HC05_InquiryMode &inq_mode,
 
   return hc05.readOperationResult();
  */
+
 }
 
 /****************************************************************
@@ -573,6 +624,7 @@ bool LIB_HC05::setInquiryMode(HC05_InquiryMode inq_mode,
   int16_t max_devices, uint8_t max_duration, unsigned long timeout)
 {
   char mode[20];
+  uint8_t answer;
   
   /* Yeah, max_devices is signed 16-bit integer, but the module accepts
    * an unsigned 16-bit integer while actually interpreting it as signed.
@@ -585,8 +637,14 @@ bool LIB_HC05::setInquiryMode(HC05_InquiryMode inq_mode,
   snprintf(mode, sizeof(mode), "AT+INQM=%d,%u,%u", inq_mode, (uint16_t)max_devices, max_duration);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "INQM=");
-  hc05.sendAtCommand(mode, timeout, 0);
-  return debugTerminal("HC05_setInquiryMode");
+    
+  answer =hc05.sendAtCommand(mode, timeout, 0);
+  debugTerminal("HC05_setInquiryMode");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
 }
 
 /****************************************************************
@@ -597,7 +655,7 @@ bool LIB_HC05::setInquiryMode(HC05_InquiryMode inq_mode,
 ****************************************************************/
 bool LIB_HC05::getPassword(char *buffer, unsigned long timeout)
 {
-  startOperation(timeout);
+  startOperation(timeout);  
 
   if (!buffer)
   {
@@ -607,9 +665,9 @@ bool LIB_HC05::getPassword(char *buffer, unsigned long timeout)
 
   //PGM_STRING_MAPPED_TO_RAM(command, "PSWD?");
   hc05.sendAtCommand("AT+PSWD?\r\n", timeout, 0);
-  return debugTerminal("HC05_getPassword");
-  processPassword(buffer, 1);
-
+  debugTerminal("HC05_getPassword");
+  return processPassword(buffer, 1);
+/* 
   char response[HC05_PASSWORD_MAXLEN + 15];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+PSWD:");
   const char *password_part = hc05.readResponseWithPrefix(
@@ -631,6 +689,10 @@ bool LIB_HC05::getPassword(char *buffer, unsigned long timeout)
   snprintf(buffer, HC05_PASSWORD_BUFSIZE, "%s", password_part);
 
   return hc05.readOperationResult();
+ */  
+
+
+
 }
 
 /****************************************************************
@@ -643,9 +705,16 @@ bool LIB_HC05::setPassword(const char *password, unsigned long timeout)
 {
   char temp[20];
   snprintf(temp, sizeof(temp), "AT+PSWD=%s\r\n", password); 
-  return  hc05.sendAtCommand(temp, timeout, 0);
-  return debugTerminal("HC05_setPassword");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand(temp, timeout, 0);
+  debugTerminal("HC05_setPassword");
   //PGM_STRING_MAPPED_TO_RAM(command, "PSWD=");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
   }
 
 /****************************************************************
@@ -660,11 +729,12 @@ bool LIB_HC05::getSerialMode(uint32_t &speed, uint8_t &stop_bits,
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "UART?");
+    
   hc05.sendAtCommand("AT+UART?\r\n", timeout, 0);
-  return debugTerminal("HC05_getSerialMode");
-  processSerialMode(speed, stop_bits,  parity, 1);
+   debugTerminal("HC05_getSerialMode");
+  return processSerialMode(speed, stop_bits,  parity, 1);
   
-
+/* 
   char response[30];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+UART:");
   char *mode_str = hc05.readResponseWithPrefix(response, sizeof(response), AT_RESP_UART);
@@ -695,7 +765,7 @@ bool LIB_HC05::getSerialMode(uint32_t &speed, uint8_t &stop_bits,
 
   parity = static_cast<HC05_Parity>(atol(++mode_str));
 
-  return hc05.readOperationResult();
+  return hc05.readOperationResult(); */
 }
 
 /****************************************************************
@@ -713,8 +783,15 @@ bool LIB_HC05::setSerialMode(uint32_t speed,
   snprintf(temp, sizeof(temp), "AT+UART=%lu,%u,%u", speed, stop_bits, parity);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "UART=");
-  hc05.sendAtCommand(temp, timeout, 0);
-  return debugTerminal("HC05_setSerialMode");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand(temp, timeout, 0);
+   debugTerminal("HC05_setSerialMode");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
 }
 
 /****************************************************************
@@ -730,8 +807,8 @@ bool LIB_HC05::getConnectionMode(
 
   //PGM_STRING_MAPPED_TO_RAM(command, "CMODE?");
   hc05.sendAtCommand("AT+CMODE?\r\n", timeout, 0);
-  return debugTerminal("HC05_getConnectionMode");
-  processConnectionMode(connection_mode, 1);
+  debugTerminal("HC05_getConnectionMode");
+  return processConnectionMode(connection_mode, 1);/* 
 
   char response[20];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+CMOD:");
@@ -747,6 +824,8 @@ bool LIB_HC05::getConnectionMode(
   connection_mode = static_cast<HC05_Connection>(atol(mode_part));
 
   return hc05.readOperationResult();
+
+   */
 }
 
 /****************************************************************
@@ -762,8 +841,17 @@ bool LIB_HC05::setConnectionMode(
   snprintf(temp, sizeof(temp), "AT+CMODE=%u", connection_mode);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "CMODE=");
-  hc05.sendAtCommand(temp, timeout, 0);
-  return debugTerminal("HC05_setConnectionMode");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand(temp, timeout, 0);
+  debugTerminal("HC05_setConnectionMode");
+  
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
+
 }
 
 /****************************************************************
@@ -803,8 +891,8 @@ bool LIB_HC05::getLeds(bool &led_status,
 
   //PGM_STRING_MAPPED_TO_RAM(command, "POLAR?");
   hc05.sendAtCommand("AT+POLAR?\r\n" ,timeout ,0 );
-  return debugTerminal("HC05_getLeds");
-  processLed(led_status, led_connection, 1);
+  debugTerminal("HC05_getLeds");
+  return processLed(led_status, led_connection, 1);
 /* 
   led_status = 0;
   led_connection = 0;
@@ -831,7 +919,10 @@ bool LIB_HC05::getLeds(bool &led_status,
   led_connection = atol(++status_part);
 
   return hc05.readOperationResult();
- */}
+ */
+
+
+}
 
 /****************************************************************
 *FUNCTION NAME:setLeds
@@ -842,14 +933,21 @@ bool LIB_HC05::getLeds(bool &led_status,
 bool LIB_HC05::setLeds(bool led_status,
   bool led_connection, unsigned long timeout)
 {
+  uint8_t answer;
   char temp[20];
   snprintf(temp, sizeof(temp), "AT+%d,%d",
     (led_status ? 1 : 0), (led_connection ? 1 : 0));
 
   //PGM_STRING_MAPPED_TO_RAM(command, "POLAR=");
-  hc05.sendAtCommand(temp, timeout, 0);
-  return debugTerminal("HC05_setLeds");
+  answer = hc05.sendAtCommand(temp, timeout, 0);
+  debugTerminal("HC05_setLeds");
   
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
+
 }
 
 /****************************************************************
@@ -861,13 +959,20 @@ bool LIB_HC05::setLeds(bool led_status,
 bool LIB_HC05::setPortState(uint8_t port_num,
   uint8_t port_state, unsigned long timeout)
 {
+  uint8_t answer;
   char temp[20];
   snprintf(temp, sizeof(temp), "AT+PIO=%u,%u", port_num, port_state);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "PIO=");
-  hc05.sendAtCommand(temp, timeout, 0);
-  return debugTerminal("HC05_setPortState");
-  processPortState(port_num, port_state, 1);
+  answer = hc05.sendAtCommand(temp, timeout, 0);
+   debugTerminal("HC05_setPortState");
+  
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
+
 }
 
 /****************************************************************
@@ -882,9 +987,9 @@ bool LIB_HC05::getMultiplePorts(uint16_t &port_states, unsigned long timeout)
 
   //PGM_STRING_MAPPED_TO_RAM(command, "MPIO?");
   hc05.sendAtCommand("AT+MPIO?\r\n", timeout, 0 );
-  return debugTerminal("HC05_getMultiplePorts");
-  processMultiPortState(port_states, 1);
-
+  debugTerminal("HC05_getMultiplePorts");
+  return processMultiPortState(port_states, 1);
+/* 
   port_states = 0;
 
   char response[20];
@@ -901,6 +1006,9 @@ bool LIB_HC05::getMultiplePorts(uint16_t &port_states, unsigned long timeout)
   port_states = htoul(states_part);
 
   return hc05.readOperationResult();
+
+   */
+
 }
 
 /****************************************************************
@@ -914,8 +1022,16 @@ bool LIB_HC05::setMultiplePorts(uint16_t port_states, unsigned long timeout)
   char temp[20];
   snprintf(temp, sizeof(temp), "AT+MPIO=%x", port_states);
   //PGM_STRING_MAPPED_TO_RAM(command, "MPIO=");
-  hc05.sendAtCommand(temp, timeout, 0);
-  return debugTerminal("HC05_setMultiplePorts");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand(temp, timeout, 0);
+  debugTerminal("HC05_setMultiplePorts");
+  
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
   
 }
 
@@ -931,10 +1047,10 @@ bool LIB_HC05::getInquiryAndPagingParams(uint16_t &inquiry_interval, uint16_t &i
 
   //PGM_STRING_MAPPED_TO_RAM(command, "IPSCAN?");
   hc05.sendAtCommand("AT+IPSCAN?\r\n", timeout, 0);
-  return debugTerminal("HC05_getInquiryAndPagingParams");
-  processGetInquiryAndPagingParams(inquiry_interval, inquiry_duration, paging_interval, paging_duration, 1);
+  debugTerminal("HC05_getInquiryAndPagingParams");
+  return processGetInquiryAndPagingParams(inquiry_interval, inquiry_duration, paging_interval, paging_duration, 1);
 
-  char response[40];
+  // char response[40];
   
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+IPSCAN:");
   /* 
@@ -968,7 +1084,10 @@ bool LIB_HC05::getInquiryAndPagingParams(uint16_t &inquiry_interval, uint16_t &i
   paging_duration = atol(++params_part);
 
   return hc05.readOperationResult();
- */}
+ */
+
+
+}
 
 /****************************************************************
 *FUNCTION NAME:setInquiryAndPagingParams
@@ -979,14 +1098,22 @@ bool LIB_HC05::getInquiryAndPagingParams(uint16_t &inquiry_interval, uint16_t &i
 bool LIB_HC05::setInquiryAndPagingParams(
   uint16_t inquiry_interval, uint16_t inquiry_duration,
   uint16_t paging_interval, uint16_t paging_duration, unsigned long timeout)
-{
+{ 
+  uint8_t answer;
   char temp[20];
   snprintf(temp, sizeof(temp), "AT+IPSCAN=%u,%u,%u,%u",
     inquiry_interval, inquiry_duration, paging_interval, paging_duration);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "IPSCAN=");
-  hc05.sendAtCommand(temp, timeout, 0);
-  return debugTerminal("HC05_setInquiryAndPagingParams");
+   
+  answer = hc05.sendAtCommand(temp, timeout, 0);
+  debugTerminal("HC05_setInquiryAndPagingParams");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
+
 }
 
 /****************************************************************
@@ -1001,9 +1128,10 @@ bool LIB_HC05::getSniffParams(uint16_t &max_time, uint16_t &min_time,
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "SNIFF?");
+  
   hc05.sendAtCommand("AT+SNIFF?\r\n", timeout, 0 );
    debugTerminal("HC05_setInquiryAndPagingParams");
-  return processGetSniffParams(max_time, min_time, retry_interval, sniff_timeout, 1);
+  return processSniffParams(max_time, min_time, retry_interval, sniff_timeout, 1);
 /* 
   char response[40];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+SNIFF:");
@@ -1053,8 +1181,17 @@ bool LIB_HC05::setSniffParams(uint16_t max_time, uint16_t min_time,
     max_time, min_time, retry_interval, sniff_timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "SNIFF=");
-  hc05.sendAtCommand(temp, timeout, 0);
-  return debugTerminal("HC05_setInquiryAndPagingParams");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand(temp, timeout, 0);
+  debugTerminal("HC05_setInquiryAndPagingParams");
+  
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
+
 }
 
 /****************************************************************
@@ -1066,8 +1203,15 @@ bool LIB_HC05::setSniffParams(uint16_t max_time, uint16_t min_time,
 bool LIB_HC05::enterSniffMode(unsigned long timeout)
 {
   //PGM_STRING_MAPPED_TO_RAM(command, "ENSNIFF");
-  hc05.sendAtCommand("AT+ENSNIFF", timeout, 0);
-  return  debugTerminal("HC05_enterSniffMode");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand("AT+ENSNIFF", timeout, 0);
+  debugTerminal("HC05_enterSniffMode");  
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
 }
 
 /****************************************************************
@@ -1079,8 +1223,15 @@ bool LIB_HC05::enterSniffMode(unsigned long timeout)
 bool LIB_HC05::exitSniffMode(unsigned long timeout)
 {
   //PGM_STRING_MAPPED_TO_RAM(command, "EXSNIFF");
-  hc05.sendAtCommand("AT+EXSNIFF", timeout, 0);
-  return  debugTerminal("HC05_exitSniffMode");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand("AT+EXSNIFF", timeout, 0);
+  debugTerminal("HC05_exitSniffMode");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
 }
 
 /****************************************************************
@@ -1130,12 +1281,18 @@ bool LIB_HC05::getSecurityAndEncryption(HC05_Security &security,
 bool LIB_HC05::setSecurityAndEncryption(HC05_Security security,
   HC05_Encryption encryption, unsigned long timeout)
 {
+  uint8_t answer;
   char temp[20];
   snprintf(temp, sizeof(temp), "AT+SENM=%u,%u", security, encryption);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "SENM=");
-  return hc05.sendAtCommand(temp, timeout, 0);
+  answer = hc05.sendAtCommand(temp, timeout, 0);
   debugTerminal("HC05_setSecurityAndEncryption");
+  
+  if(answer == 1)
+      return true;
+  else
+      return false;
 }
 
 
@@ -1161,10 +1318,17 @@ bool LIB_HC05::deleteDeviceFromList(
 bool LIB_HC05::deleteAllDevicesFromList(unsigned long timeout)
 {
   //PGM_STRING_MAPPED_TO_RAM(command, "RMAAD");
-  hc05.sendAtCommand("AT+RMAAD", timeout, 0);
+  uint8_t answer;
+  answer =hc05.sendAtCommand("AT+RMAAD", timeout, 0);
 
   debugTerminal("HC05_deleteAllDevicesFromList");
-  return processDeleteAllDevicesFromList(1);
+  //return processDeleteAllDevicesFromList(1);
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
+
 }
 
 /****************************************************************
@@ -1191,6 +1355,7 @@ bool LIB_HC05::countDevicesInList(uint8_t &device_count, unsigned long timeout)
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "ADCN?");
+  
   hc05.sendAtCommand("AT+ADCN?\r\n", timeout, 0);
   debugTerminal("HC05_countDevicesInList");
   return processCountDevicesInList(device_count, 1);
@@ -1292,8 +1457,15 @@ return processState(state, 1);
 bool LIB_HC05::initSerialPortProfile(unsigned long timeout)
 {
   //PGM_STRING_MAPPED_TO_RAM(command, "INIT");
-  hc05.sendAtCommand("AT+INIT", timeout, 0);
-  return debugTerminal("HC05_initSerialPortProfile");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand("AT+INIT", timeout, 0);
+  debugTerminal("HC05_initSerialPortProfile");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
 }
 
 /****************************************************************
@@ -1307,8 +1479,9 @@ bool LIB_HC05::inquire(InquiryCallback callback, unsigned long timeout)
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "INQ");
+    
   hc05.sendAtCommand("AT+INQ\r\n", timeout, 0);
-  return debugTerminal("HC05_inquire");
+  debugTerminal("HC05_inquire");
 
   while (!isOperationTimedOut())
   {
@@ -1341,8 +1514,15 @@ bool LIB_HC05::inquire(InquiryCallback callback, unsigned long timeout)
 bool LIB_HC05::cancelInquiry(unsigned long timeout)
 {
   //PGM_STRING_MAPPED_TO_RAM(command, "INQC");
-  return hc05.sendAtCommand(AT_INQC, 0, timeout);
-  return debugTerminal("HC05_cancelInquiry");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand(AT_INQC, 0, timeout);
+  debugTerminal("HC05_cancelInquiry");
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
 }
 
 /****************************************************************
@@ -1361,9 +1541,17 @@ bool LIB_HC05::pair(const BluetoothAddress &address, unsigned long timeout)
     sizeof(params_str) - address_length, "AT+PAIR,%lu", timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "PAIR");
-  hc05.sendAtCommand(params_str, timeout, 0);
-  return debugTerminal("HC05_pair");
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand(params_str, timeout, 0);
+  debugTerminal("HC05_pair");
   processPair(1);
+  
+  if(answer == 1)
+      return true;
+  else
+      return false;
+  
 }
 
 /****************************************************************
@@ -1386,9 +1574,11 @@ bool LIB_HC05::connect(const BluetoothAddress &address, unsigned long timeout)
 bool LIB_HC05::disconnect(unsigned long timeout)
 {
   startOperation(timeout);
-  hc05.sendAtCommand("AT+DISC\r\n", timeout, 0 );
-  return debugTerminal("HC05_pair");
-  processDisconnect(1);
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand("AT+DISC\r\n", timeout, 0 );
+  debugTerminal("HC05_pair");
+  return processDisconnect(1);
 
   //PGM_STRING_MAPPED_TO_RAM(SUCCESS, "SUCCESS");
   //PGM_STRING_MAPPED_TO_RAM(LINK_LOSS, "LINK_LOSS");
@@ -1396,12 +1586,12 @@ bool LIB_HC05::disconnect(unsigned long timeout)
  // PGM_STRING_MAPPED_TO_RAM(TIMEOUT, "TIMEOUT");
   //PGM_STRING_MAPPED_TO_RAM(ERROR, "ERROR");
 
-  char response[20];
+  //char response[20];
   
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, AT_RESP_DISC);
   
-  const char *status_part = hc05.readResponseWithPrefix(
-    response, sizeof(response), AT_RESP_DISC);
+  //const char *status_part = hc05.readResponseWithPrefix(
+  //  response, sizeof(response), AT_RESP_DISC);
 /* 
   if (strcmp(status_part, AT_SUCCESS) == 0)
     m_errCode = HC05_OK;
@@ -1414,7 +1604,8 @@ bool LIB_HC05::disconnect(unsigned long timeout)
   else if (strcmp(status_part, AT_ERROR) == 0)
     m_errCode = HC05_ERR_DISC_ERROR;
 
- */   return hc05.readOperationResult();
+ return hc05.readOperationResult();
+ */  
 }
 
 
@@ -1425,7 +1616,7 @@ bool LIB_HC05::disconnect(unsigned long timeout)
 *INPUT        :addrs
 *OUTPUT       :void
 ****************************************************************/
-bool LIB_HC05::processVersion(char *buffer, size_t buffer_size, uint16_t addrs)
+bool LIB_HC05::processVersion(uint8_t answer, char *buffer, size_t buffer_size, uint16_t addrs)
 {
 	char      *strStart, *str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1433,11 +1624,29 @@ bool LIB_HC05::processVersion(char *buffer, size_t buffer_size, uint16_t addrs)
   str1 = strstr(strStart,"+VERSION:");
   
   if(str1!=NULL)
-    sscanf(str1,"%s",Sim80x.IMEI);
+    sscanf(str1,"%s",Sim80x.IMEI);//NEED TO CHECK
+
+  debugTerminal("HC05_getversion");
+  
+  char response[30];
+  
+  const char *version = hc05.readResponseWithPrefix(
+     response, sizeof(response), AT_RESP_VERSION);
+  
+  if (m_errCode != HC05_OK)
+    return false;
+
+  if (!version)
+  {
+    *buffer = 0;
+    return hc05.readOperationResult() && false;
+  }
+ 
+  snprintf(buffer, buffer_size, "%s", version);
+  return answer ;
 
   // update Flash IC here
-		
-  return debugTerminal("HC05_getversion");
+	
   
   
 	
@@ -1456,6 +1665,7 @@ bool LIB_HC05::processRemoteDeviceName(const BluetoothAddress &address,
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
 
     char response[40];
+    debugTerminal("HC05_RemoteDeviceName");
   
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+RNAME:");
   char *name_part = hc05.readResponseWithPrefix(response, sizeof(response), "+RNAME:");
@@ -1480,7 +1690,7 @@ bool LIB_HC05::processRemoteDeviceName(const BluetoothAddress &address,
 
   // update Flash IC here
 		
-  return debugTerminal("HC05_RemoteDeviceName");
+  
   
   
 
@@ -1521,7 +1731,7 @@ bool LIB_HC05::processDeviceClass(uint32_t &device_class, uint16_t addrs)
 
   // update Flash IC here
 		
-  return debugTerminal("HC05_DeviceClass");
+  debugTerminal("HC05_DeviceClass");
   
   
 
@@ -1581,7 +1791,7 @@ bool LIB_HC05::processInquiryMode(HC05_InquiryMode &inq_mode,
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+INQM:");
   char *mode_part = hc05.readResponseWithPrefix(
     response, sizeof(response), AT_RESP_INQM);
-
+  debugTerminal("HC05_InquiryMode");
   if (m_errCode != HC05_OK)
     return false;
 
@@ -1603,8 +1813,6 @@ bool LIB_HC05::processInquiryMode(HC05_InquiryMode &inq_mode,
   max_duration = atol(++mode_part);
 
   return hc05.readOperationResult();
-
- debugTerminal("HC05_InquiryMode");
   
   
 
@@ -1620,15 +1828,35 @@ bool LIB_HC05::processPassword(char *buffer, uint16_t addrs)
 {
 	char      *strStart, *str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
-     
   
+  debugTerminal("HC05_Password");
+
   
-  if(str1!=NULL)
-    sscanf(str1,"%s",Sim80x.IMEI);
+  char response[HC05_PASSWORD_MAXLEN + 15];
+  //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+PSWD:");
+  const char *password_part = hc05.readResponseWithPrefix(
+    response, sizeof(response), AT_RESP_PSWD);
+
+  if (m_errCode != HC05_OK)
+  {
+    *buffer = 0;
+    return false;
+  }
+
+  if (!password_part)
+  {
+    *buffer = 0;
+    return hc05.readOperationResult() && false;
+  }
+
+  //PGM_STRING_MAPPED_TO_RAM(format, "%s");
+  snprintf(buffer, HC05_PASSWORD_BUFSIZE, "%s", password_part);
+
+  return hc05.readOperationResult();
+
 
   // update Flash IC here
 		
-  return debugTerminal("HC05_Password");
   
   
 
@@ -1647,6 +1875,8 @@ bool LIB_HC05::processSerialMode(uint32_t &speed, uint8_t &stop_bits,
   char response[30];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+UART:");
   char *mode_str = hc05.readResponseWithPrefix(response, sizeof(response), AT_RESP_UART);
+  		
+   debugTerminal("HC05_SerialMode");
 
   if (m_errCode != HC05_OK)
     return false;
@@ -1677,8 +1907,7 @@ bool LIB_HC05::processSerialMode(uint32_t &speed, uint8_t &stop_bits,
   return hc05.readOperationResult();
 
   // update Flash IC here
-		
-   debugTerminal("HC05_SerialMode");
+
   
   
 
@@ -1703,7 +1932,25 @@ bool LIB_HC05::processConnectionMode(
 
   // update Flash IC here
 		
-  return debugTerminal("HC05_ConnectionMode");
+  debugTerminal("HC05_ConnectionMode");
+  
+
+  char response[20];
+  //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+CMOD:");
+  const char *mode_part = hc05.readResponseWithPrefix(
+    response, sizeof(response), AT_RESP_CMODE);
+
+  if (m_errCode != HC05_OK)
+    return false;
+
+  if (!mode_part)
+    return hc05.readOperationResult() && false;
+
+  connection_mode = static_cast<HC05_Connection>(atol(mode_part));
+
+  return hc05.readOperationResult();
+
+  
   
   
 
@@ -1773,7 +2020,7 @@ bool LIB_HC05::processPortState(uint8_t port_num,
 
   // update Flash IC here
 		
-  return debugTerminal("HC05_PortState");
+  debugTerminal("HC05_PortState");
   
   
 
@@ -1888,6 +2135,9 @@ bool LIB_HC05::processSecurityAndEncryption(HC05_Security &security,
   char *params_part = hc05.readResponseWithPrefix(
     response, sizeof(response), AT_RESP_SENM);
 
+		
+  debugTerminal("HC05_processSecurityAndEncryption");
+  
   if (m_errCode != HC05_OK)
     return false;
 
@@ -1909,8 +2159,6 @@ bool LIB_HC05::processSecurityAndEncryption(HC05_Security &security,
     sscanf(str1,"%s",Sim80x.IMEI);
 
   // update Flash IC here
-		
-  return debugTerminal("HC05_processSecurityAndEncryption");
   
   
 
@@ -1987,9 +2235,8 @@ bool LIB_HC05::processPair(uint16_t addrs)
   // update Flash IC here
 		
   debugTerminal("HC05_HC05_processPair");
-  
-  
 
+ 
 }
 
 /****************************************************************
@@ -2001,7 +2248,7 @@ bool LIB_HC05::processPair(uint16_t addrs)
 bool LIB_HC05::processDisconnect(uint16_t addrs)
 {
 
-	char      *strStart, *str1;
+  char      *strStart, *str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
   
@@ -2025,6 +2272,7 @@ bool LIB_HC05::processDisconnect(uint16_t addrs)
 
 	
   debugTerminal("HC05_HC05_processDisconnect");
+   return hc05.readOperationResult();
   
   
 
@@ -2062,7 +2310,7 @@ bool LIB_HC05::processCountDevicesInList(uint8_t &device_count, uint16_t addrs)
 *INPUT        :addrs
 *OUTPUT       :void
 ****************************************************************/
-bool LIB_HC05::processDeleteAllDevicesFromList(uint16_t addrs)
+/* bool LIB_HC05::processDeleteAllDevicesFromList(uint16_t addrs)
 {	
 	char      *strStart, *str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -2074,9 +2322,9 @@ bool LIB_HC05::processDeleteAllDevicesFromList(uint16_t addrs)
 
   // update Flash IC here
 		
-  return debugTerminal("Sim80x_getLastCommand");
+  debugTerminal("Sim80x_getLastCommand");
   
-}
+} */
 
 /****************************************************************
 *FUNCTION NAME:processDisconnect
@@ -2084,7 +2332,7 @@ bool LIB_HC05::processDeleteAllDevicesFromList(uint16_t addrs)
 *INPUT        :addrs
 *OUTPUT       :void
 ****************************************************************/
-bool LIB_HC05::processGetSniffParams(uint16_t max_time, uint16_t min_time,
+bool LIB_HC05::processSniffParams(uint16_t max_time, uint16_t min_time,
   uint16_t retry_interval, uint16_t sniff_timeout, uint16_t addrs)
 {
   char response[40];
@@ -2120,6 +2368,61 @@ bool LIB_HC05::processGetSniffParams(uint16_t max_time, uint16_t min_time,
 
   return hc05.readOperationResult();
  
+}
+
+/****************************************************************
+*FUNCTION NAME:processDisconnect
+*FUNCTION     :processDisconnect
+*INPUT        :addrs
+*OUTPUT       :void
+****************************************************************/
+bool LIB_HC05::processRole(HC05_Role &role, uint16_t addrs)
+{ 
+  char response[20];  
+  const char *role_str = hc05.readResponseWithPrefix(
+    response, sizeof(response), AT_RESP_ROLE);
+    
+    
+  if (m_errCode != HC05_OK)
+    return false;
+
+  if (!role_str)
+    return hc05.readOperationResult() && false;
+
+  role = static_cast<HC05_Role>(atol(role_str));
+
+  return hc05.readOperationResult();
+}
+
+/****************************************************************
+*FUNCTION NAME:processDisconnect
+*FUNCTION     :processDisconnect
+*INPUT        :addrs
+*OUTPUT       :void
+****************************************************************/
+bool LIB_HC05::processName(char *buffer, uint16_t addrs)
+{ 
+  char response[40];
+  
+  //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+NAME:");
+  
+  char *name_part = hc05.readResponseWithPrefix(response, sizeof(response), AT_RESP_NAME);
+
+  if (m_errCode != HC05_OK)
+    return false;
+
+  if (!name_part)
+  {
+    *buffer = 0;
+    return hc05.readOperationResult() && false;
+  }
+
+  //PGM_STRING_MAPPED_TO_RAM(format, "%s");
+  
+  snprintf(buffer, HC05_NAME_BUFSIZE, "%s", name_part);
+
+  return hc05.readOperationResult();
+
 }
 
 

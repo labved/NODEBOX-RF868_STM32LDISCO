@@ -41,11 +41,15 @@ bool  LIB_SIM800C::startupNetGPRS(void)
     return false;
   }
 }  
+
 //####################################################################################################
 bool  LIB_SIM800C::getNetAPN(char *Name,char *username,char *password)
 {
   uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CSTT?\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
+  
+  debugTerminal("getNetAPN");
+  
   if(answer==1)
   {
     if(Name!=NULL)
@@ -54,19 +58,14 @@ bool  LIB_SIM800C::getNetAPN(char *Name,char *username,char *password)
       strcpy(username,Sim80x.GPRS.APN_UserName);
     if(password!=NULL)
       strcpy(password,Sim80x.GPRS.APN_Password);
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\ngetNetAPN(%s,%s,%s) <--- OK\r\n",Sim80x.GPRS.APN,Sim80x.GPRS.APN_UserName,Sim80x.GPRS.APN_Password);
-    #endif
     return true;
   }
   else
-  {
-    #if (_SIM80X_DEBUG==1)
-    printf("\r\ngetNetAPN() <--- ERROR\r\n");
-    #endif
+  {    
     return false;
   }
 }
+
 //####################################################################################################
 bool  LIB_SIM800C::setNetAPN(char *Name,char *username,char *password)
 {
@@ -92,6 +91,7 @@ bool  LIB_SIM800C::setNetAPN(char *Name,char *username,char *password)
     return false;  
   }  
 }
+
 //####################################################################################################
 bool  LIB_SIM800C::deactivateNetPDPContext(void)
 {
@@ -112,8 +112,9 @@ bool  LIB_SIM800C::deactivateNetPDPContext(void)
     return false;  
   }
 }
+
 //####################################################################################################
-void  LIB_SIM800C::getNetLocalIP(char *IP)
+bool  LIB_SIM800C::getNetLocalIP(char *IP)
 {
   uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CIFSR\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
@@ -121,16 +122,30 @@ void  LIB_SIM800C::getNetLocalIP(char *IP)
     strcpy(IP,Sim80x.GPRS.LocalIP);
   #if (_SIM80X_DEBUG==1)
   printf("\r\ngetNetLocalIP(%s) <--- OK\r\n",Sim80x.GPRS.LocalIP);
-  #endif    
+  #endif  
+
+  if(answer == 1)
+      return true;
+  else
+      return false;  
 }
+
 //####################################################################################################
-void  LIB_SIM800C::getNetCurrentConnectionSts(void)
+bool  LIB_SIM800C::getNetCurrentConnectionSts(void)
 {
-  sim800c.sendAtCommand(" AT+CIPSTATUS\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");  
+    
+  uint8_t answer;
+  answer =sim800c.sendAtCommand(" AT+CIPSTATUS\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");  
   #if (_SIM80X_DEBUG==1)
   printf("\r\ngetNetCurrentConnectionSts() <--- OK\r\n");
-  #endif      
+  #endif    
+
+  if(answer == 1)
+      return true;
+  else
+      return false;  
 }
+
 //####################################################################################################
 bool  LIB_SIM800C::getNetMultiConnection(void)
 {
@@ -140,6 +155,7 @@ bool  LIB_SIM800C::getNetMultiConnection(void)
   #endif  
   return Sim80x.GPRS.MultiConnection;
 }
+
 //####################################################################################################
 bool  LIB_SIM800C::setNetMultiConnection(bool Enable)
 {
@@ -164,6 +180,7 @@ bool  LIB_SIM800C::setNetMultiConnection(bool Enable)
     return false;
   }
 }
+
 //####################################################################################################
 //####################################################################################################
 //####################################################################################################
@@ -198,6 +215,7 @@ bool  LIB_SIM800C::GPRS_connectToNetwork(char *Name,char *username,char *passwor
   #endif 
   return true;
 }
+
 //####################################################################################################
 bool  LIB_SIM800C::getHttp(char *URL)
 {
@@ -268,6 +286,7 @@ bool  LIB_SIM800C::getHttp(char *URL)
   #endif 
   return false;  
 }
+
 //####################################################################################################
 #endif
 #endif

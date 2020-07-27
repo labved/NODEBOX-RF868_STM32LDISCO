@@ -18,7 +18,7 @@ extern HAL_SIM800C              sim800c;
 extern Sim80x_t                 Sim80x;
 
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_ussd(char *send,char *receive)
+bool  LIB_SIM800C::smsUssd(char *send,char *receive)
 {
   uint8_t answer;
   char str[32];
@@ -55,7 +55,7 @@ GsmMsgFormat_t  LIB_SIM800C::getSmsFormat(void)
     return GsmMsgFormat_Error;  
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_setMsgFormat(GsmMsgFormat_t GsmMsgFormat)
+bool  LIB_SIM800C::setSmsMsgFormat(GsmMsgFormat_t GsmMsgFormat)
 {
   uint8_t   answer;
   if(GsmMsgFormat == GsmMsgFormat_PDU)
@@ -89,7 +89,7 @@ GsmMsgMemory_t  LIB_SIM800C::getSmsMsgMemorySts(void)
   return  Sim80x.Gsm.MsgMemory; 
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_setMsgMemoryLocation(GsmMsgMemory_t GsmMsgMemory)
+bool  LIB_SIM800C::setSmsMsgMemoryLocation(GsmMsgMemory_t GsmMsgMemory)
 {
   uint8_t   answer;
   if(GsmMsgMemory == GsmMsgMemory_OnSim)
@@ -117,13 +117,13 @@ bool  LIB_SIM800C::Gsm_setMsgMemoryLocation(GsmMsgMemory_t GsmMsgMemory)
   return false;
 }
 //######################################################################################################
-GsmTECharacterSet_t     LIB_SIM800C::Gsm_getMsgCharacterFormat(void)
+GsmTECharacterSet_t     LIB_SIM800C::getSmsMsgCharacterFormat(void)
 {
   Sim80x.Gsm.TeCharacterFormat = (GsmTECharacterSet_t)sim800c.sendAtCommand("AT+CSCS?\r\n",1000,7,"\r\n+CSCS: \"GSM\"\r\n","\r\n+CSCS: \"UCS2\"\r\n","\r\n+CSCS: \"IRA\"\r\n","\r\n+CSCS: \"HEX\"\r\n","\r\n+CSCS: \"PCCP\"\r\n","\r\n+CSCS: \"PCDN\"\r\n","\r\n+CSCS: \"8859-1\"\r\n");
   return Sim80x.Gsm.TeCharacterFormat;
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_setMsgCharacterFormat(GsmTECharacterSet_t GsmTECharacterSet)
+bool  LIB_SIM800C::setSmsMsgCharacterFormat(GsmTECharacterSet_t GsmTECharacterSet)
 {
   uint8_t answer;
   switch(GsmTECharacterSet)
@@ -152,7 +152,7 @@ bool  LIB_SIM800C::Gsm_setMsgCharacterFormat(GsmTECharacterSet_t GsmTECharacterS
       answer = sim800c.sendAtCommand("AT+CSCS=\"8859-1\"\r\n",1000,2,"AT+CSCS=\"8859-1\"\r\r\nOK\r\n","AT+CSCS=\"8859-1\"\r\r\n+CME ERROR");  
     break;   
   }  
-  Gsm_getMsgCharacterFormat();
+  getSmsMsgCharacterFormat();
   if(answer == 1)
     return true;
   else
@@ -225,7 +225,7 @@ bool  LIB_SIM800C::getSmsMsgTextModeParam(void)
     return false;  
 }
 //######################################################################################################
-bool  LIB_SIM800C::Gsm_setMsgTextModeParameter(uint8_t fo,uint8_t vp,uint8_t pid,uint8_t dcs)
+bool  LIB_SIM800C::setSmsMsgTextModeParameter(uint8_t fo,uint8_t vp,uint8_t pid,uint8_t dcs)
 {
   uint8_t answer;
   char str[32];
@@ -246,7 +246,7 @@ bool  LIB_SIM800C::setSmsMsgTxt(char *Number,char *msg)
   char str[128];
   Sim80x.Gsm.MsgSent=0;
   if(Sim80x.Gsm.MsgFormat != GsmMsgFormat_Text)
-    Gsm_setMsgFormat(GsmMsgFormat_Text);
+    setSmsMsgFormat(GsmMsgFormat_Text);
   snprintf(str,sizeof(str),"AT+CMGS=\"%s\"\r\n",Number);
   answer = sim800c.sendAtCommand(str,10000,1,"\r\r\n> ");
   delay_ms(100);
