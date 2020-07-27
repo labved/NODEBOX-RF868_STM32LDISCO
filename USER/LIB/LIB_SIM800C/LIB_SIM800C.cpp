@@ -3,6 +3,7 @@
 #include "Pinouts.h"
 #include "Shortcodes.h"
 #include "Variables.h"
+#include "String.h"
 
 #include "Functions.h"
 #include "Conversions.h"
@@ -239,7 +240,7 @@ void LIB_SIM800C::startSim80xBuffTask(void const * argument)
 ****************************************************************/
 void  LIB_SIM800C::bufferProcess(void)
 {
-  char      *strStart,*str1,*str2,*str3;
+  char      *strStart, *str1, *str2, *str3;
   int32_t   tmp_int32_t;
   char      tmp_str[16];
   
@@ -385,7 +386,7 @@ void  LIB_SIM800C::bufferProcess(void)
 
       
     }    
-   */}
+   }*/
   //################################################## 
   str1 = strstr(strStart,"\r\n+CRSL:");//not used
   if(str1!=NULL)
@@ -1787,7 +1788,7 @@ bool LIB_SIM800C::processCSQ(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processCBC(uint16_t addrs)
+void LIB_SIM800C::processCBC(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -1833,7 +1834,7 @@ bool LIB_SIM800C::processCBC(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processSmsMsgTxt(uint16_t addrs)
+void LIB_SIM800C::processSmsMsgTxt(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -1856,7 +1857,7 @@ bool LIB_SIM800C::processSmsMsgTxt(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processSmsMsgMemorySts(uint16_t addrs)
+void LIB_SIM800C::processSmsMsgMemorySts(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -1890,7 +1891,7 @@ bool LIB_SIM800C::processSmsMsgMemorySts(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processSmsMsg(uint16_t addrs)
+void LIB_SIM800C::processSmsMsg(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -1921,14 +1922,14 @@ bool LIB_SIM800C::processSmsMsg(uint16_t addrs)
   
 
 }
-
+}
 /****************************************************************
 *FUNCTION NAME:processTaCapabilities
 *FUNCTION     :processTaCapabilities
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processMsgServiceNumber(uint16_t addrs)
+void LIB_SIM800C::processMsgServiceNumber(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -1955,7 +1956,7 @@ bool LIB_SIM800C::processMsgServiceNumber(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processSmsTextModeParam(uint16_t addrs)
+USART3 LIB_SIM800C::processSmsTextModeParam(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -1979,7 +1980,7 @@ bool LIB_SIM800C::processSmsTextModeParam(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processBTGetHostName(uint16_t addrs)
+void LIB_SIM800C::processBTGetHostName(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -2003,11 +2004,11 @@ bool LIB_SIM800C::processBTGetHostName(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processBTStatus(uint16_t addrs)
+void LIB_SIM800C::processBTStatus(uint16_t addrs)
 {
   
-  char      *strStart,*str1,*str2,*str3;
-  int32_t   tmp_int32_t;
+  char      *strStart, *str1, *str2, *str3;
+  uint32_t   tmp_int32_t;
   char      tmp_str[16];
   
   strStart = (char*)&Sim80x.UsartRxBuffer[0]; 
@@ -2067,7 +2068,7 @@ bool LIB_SIM800C::processBTStatus(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processBTPair(uint16_t addrs)
+void LIB_SIM800C::processBTPair(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -2092,7 +2093,7 @@ bool LIB_SIM800C::processBTPair(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processBTVisibility(uint16_t addrs)
+void LIB_SIM800C::processBTVisibility(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -2118,7 +2119,7 @@ bool LIB_SIM800C::processBTVisibility(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processGPRSNetApn(uint16_t addrs)
+void LIB_SIM800C::processGPRSNetApn(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -2141,7 +2142,7 @@ bool LIB_SIM800C::processGPRSNetApn(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processGPRSNetLocalIP(uint16_t addrs)
+void LIB_SIM800C::processGPRSNetLocalIP(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -2164,7 +2165,7 @@ bool LIB_SIM800C::processGPRSNetLocalIP(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processGPRSNetMultiConnection(uint16_t addrs)
+void LIB_SIM800C::processGPRSNetMultiConnection(uint16_t addrs)
 {
   
   char      *strStart,*str1,*str2,*str3;
@@ -2207,7 +2208,7 @@ bool LIB_SIM800C::processGPRSNetMultiConnection(uint16_t addrs)
 *INPUT        :addrs; 
 *OUTPUT       :bool
 ****************************************************************/
-bool LIB_SIM800C::processIMEI(uint16_t addrs)
+void LIB_SIM800C::processIMEI(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
