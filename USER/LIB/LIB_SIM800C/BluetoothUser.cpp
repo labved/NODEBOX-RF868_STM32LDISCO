@@ -26,7 +26,7 @@ extern Sim80x_t                 Sim80x;
 *FUNCTION NAME:Bluetooth_UserNewPairingRequest
 *FUNCTION     :Bluetooth_UserNewPairingRequest
 *INPUT        :Name,Address,Pass; //refer defines in header file
-*OUTPUT       :none
+*OUTPUT       :void
 ****************************************************************/
 
 void   LIB_SIM800C::userBtNewPairingRequest(char *Name,char *Address,char *Pass)
@@ -39,8 +39,8 @@ void   LIB_SIM800C::userBtNewPairingRequest(char *Name,char *Address,char *Pass)
 /****************************************************************
 *FUNCTION NAME:Bluetooth_UserConnectingSpp
 *FUNCTION     :Bluetooth_UserConnectingSpp
-*INPUT        :none; //refer defines in header file
-*OUTPUT       :none
+*INPUT        :void; //refer defines in header file
+*OUTPUT       :void
 ****************************************************************/
 
 void  LIB_SIM800C::userBtConnectingSpp(void)
@@ -54,7 +54,7 @@ void  LIB_SIM800C::userBtConnectingSpp(void)
 *FUNCTION NAME:Bluetooth_UserNewSppData
 *FUNCTION     :Bluetooth_UserNewSppData
 *INPUT        :NewData, len; //refer defines in header file
-*OUTPUT       :none
+*OUTPUT       :void
 ****************************************************************/
 
 void  LIB_SIM800C::userBtNewSppData(char *NewData,uint16_t len)

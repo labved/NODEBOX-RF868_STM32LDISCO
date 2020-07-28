@@ -11,7 +11,7 @@
 #include "HAL_SIM800C.h"
 #include "LIB_SIM800C.h"
 
-#ifdef LIB_SIM800C_H
+#ifdef LIB_SIM800C_H 
   
 #if(_USE_GSM==1)
 
@@ -37,17 +37,17 @@ void LIB_SIM800C::test(void)
 
   sim800c.sendAtCommand("ATE0\r\n", 200, 0);
   delay_ms(300);
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); // clear buffer
+   // clear buffer
   
   
   sim800c.sendAtCommand("AT\r\n", 200, 0);
   delay_ms(300);
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); // clear buffer
+   // clear buffer
   
 
 //  sim800c.sendAtCommand("AT+GSN\r\n", 200, 0);
 //  delay_ms(300);
-//  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); // clear buffer
+//   // clear buffer
 
   
   //getIMEI(temp);
@@ -999,7 +999,7 @@ void LIB_SIM800C::startSim80xTask(void const * argument)
 *FUNCTION NAME:setAtMode
 *FUNCTION     :setAtMode
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setAtMode(void)
 {
@@ -1007,7 +1007,9 @@ bool LIB_SIM800C::setAtMode(void)
   delay_ms(1000);       // prerequisite for switching to At Command Mode
   answer = sim800c.sendAtCommand("+++\r\n",200, 0);
   delay_ms(1000);     // prerequisite for switching to At Command Mode
-  debugTerminal("setAtMode");
+  debugTerminal("Sim80x_setAtMode");
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
 
   if(answer == 1)
       return true;
@@ -1019,14 +1021,16 @@ bool LIB_SIM800C::setAtMode(void)
 *FUNCTION NAME:setDataMode
 *FUNCTION     :setDataMode
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setDataMode(void)
 {
   uint8_t answer;  
   answer =sim800c.sendAtCommand("ATO\r\n",200, 0);
-  debugTerminal("setDataMode");
+  debugTerminal("Sim80x_setDataMode");
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
   if(answer == 1)
       return true;
   else
@@ -1038,10 +1042,19 @@ bool LIB_SIM800C::setDataMode(void)
 *FUNCTION NAME:setActiveProfile
 *FUNCTION     :setActiveProfile
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setActiveProfile(void)
 {
+
+  uint8_t answer;
+  
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+  if(answer == 1)
+      return true;
+  else
+      return false;
 
 }
 
@@ -1049,16 +1062,18 @@ bool LIB_SIM800C::setActiveProfile(void)
 *FUNCTION NAME:setDefaultConfig
 *FUNCTION     :setDefaultConfig
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setDefaultConfig(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("ATZ\r\r",200, 0);
 
-  debugTerminal("setDefaultConfig");
+  debugTerminal("Sim80x_setDefaultConfig");
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
   if(answer == 1)
       return true;
   else
@@ -1070,19 +1085,20 @@ bool LIB_SIM800C::setDefaultConfig(void)
 *FUNCTION NAME:setFactoryDefault
 *FUNCTION     :setFactoryDefault
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setFactoryDefault(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT&F0\r\n",200,0);
 
   debugTerminal("Sim80x_setFactoryDefault");
 
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
-
-  if(answer == 1)
+   
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1093,20 +1109,21 @@ bool LIB_SIM800C::setFactoryDefault(void)
 *FUNCTION NAME:setAtEcho
 *FUNCTION     :change command echo mode
 *INPUT        :turnon
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setAtEcho(bool turnon)
 {
   char temp[20];
   snprintf(temp, sizeof(temp), "ATE%d\r\n", turnon); 
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand(temp, 200, 0);
 
   debugTerminal("Sim80x_setAtEcho");//need to check as response changes can be on or off
 
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer)); 
-
+   
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
   if(answer == 1)
       return true;
   else
@@ -1119,14 +1136,14 @@ bool LIB_SIM800C::setAtEcho(bool turnon)
 *FUNCTION NAME:setBaudRate
 *FUNCTION     :AT command to change baud rate
 *INPUT        :baudrate
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setBaudRate(uint16_t baudrate)
 {
   char temp[20];
   snprintf(temp, sizeof(temp), "AT+IPR=%d\r\n", baudrate); 
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand(temp, 200, 0);
 
   debugTerminal("Sim80x_setBaudRate");
@@ -1144,7 +1161,7 @@ bool LIB_SIM800C::setBaudRate(uint16_t baudrate)
 *FUNCTION NAME:setPower
 *FUNCTION     :setPower
 *INPUT        :turnon
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::setPower(bool turnon)
 { 
@@ -1204,17 +1221,18 @@ bool  LIB_SIM800C::setPower(bool turnon)
 *FUNCTION NAME:saveParameters
 *FUNCTION     :saveParameters
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool   LIB_SIM800C::setParameters(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT&W0\r\n",200,1,"AT&W0\r\r\nOK\r\n");
-  debugTerminal("setParameters()");
+  debugTerminal("Sim80x_setParameters()");
 
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
-
+  
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
   if(answer == 1)
       return true;
   else
@@ -1226,7 +1244,7 @@ bool   LIB_SIM800C::setParameters(void)
 *FUNCTION NAME:getManNo
 *FUNCTION     :getManNo 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getManNo(void)
 {  
@@ -1235,7 +1253,7 @@ bool  LIB_SIM800C::getManNo(void)
 
   debugTerminal("Sim80x_getManNo");
 
-  //update
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
   
   if(answer == 1)
       return true;
@@ -1247,18 +1265,19 @@ bool  LIB_SIM800C::getManNo(void)
 *FUNCTION NAME:getModelNo
 *FUNCTION     :getModelNo 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getModelNo(void)
 {
   
-  int8_t answer;
-  answer = sim800c.sendAtCommand("AT+CGMM\r\n",200,0);
+  uint8_t answer;
+  answer = sim800c.sendAtCommand("AT+CGMM\r\n", 200, 0);
 
   debugTerminal("Sim80x_getModelNo");
 
   //update
   
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
 
   if(answer == 1)
       return true;
@@ -1273,20 +1292,21 @@ bool  LIB_SIM800C::getModelNo(void)
 *FUNCTION NAME:getGlobalNo
 *FUNCTION     :getGlobalNo 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getGlobalNo(void)
 {
   
-  int8_t answer;
-  answer = sim800c.sendAtCommand("AT+GOI\r\n",200,0);
+  uint8_t answer;
+  answer = sim800c.sendAtCommand("AT+GOI\r\n", 200, 0);
 
   debugTerminal("Sim80x_getGlobalNo");
 
   //update
   
 
-
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
   if(answer == 1)
       return true;
   else
@@ -1299,11 +1319,11 @@ bool  LIB_SIM800C::getGlobalNo(void)
 *FUNCTION NAME:getLastCommand
 *FUNCTION     :getLastCommand 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getLastCommand(void)
 {
-   sim800c.sendAtCommand("A/",200, 0);
+   sim800c.sendAtCommand("A/\r\n",200, 0);
    //RESPONSE CANT BE DETERMINED
 }
 
@@ -1311,21 +1331,22 @@ bool  LIB_SIM800C::getLastCommand(void)
 *FUNCTION NAME:getCurrentConfig
 *FUNCTION     :getCurrentConfig 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getCurrentConfig(void)
 {
   
-  int8_t answer;
-  answer = sim800c.sendAtCommand("AT&V0\r\n",200,0);
+  uint8_t answer;
+  answer = sim800c.sendAtCommand("AT&V0\r\n", 200, 0);
 
   debugTerminal("Sim80x_setFactoryDefault");
 
   //update
   
   
-
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1338,18 +1359,19 @@ bool  LIB_SIM800C::getCurrentConfig(void)
 *FUNCTION NAME:getTaCapabilities
 *FUNCTION     :getTaCapabilities 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getTaCapabilities(void)
 {
   
-  int8_t answer;
-  answer = sim800c.sendAtCommand("AT+GCAP\r\n",200,0);
+  uint8_t answer;
+  answer = sim800c.sendAtCommand("AT+GCAP\r\n", 200, 0);
 
   debugTerminal("Sim80x_getTaCapabilities");
 
   //update
   
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
 
   if(answer == 1)
       return true;
@@ -1363,36 +1385,42 @@ bool  LIB_SIM800C::getTaCapabilities(void)
 *FUNCTION NAME:getIMEI
 *FUNCTION     :recieve module IMEI number 
 *INPUT        :IMEI
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getIMEI(char *IMEI)
 {
   
-  int8_t answer;
-  answer = sim800c.sendAtCommand("AT+CGSN\r\n",200, 0);
+  uint8_t answer;
 
-  processIMEI(1);
+  answer = sim800c.sendAtCommand("AT+CGSN\r\n", 200, 0);
 
+ debugTerminal("Sim80x_getIMEI");
+ 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
   if(answer == 1)
       return true;
   else
       return false;
 
 }
+
 
 /****************************************************************
 *FUNCTION NAME:getTeChar
 *FUNCTION     :getTeChar 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getTeChar(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CSCS?\r\n",200, 0);
 
+  debugTerminal("Sim80x_getTeChar");
   //update
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
 
   if(answer == 1)
       return true;
@@ -1402,19 +1430,23 @@ bool  LIB_SIM800C::getTeChar(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:getIMEI
-*FUNCTION     :recieve module IMEI number 
+*FUNCTION NAME:getAddrsType
+*FUNCTION     :getAddrsType 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getAddrsType(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CSTA?\r\n",200, 0);
 
-  //update
+ debugTerminal("Sim80x_getAddrsType");
 
+  //update
+  
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
   if(answer == 1)
       return true;
   else
@@ -1426,17 +1458,20 @@ bool  LIB_SIM800C::getAddrsType(void)
 *FUNCTION NAME:getIMSI
 *FUNCTION     :getIMSI 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getIMSI(void)
 {
   
-  int8_t answer;
-  answer = sim800c.sendAtCommand("AT+CIMI\r\n",200, 0);
+  uint8_t answer;
+  answer = sim800c.sendAtCommand("AT+CIMI\r\n",200,0);
+
+ debugTerminal("Sim80x_getIMSI");
 
   //update
   
-
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
   if(answer == 1)
       return true;
   else
@@ -1445,21 +1480,24 @@ bool  LIB_SIM800C::getIMSI(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:getSelOperator
-*FUNCTION     :getSelOperator
+*FUNCTION NAME:getOperator
+*FUNCTION     :getOperator
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getOperator(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT+COPS?\r\n",120000, 0);
+
+ debugTerminal("Sim80x_getOperator");
 
   //update
   
-
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1470,16 +1508,20 @@ bool  LIB_SIM800C::getOperator(void)
 *FUNCTION NAME:getNetworkReg
 *FUNCTION     :getNetworkReg 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getNetworkReg(void)
 {
   uint8_t answer;
   answer =sim800c.sendAtCommand("AT+CREG?\r\n",200, 0);
 
+ debugTerminal("Sim80x_getNetworkReg");
+
   //update
 
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1489,18 +1531,20 @@ bool  LIB_SIM800C::getNetworkReg(void)
 *FUNCTION NAME:getRLPParams
 *FUNCTION     :getRLPParams
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::getRLPParams(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CRLP?\r\n",200, 0);
-  debugTerminal("setRLPParams");
+
+  debugTerminal("Sim80x_setRLPParams");
   //update
   
-
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1511,17 +1555,21 @@ bool LIB_SIM800C::getRLPParams(void)
 *FUNCTION NAME:getCSQ
 *FUNCTION     :getCSQ 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getCSQ(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CSQ\r\n",200, 0);
+
+ debugTerminal("Sim80x_getCSQ");
 
   //update
 
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1532,17 +1580,21 @@ bool  LIB_SIM800C::getCSQ(void)
 *FUNCTION NAME:getPrefOperLst
 *FUNCTION     :getPrefOperLst 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getPrefOperLst(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CPOL?\r\n",200, 0);
+
+ debugTerminal("Sim80x_getPrefOperLst");
 
   //update
 
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1553,17 +1605,21 @@ bool  LIB_SIM800C::getPrefOperLst(void)
 *FUNCTION NAME:getOperName
 *FUNCTION     :getOperName 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getOperName(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT+COPN\r\n",200, 0);
+
+ debugTerminal("Sim80x_getOperName");
 
   //update
 
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1574,17 +1630,21 @@ bool  LIB_SIM800C::getOperName(void)
 *FUNCTION NAME:getPhoneFunc
 *FUNCTION     :getPhoneFunc 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getPhoneFunc(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CFUN?\r\n",10000, 0);
+
+ debugTerminal("Sim80x_getPhoneFunc");
 
   //update
 
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1595,16 +1655,19 @@ bool  LIB_SIM800C::getPhoneFunc(void)
 *FUNCTION NAME:getClockData
 *FUNCTION     :getClockData
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::getClockData(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CCLK?\r\n",200, 0);
-  debugTerminal("setClockData");
 
-  if(answer == 1)
+  debugTerminal("Sim80x_setClockData");
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1615,17 +1678,21 @@ bool LIB_SIM800C::getClockData(void)
 *FUNCTION NAME:getBattChar
 *FUNCTION     :getBattChar 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::getBattChar(void)
 {
   
-  int8_t answer;
+  uint8_t answer;
   answer = sim800c.sendAtCommand("AT+CBC\r\n",200, 0);
+
+  debugTerminal("Sim80x_getBattChar");
 
   //update
 
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1635,8 +1702,8 @@ bool  LIB_SIM800C::getBattChar(void)
 /****************************************************************
 *FUNCTION NAME:setTeChar
 *FUNCTION     :setTeChar
-*INPUT        :void
-*OUTPUT       :void
+*INPUT        :chset
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setTeChar(char *chset)
 {
@@ -1644,10 +1711,12 @@ bool LIB_SIM800C::setTeChar(char *chset)
   char temp[20];
   snprintf(temp, sizeof(temp), "AT+CSCS%s\r\n", chset);
   answer = sim800c.sendAtCommand(temp, 200, 0);
-  debugTerminal("setTeChar");
 
+  debugTerminal("Sim80x_setTeChar");
 
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1657,18 +1726,21 @@ bool LIB_SIM800C::setTeChar(char *chset)
 /****************************************************************
 *FUNCTION NAME:setAddrsType
 *FUNCTION     :setAddrsType
-*INPUT        :void
-*OUTPUT       :void
+*INPUT        :type
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setAddrsType(uint8_t type)
 {
   char temp[20];
-  int8_t answer;
+  uint8_t answer;
   snprintf(temp, sizeof(temp), "AT+CSTA=%d\r\n", type); 
   answer = sim800c.sendAtCommand(temp,200, 0);
-  debugTerminal("setAddrsType");
 
-  if(answer == 1)
+  debugTerminal("Sim80x_setAddrsType");
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1678,18 +1750,21 @@ bool LIB_SIM800C::setAddrsType(uint8_t type)
 /****************************************************************
 *FUNCTION NAME:setSelOperator
 *FUNCTION     :setSelOperator
-*INPUT        :void
-*OUTPUT       :void
+*INPUT        :mode, format, oper
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setSelOperator(uint8_t mode, uint8_t format, uint8_t oper)
 {
   char temp[20];
-  int8_t answer;
+  uint8_t answer;
   snprintf(temp, sizeof(temp), "AT+COPS=%d,[%d[],%d]]\r\n", mode, format, oper); 
   answer = sim800c.sendAtCommand(temp,120000, 0);
-  debugTerminal("setSelOperator");
 
-  if(answer == 1)
+  debugTerminal("Sim80x_setSelOperator");
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1699,19 +1774,22 @@ bool LIB_SIM800C::setSelOperator(uint8_t mode, uint8_t format, uint8_t oper)
 /****************************************************************
 *FUNCTION NAME:setNetworkReg
 *FUNCTION     :setNetworkReg
-*INPUT        :void
-*OUTPUT       :void
+*INPUT        :turnon
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setNetworkReg(bool turnon)
 {
   char temp[20];  
-  int8_t answer;
+  uint8_t answer;
   snprintf(temp, sizeof(temp), "AT+CREG=%d\r\n", turnon); 
-  answer = sim800c.sendAtCommand(temp,200, 0);
-  debugTerminal("setNetworkReg");
-  processNetworkReg(1);
 
-  if(answer == 1)
+  answer = sim800c.sendAtCommand(temp,200, 0);
+
+  debugTerminal("Sim80x_setNetworkReg");
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1722,18 +1800,20 @@ bool LIB_SIM800C::setNetworkReg(bool turnon)
 *FUNCTION NAME:setRLPParams
 *FUNCTION     :setRLPParams 
 *INPUT        :void
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool  LIB_SIM800C::setRLPParams(uint16_t iws,uint16_t mws,uint16_t t2,uint16_t n2,uint16_t t4)
 {
   char temp[20];  
-  int8_t answer;
+  uint8_t answer;
   snprintf(temp, sizeof(temp), "AT+CRLP=%d[,%d[,%d[,%d[,%d]]]]\r\n", iws, mws, t2, n2, t4); 
   answer = sim800c.sendAtCommand(temp,200, 0);
 
   //update
 
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1743,18 +1823,21 @@ bool  LIB_SIM800C::setRLPParams(uint16_t iws,uint16_t mws,uint16_t t2,uint16_t n
 /****************************************************************
 *FUNCTION NAME:setPrefOperLst
 *FUNCTION     :setPrefOperLst
-*INPUT        :void
-*OUTPUT       :void
+*INPUT        :index, format, oper
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setPrefOperLst(uint8_t index, uint8_t  format, char *oper)
 {
   char temp[20];
-  int8_t answer;
+  uint8_t answer;
   snprintf(temp, sizeof(temp), "AT+CPOL=%d[,%d,%s]\r\n", index, format, oper); 
   answer = sim800c.sendAtCommand(temp,200, 0);
-  debugTerminal("setPrefOperLst");
 
-  if(answer == 1)
+  debugTerminal("Sim80x_setPrefOperLst");
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1765,17 +1848,18 @@ bool LIB_SIM800C::setPrefOperLst(uint8_t index, uint8_t  format, char *oper)
 *FUNCTION NAME:setPhoneFunc
 *FUNCTION     :setPhoneFunc
 *INPUT        :fun, rst
-*OUTPUT       :void
+*OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::setPhoneFunc(uint8_t fun, uint8_t  rst)
 {
   char temp[20];
-  int8_t answer;
+  uint8_t answer;
   snprintf(temp, sizeof(temp), "AT+CFUN=%d[,%d]\r\n", fun, rst); 
   answer = sim800c.sendAtCommand(temp,10000, 0);
-  debugTerminal("setPhoneFunc");
-    
-  if(answer == 1)
+  debugTerminal("Sim80x_setPhoneFunc");
+      memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1788,16 +1872,17 @@ bool LIB_SIM800C::setPhoneFunc(uint8_t fun, uint8_t  rst)
 *INPUT        :void
 *OUTPUT       :time
 ****************************************************************/
-bool  LIB_SIM800C::setClockData(char time)
+bool  LIB_SIM800C::setClockData(char *time)
 {
   char temp[40];  
-  int8_t answer;
+  uint8_t answer;
   snprintf(temp, sizeof(temp), "AT+CCLK=%s\r\n", time); 
   answer = sim800c.sendAtCommand(temp,200, 0);
 
   //update
-
-  if(answer == 1)
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1813,12 +1898,15 @@ bool  LIB_SIM800C::setClockData(char time)
 bool LIB_SIM800C::setSimAccess(uint16_t length, char command)
 {
   char temp[20];
-  int8_t answer;
+  uint8_t answer;
   snprintf(temp, sizeof(temp), "AT+CSIM=%d,%s\r\n", length, command); 
   answer = sim800c.sendAtCommand(temp,200, 0);
-  debugTerminal("setSimAccess");
 
-  if(answer == 1)
+  debugTerminal("Sim80x_setSimAccess");
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+  
+   if(answer == 1)
       return true;
   else
       return false;
@@ -1830,10 +1918,10 @@ bool LIB_SIM800C::setSimAccess(uint16_t length, char command)
 /****************************************************************
 *FUNCTION NAME:processManNo
 *FUNCTION     :processManNo
-*INPUT        :addrs; 
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processManNo(uint16_t addrs)
+bool LIB_SIM800C::processManNo(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1846,18 +1934,20 @@ void LIB_SIM800C::processManNo(uint16_t addrs)
   // update Flash IC here
 		
   debugTerminal("Sim80x_getManNo");
+
   
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+  
+  
 	
 }
 
 /****************************************************************
 *FUNCTION NAME:processModelNo
 *FUNCTION     :processModelNo
-*INPUT        :addrs; 
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processModelNo(uint16_t addrs)
+bool LIB_SIM800C::processModelNo(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1871,17 +1961,17 @@ void LIB_SIM800C::processModelNo(uint16_t addrs)
 		
   debugTerminal("Sim80x_getModelNo");
   
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+  
 	
 }//complete
 
 /****************************************************************
 *FUNCTION NAME:processGlobalNo
 *FUNCTION     :processGlobalNo
-*INPUT        :addrs; 
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processGlobalNo(uint16_t addrs)
+bool LIB_SIM800C::processGlobalNo(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1895,17 +1985,17 @@ void LIB_SIM800C::processGlobalNo(uint16_t addrs)
 		
   debugTerminal("Sim80x_getGlobalNo");
   
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+  
 	
 }
 
 /****************************************************************
 *FUNCTION NAME:processLastCommand
 *FUNCTION     :processLastCommand
-*INPUT        :addrs; 
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processLastCommand(uint16_t addrs)
+bool LIB_SIM800C::processLastCommand(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1919,17 +2009,17 @@ void LIB_SIM800C::processLastCommand(uint16_t addrs)
 		
   debugTerminal("Sim80x_getLastCommand");
   
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+  
 	
 }
 
 /****************************************************************
 *FUNCTION NAME:processCurrentConfig
 *FUNCTION     :processCurrentConfig
-*INPUT        :addrs; 
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processCurrentConfig(uint16_t addrs)
+bool LIB_SIM800C::processCurrentConfig(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1943,17 +2033,17 @@ void LIB_SIM800C::processCurrentConfig(uint16_t addrs)
 		
   debugTerminal("Sim80x_getCurrentConfig");
   
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+  
 	
 }
 
 /****************************************************************
 *FUNCTION NAME:processTaCapabilities
 *FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processTaCapabilities(uint16_t addrs)
+bool LIB_SIM800C::processTaCapabilities(uint16_t addrs)
 {	
 	char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -1967,17 +2057,17 @@ void LIB_SIM800C::processTaCapabilities(uint16_t addrs)
 		
   debugTerminal("Sim80x_getTaCapabilities");
   
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+  
 	
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processNetworkReg
+*FUNCTION     :processNetworkReg
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processNetworkReg(uint16_t addrs)
+bool LIB_SIM800C::processNetworkReg(uint16_t addrs)
 {
   
   char      *strStart, *str1;
@@ -1987,12 +2077,12 @@ void LIB_SIM800C::processNetworkReg(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processCSQ
+*FUNCTION     :processCSQ
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processCSQ(uint16_t addrs)
+bool LIB_SIM800C::processCSQ(uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2011,12 +2101,12 @@ void LIB_SIM800C::processCSQ(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processCBC
+*FUNCTION     :processCBC
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processCBC(uint16_t addrs)
+bool LIB_SIM800C::processCBC(uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2056,12 +2146,12 @@ void LIB_SIM800C::processCBC(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processSmsMsgTxt
+*FUNCTION     :processSmsMsgTxt
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processSmsMsgTxt(char *number, char *msg, uint16_t addrs)
+bool LIB_SIM800C::processSmsMsgTxt(char *number, char *msg, uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2077,12 +2167,12 @@ void LIB_SIM800C::processSmsMsgTxt(char *number, char *msg, uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processSmsMsgMemorySts
+*FUNCTION     :processSmsMsgMemorySts
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processSmsMsgMemorySts(uint16_t addrs)
+bool LIB_SIM800C::processSmsMsgMemorySts(uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2109,12 +2199,12 @@ void LIB_SIM800C::processSmsMsgMemorySts(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processSmsMsg
+*FUNCTION     :processSmsMsg
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processSmsMsg(uint16_t addrs)
+bool LIB_SIM800C::processSmsMsg(uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2145,12 +2235,12 @@ void LIB_SIM800C::processSmsMsg(uint16_t addrs)
 }
 }
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processSmsMsgServiceNo
+*FUNCTION     :processSmsMsgServiceNo
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processSmsMsgServiceNo(uint16_t addrs)
+bool LIB_SIM800C::processSmsMsgServiceNo(uint16_t addrs)
 {
   
   char      *strStart,*str1, *str2;
@@ -2170,12 +2260,12 @@ void LIB_SIM800C::processSmsMsgServiceNo(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processSmsTextModeParam
+*FUNCTION     :processSmsTextModeParam
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processSmsTextModeParam(uint16_t addrs)
+bool LIB_SIM800C::processSmsTextModeParam(uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2193,12 +2283,12 @@ void LIB_SIM800C::processSmsTextModeParam(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processBTGetHostName
+*FUNCTION     :processBTGetHostName
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processBTGetHostName(uint16_t addrs)
+bool LIB_SIM800C::processBTGetHostName(uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2215,12 +2305,12 @@ void LIB_SIM800C::processBTGetHostName(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processBTStatus
+*FUNCTION     :processBTStatus
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processBTStatus(uint16_t addrs)
+bool LIB_SIM800C::processBTStatus(uint16_t addrs)
 {
   
   char      *strStart, *str1, *str2, *str3;
@@ -2279,12 +2369,12 @@ void LIB_SIM800C::processBTStatus(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processBTPair
+*FUNCTION     :processBTPair
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processBTPair(uint16_t addrs)
+bool LIB_SIM800C::processBTPair(uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2302,12 +2392,12 @@ void LIB_SIM800C::processBTPair(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processBTVisibility
+*FUNCTION     :processBTVisibility
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processBTVisibility(uint16_t addrs)
+bool LIB_SIM800C::processBTVisibility(uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2326,12 +2416,12 @@ void LIB_SIM800C::processBTVisibility(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processGPRSNetApn
+*FUNCTION     :processGPRSNetApn
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processGPRSNetApn(uint16_t addrs)
+bool LIB_SIM800C::processGPRSNetApn(uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2347,12 +2437,12 @@ void LIB_SIM800C::processGPRSNetApn(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processGPRSNetLocalIP
+*FUNCTION     :processGPRSNetLocalIP
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processGPRSNetLocalIP(uint16_t addrs)
+bool LIB_SIM800C::processGPRSNetLocalIP(uint16_t addrs)
 {
   
   char      *strStart,*str1;
@@ -2368,12 +2458,12 @@ void LIB_SIM800C::processGPRSNetLocalIP(uint16_t addrs)
 }
 
 /****************************************************************
-*FUNCTION NAME:processTaCapabilities
-*FUNCTION     :processTaCapabilities
-*INPUT        :addrs; 
+*FUNCTION NAME:processGPRSNetMultiConnection
+*FUNCTION     :processGPRSNetMultiConnection
+*INPUT        :addrs 
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processGPRSNetMultiConnection(uint16_t addrs)
+bool LIB_SIM800C::processGPRSNetMultiConnection(uint16_t addrs)
 {
   
   char      *strStart, *str1;
@@ -2392,15 +2482,16 @@ void LIB_SIM800C::processGPRSNetMultiConnection(uint16_t addrs)
       Sim80x.GPRS.MultiConnection=1;
   } 
   
+
 }
 
 /****************************************************************
 *FUNCTION NAME:processIMEI
 *FUNCTION     :processIMEI
-*INPUT        :addrs; 
+*INPUT        :addrs
 *OUTPUT       :bool
 ****************************************************************/
-void LIB_SIM800C::processIMEI(uint16_t addrs)
+bool LIB_SIM800C::processIMEI(uint16_t addrs)
 {
   char      *strStart,*str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
@@ -2414,14 +2505,14 @@ void LIB_SIM800C::processIMEI(uint16_t addrs)
 		
   debugTerminal("Sim80x_getIMEI");
   
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+  
 	
 }
  
 /****************************************************************
-*FUNCTION NAME:probe
-*FUNCTION     :probe
-*INPUT        :timeout
+*FUNCTION NAME:processHttpData
+*FUNCTION     :processHttpData
+*INPUT        :void
 *OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::processHttpData(void)
@@ -2430,9 +2521,9 @@ bool LIB_SIM800C::processHttpData(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:probe
-*FUNCTION     :probe
-*INPUT        :timeout
+*FUNCTION NAME:processHttpAction
+*FUNCTION     :processHttpAction
+*INPUT        :void
 *OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::processHttpAction(void)
@@ -2441,9 +2532,9 @@ bool LIB_SIM800C::processHttpAction(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:probe
-*FUNCTION     :probe
-*INPUT        :timeout
+*FUNCTION NAME:processHttpRead
+*FUNCTION     :processHttpRead
+*INPUT        :void
 *OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::processHttpRead(void)
@@ -2452,9 +2543,9 @@ bool LIB_SIM800C::processHttpRead(void)
 }
 
 /****************************************************************
-*FUNCTION NAME:probe
-*FUNCTION     :probe
-*INPUT        :timeout
+*FUNCTION NAME:processHttpContent
+*FUNCTION     :processHttpContent
+*INPUT        :void
 *OUTPUT       :bool
 ****************************************************************/
 bool LIB_SIM800C::processHttpContent(void)

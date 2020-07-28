@@ -233,7 +233,12 @@ bool LIB_HC05::getVersion(char *buffer, size_t buffer_size, unsigned long timeou
   //PGM_STRING_MAPPED_TO_RAM(command, "VERSION?");
   
   answer = hc05.sendAtCommand("AT+VERSION?\r\n", 200, 0);
-  return processVersion(answer, buffer , buffer_size, 1);
+
+    if(answer == 1)
+      return true;
+  else
+      return false;
+  
   /* Response should look like "+VERSION:2.0-20100601" */
  
 
@@ -288,10 +293,15 @@ bool LIB_HC05::getName(char *buffer, unsigned long timeout)
   }
 
   //PGM_STRING_MAPPED_TO_RAM(command, "NAME?");
+  uint8_t answer;
     
-  hc05.sendAtCommand("AT+NAME?\r\n",200,0);
-  debugTerminal("HC05_getName");
-  return processName(buffer ,1);
+  answer = hc05.sendAtCommand("AT+NAME?\r\n",200,0);
+  debugTerminal("HC05_getName");  
+  
+  if(answer == 1)
+      return true;
+  else
+      return false;
   
 /* 
   char response[40];
@@ -365,8 +375,16 @@ bool LIB_HC05::getRemoteDeviceName(const BluetoothAddress &address,
   
   //PGM_STRING_MAPPED_TO_RAM(command, "RNAME?");
   
-   hc05.sendAtCommand("AT+RNAME?\r\n", timeout, 0); //check
+    
+    
+  uint8_t answer;
+  answer = hc05.sendAtCommand("AT+RNAME?\r\n", timeout, 0); //check
+
   debugTerminal("HC05_getRemoteDeviceName");
+    if(answer == 1)
+      return true;
+  else
+      return false;
   return processRemoteDeviceName(address, buffer, buffer_size, 1);
   
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+RNAME:");
@@ -398,9 +416,15 @@ bool LIB_HC05::getRole(HC05_Role &role, unsigned long timeout)
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "ROLE?");
-  hc05.sendAtCommand("AT+ROLE?\r\n", timeout, 0 );
+   
+    
+  uint8_t answer;
+  answer =hc05.sendAtCommand("AT+ROLE?\r\n", timeout, 0 );
   debugTerminal("HC05_setSimAccess");
-  return processRole(role, 1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
 /* 
   char response[20];
  // PGM_STRING_MAPPED_TO_RAM(response_pattern, "+ROLE:");
@@ -457,9 +481,14 @@ bool LIB_HC05::getDeviceClass(uint32_t &device_class, unsigned long timeout)
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "CLASS?");
-   hc05.sendAtCommand("AT+CLASS?\r\n", timeout, 0 );
+  uint8_t answer;
+   answer = hc05.sendAtCommand("AT+CLASS?\r\n", timeout, 0 );
    debugTerminal("HC05_getDeviceClass");
-  return processDeviceClass(device_class, 1);
+
+    if(answer == 1)
+      return true;
+  else
+      return false;
 
 /* 
   device_class = 0;
@@ -521,9 +550,13 @@ bool LIB_HC05::getInquiryAccessCode(uint32_t &iac, unsigned long timeout)
   startOperation(timeout);
 
  // PGM_STRING_MAPPED_TO_RAM(command, "IAC?");
-  hc05.sendAtCommand("AT+IAC?\r\n", timeout, 0);
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+IAC?\r\n", timeout, 0);
   debugTerminal("HC05_getInquiryAccessCode");
-  return processInquiryAccessCode(iac, 1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
 
 /* 
   iac = 0;
@@ -584,9 +617,13 @@ bool LIB_HC05::getInquiryMode(HC05_InquiryMode &inq_mode,
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "INQM?");
-  hc05.sendAtCommand("AT+INQM?\r\n", timeout, 0);
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+INQM?\r\n", timeout, 0);
   debugTerminal("HC05_getInquiryMode");
-  return processInquiryMode(inq_mode, max_devices, max_duration, 1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
 /* 
   inq_mode = HC05_INQUIRY_STANDARD;
   max_devices = 0;
@@ -672,9 +709,13 @@ bool LIB_HC05::getPassword(char *buffer, unsigned long timeout)
   }
 
   //PGM_STRING_MAPPED_TO_RAM(command, "PSWD?");
-  hc05.sendAtCommand("AT+PSWD?\r\n", timeout, 0);
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+PSWD?\r\n", timeout, 0);
   debugTerminal("HC05_getPassword");
-  return processPassword(buffer, 1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
 /* 
   char response[HC05_PASSWORD_MAXLEN + 15];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+PSWD:");
@@ -738,9 +779,13 @@ bool LIB_HC05::getSerialMode(uint32_t &speed, uint8_t &stop_bits,
 
   //PGM_STRING_MAPPED_TO_RAM(command, "UART?");
     
-  hc05.sendAtCommand("AT+UART?\r\n", timeout, 0);
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+UART?\r\n", timeout, 0);
    debugTerminal("HC05_getSerialMode");
-  return processSerialMode(speed, stop_bits,  parity, 1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
   
 /* 
   char response[30];
@@ -814,9 +859,14 @@ bool LIB_HC05::getConnectionMode(
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "CMODE?");
-  hc05.sendAtCommand("AT+CMODE?\r\n", timeout, 0);
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+CMODE?\r\n", timeout, 0);
   debugTerminal("HC05_getConnectionMode");
-  return processConnectionMode(connection_mode, 1);/* 
+    if(answer == 1)
+      return true;
+  else
+      return false;
+  /* 
 
   char response[20];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+CMOD:");
@@ -898,9 +948,13 @@ bool LIB_HC05::getLeds(bool &led_status,
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "POLAR?");
-  hc05.sendAtCommand("AT+POLAR?\r\n" ,timeout ,0 );
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+POLAR?\r\n" ,timeout ,0 );
   debugTerminal("HC05_getLeds");
-  return processLed(led_status, led_connection, 1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
 /* 
   led_status = 0;
   led_connection = 0;
@@ -994,9 +1048,13 @@ bool LIB_HC05::getMultiplePorts(uint16_t &port_states, unsigned long timeout)
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "MPIO?");
-  hc05.sendAtCommand("AT+MPIO?\r\n", timeout, 0 );
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+MPIO?\r\n", timeout, 0 );
   debugTerminal("HC05_getMultiplePorts");
-  return processMultiPortState(port_states, 1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
 /* 
   port_states = 0;
 
@@ -1054,10 +1112,13 @@ bool LIB_HC05::getInquiryAndPagingParams(uint16_t &inquiry_interval, uint16_t &i
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "IPSCAN?");
-  hc05.sendAtCommand("AT+IPSCAN?\r\n", timeout, 0);
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+IPSCAN?\r\n", timeout, 0);
   debugTerminal("HC05_getInquiryAndPagingParams");
-  return processGetInquiryAndPagingParams(inquiry_interval, inquiry_duration, paging_interval, paging_duration, 1);
-
+    if(answer == 1)
+      return true;
+  else
+      return false;
   // char response[40];
   
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+IPSCAN:");
@@ -1137,9 +1198,14 @@ bool LIB_HC05::getSniffParams(uint16_t &max_time, uint16_t &min_time,
 
   //PGM_STRING_MAPPED_TO_RAM(command, "SNIFF?");
   
-  hc05.sendAtCommand("AT+SNIFF?\r\n", timeout, 0 );
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+SNIFF?\r\n", timeout, 0 );
    debugTerminal("HC05_setInquiryAndPagingParams");
-  return processSniffParams(max_time, min_time, retry_interval, sniff_timeout, 1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
+  
 /* 
   char response[40];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+SNIFF:");
@@ -1254,9 +1320,13 @@ bool LIB_HC05::getSecurityAndEncryption(HC05_Security &security,
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "SENM?");
-  hc05.sendAtCommand("AT+SENM?\r\n", timeout, 0);
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+SENM?\r\n", timeout, 0);
   debugTerminal("HC05_getSecurityAndEncryption");
-  return processSecurityAndEncryption(security, encryption, 1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
 
   /* char response[20];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+SENM:");
@@ -1330,9 +1400,7 @@ bool LIB_HC05::deleteAllDevicesFromList(unsigned long timeout)
   answer =hc05.sendAtCommand("AT+RMAAD", timeout, 0);
 
   debugTerminal("HC05_deleteAllDevicesFromList");
-  //return processDeleteAllDevicesFromList(1);
-
-  if(answer == 1)
+    if(answer == 1)
       return true;
   else
       return false;
@@ -1364,9 +1432,13 @@ bool LIB_HC05::countDevicesInList(uint8_t &device_count, unsigned long timeout)
 
   //PGM_STRING_MAPPED_TO_RAM(command, "ADCN?");
   
-  hc05.sendAtCommand("AT+ADCN?\r\n", timeout, 0);
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+ADCN?\r\n", timeout, 0);
   debugTerminal("HC05_countDevicesInList");
-  return processCountDevicesInList(device_count, 1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
  /*  char response[20];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+ADCN:");
   const char *count_part = hc05.readResponseWithPrefix(
@@ -1407,12 +1479,16 @@ bool LIB_HC05::getState(HC05_State &state, unsigned long timeout)
   startOperation(timeout);
 
   //PGM_STRING_MAPPED_TO_RAM(command, "STATE?");
-  hc05.sendAtCommand("AT+STATE?\r\n", timeout, 0);
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+STATE?\r\n", timeout, 0);
   debugTerminal("HC05_getState");
  
 
   
-return processState(state, 1);
+  if(answer == 1)
+      return true;
+  else
+      return false;
   /* char response[40];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+STATE:");
   const char *status_part = hc05.readResponseWithPrefix(
@@ -1488,7 +1564,8 @@ bool LIB_HC05::inquire(InquiryCallback callback, unsigned long timeout)
 
   //PGM_STRING_MAPPED_TO_RAM(command, "INQ");
     
-  hc05.sendAtCommand("AT+INQ\r\n", timeout, 0);
+  uint8_t answer; 
+   answer = hc05.sendAtCommand("AT+INQ\r\n", timeout, 0);
   debugTerminal("HC05_inquire");
 
   while (!isOperationTimedOut())
@@ -1586,7 +1663,10 @@ bool LIB_HC05::disconnect(unsigned long timeout)
   uint8_t answer;
   answer =hc05.sendAtCommand("AT+DISC\r\n", timeout, 0 );
   debugTerminal("HC05_pair");
-  return processDisconnect(1);
+    if(answer == 1)
+      return true;
+  else
+      return false;
 
   //PGM_STRING_MAPPED_TO_RAM(SUCCESS, "SUCCESS");
   //PGM_STRING_MAPPED_TO_RAM(LINK_LOSS, "LINK_LOSS");

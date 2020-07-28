@@ -19,8 +19,8 @@ extern Sim80x_t                 Sim80x;
 
 
 /****************************************************************
-*FUNCTION NAME:Gsm_user
-*FUNCTION     :Gsm_user
+*FUNCTION NAME:smsUser
+*FUNCTION     :smsUser
 *INPUT        :StartupTime
 *OUTPUT       :void
 ****************************************************************/
@@ -31,8 +31,8 @@ void  LIB_SIM800C::smsUser(uint32_t StartupTime)
 }
 
 /****************************************************************
-*FUNCTION NAME:Gsm_userNewMsg
-*FUNCTION     :Gsm_userNewMsg
+*FUNCTION NAME:smsUserNewMsg
+*FUNCTION     :smsUserNewMsg
 *INPUT        :Number, Date, Time, kmsg
 *OUTPUT       :void
 ****************************************************************/

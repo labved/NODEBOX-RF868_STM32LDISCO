@@ -20,13 +20,18 @@ extern Sim80x_t                 Sim80x;
 #if (_SIM80X_USE_GPRS==1)
 
 
-//#########################################################################################################
-void     LIB_SIM800C::GPRS_userHttpGetAnswer(char *data,uint32_t StartAddress,uint16_t dataLen)
+
+/****************************************************************
+*FUNCTION NAME:getUserHttpAnswer
+*FUNCTION     :getUserHttpAnswer
+*INPUT        :data, StartAddress, dataLen
+*OUTPUT       :bool
+****************************************************************/
+bool     LIB_SIM800C::getUserHttpAnswer(char *data,uint32_t StartAddress,uint16_t dataLen)
 {
   
   
 }
-//#########################################################################################################
 
 
 #endif

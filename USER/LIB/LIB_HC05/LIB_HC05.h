@@ -136,11 +136,6 @@ uint16_t &inquiry_duration, uint16_t &paging_interval, uint16_t &paging_duration
   uint16_t retry_interval, uint16_t sniff_timeout, uint16_t addrs);
   bool processRole(HC05_Role &role, uint16_t addrs);       //need to check
   bool processName(char *buffer, uint16_t addrs);
-  bool processHttpData();
-  bool processHttpAction();
-  bool  processHttpRead();
-  bool processHttpContent();
-
   
   
   //
