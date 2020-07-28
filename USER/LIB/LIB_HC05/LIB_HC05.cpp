@@ -45,7 +45,8 @@ void LIB_HC05::test(void)
 
   debugTerminal("HC05_HC05_getVersion");
 
-  memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
                      
 }
 
@@ -173,12 +174,12 @@ bool LIB_HC05::softReset(unsigned long timeout)
   uint8_t answer;
   //PGM_STRING_MAPPED_TO_RAM(reset_cmd, "RESET");
   answer = (hc05.sendAtCommand("AT+RESET", timeout, 0)); // CHECK
-
+  debugTerminal("HC05_softReset");
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
   if(answer == 1)
       return true;
   else
       return false;
-
 }
 
 /****************************************************************
@@ -193,6 +194,8 @@ bool LIB_HC05::probe(unsigned long timeout)
     
   hc05.sendAtCommand("AT\r\n",200,0);
   
+  debugTerminal("HC05_probe");
+
   return hc05.readOperationResult();
 }
 
@@ -207,7 +210,10 @@ bool LIB_HC05::setFactoryDefault(unsigned long timeout)
     
   uint8_t answer;
   answer =hc05.sendAtCommand("AT+ORGL\r\n", 200, 0);
+  
   debugTerminal("HC05_setFactoryDefault");
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
 
   if(answer == 1)
       return true;
@@ -234,7 +240,11 @@ bool LIB_HC05::getVersion(char *buffer, size_t buffer_size, unsigned long timeou
   
   answer = hc05.sendAtCommand("AT+VERSION?\r\n", 200, 0);
 
-    if(answer == 1)
+    debugTerminal("HC05_getVersion");
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -296,8 +306,11 @@ bool LIB_HC05::getName(char *buffer, unsigned long timeout)
   uint8_t answer;
     
   answer = hc05.sendAtCommand("AT+NAME?\r\n",200,0);
+
   debugTerminal("HC05_getName");  
   
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -344,6 +357,8 @@ bool LIB_HC05::setName(const char *name, unsigned long timeout)
   //PGM_STRING_MAPPED_TO_RAM(command, "NAME=");
   
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -381,12 +396,13 @@ bool LIB_HC05::getRemoteDeviceName(const BluetoothAddress &address,
   answer = hc05.sendAtCommand("AT+RNAME?\r\n", timeout, 0); //check
 
   debugTerminal("HC05_getRemoteDeviceName");
-    if(answer == 1)
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
-  return processRemoteDeviceName(address, buffer, buffer_size, 1);
-  
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+RNAME:");
   /* char *name_part = hc05.readResponseWithPrefix(response, sizeof(response), "+RNAME:");
 
@@ -421,7 +437,9 @@ bool LIB_HC05::getRole(HC05_Role &role, unsigned long timeout)
   uint8_t answer;
   answer =hc05.sendAtCommand("AT+ROLE?\r\n", timeout, 0 );
   debugTerminal("HC05_setSimAccess");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -463,6 +481,8 @@ bool LIB_HC05::setRole(HC05_Role role, unsigned long timeout)
   answer =hc05.sendAtCommand(temp, timeout, 0);
   debugTerminal("HC05_setRole");
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -485,7 +505,9 @@ bool LIB_HC05::getDeviceClass(uint32_t &device_class, unsigned long timeout)
    answer = hc05.sendAtCommand("AT+CLASS?\r\n", timeout, 0 );
    debugTerminal("HC05_getDeviceClass");
 
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -532,6 +554,8 @@ bool LIB_HC05::setDeviceClass(uint32_t device_class, unsigned long timeout)
   debugTerminal("HC05_setDeviceClass");
   
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -553,7 +577,9 @@ bool LIB_HC05::getInquiryAccessCode(uint32_t &iac, unsigned long timeout)
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+IAC?\r\n", timeout, 0);
   debugTerminal("HC05_getInquiryAccessCode");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -599,6 +625,8 @@ bool LIB_HC05::setInquiryAccessCode(uint32_t iac, unsigned long timeout)
   answer =hc05.sendAtCommand(iac_str, timeout, 0);
   debugTerminal("HC05_getInquiryAccessCode");
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -620,7 +648,9 @@ bool LIB_HC05::getInquiryMode(HC05_InquiryMode &inq_mode,
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+INQM?\r\n", timeout, 0);
   debugTerminal("HC05_getInquiryMode");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -686,6 +716,8 @@ bool LIB_HC05::setInquiryMode(HC05_InquiryMode inq_mode,
   answer =hc05.sendAtCommand(mode, timeout, 0);
   debugTerminal("HC05_setInquiryMode");
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -712,7 +744,9 @@ bool LIB_HC05::getPassword(char *buffer, unsigned long timeout)
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+PSWD?\r\n", timeout, 0);
   debugTerminal("HC05_getPassword");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -760,6 +794,8 @@ bool LIB_HC05::setPassword(const char *password, unsigned long timeout)
   debugTerminal("HC05_setPassword");
   //PGM_STRING_MAPPED_TO_RAM(command, "PSWD=");
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -782,7 +818,9 @@ bool LIB_HC05::getSerialMode(uint32_t &speed, uint8_t &stop_bits,
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+UART?\r\n", timeout, 0);
    debugTerminal("HC05_getSerialMode");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -841,6 +879,8 @@ bool LIB_HC05::setSerialMode(uint32_t speed,
   answer =hc05.sendAtCommand(temp, timeout, 0);
    debugTerminal("HC05_setSerialMode");
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -862,7 +902,9 @@ bool LIB_HC05::getConnectionMode(
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+CMODE?\r\n", timeout, 0);
   debugTerminal("HC05_getConnectionMode");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -904,6 +946,8 @@ bool LIB_HC05::setConnectionMode(
   answer =hc05.sendAtCommand(temp, timeout, 0);
   debugTerminal("HC05_setConnectionMode");
   
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
 
   if(answer == 1)
       return true;
@@ -951,7 +995,9 @@ bool LIB_HC05::getLeds(bool &led_status,
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+POLAR?\r\n" ,timeout ,0 );
   debugTerminal("HC05_getLeds");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -1005,6 +1051,8 @@ bool LIB_HC05::setLeds(bool led_status,
   debugTerminal("HC05_setLeds");
   
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1030,6 +1078,8 @@ bool LIB_HC05::setPortState(uint8_t port_num,
    debugTerminal("HC05_setPortState");
   
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1051,7 +1101,9 @@ bool LIB_HC05::getMultiplePorts(uint16_t &port_states, unsigned long timeout)
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+MPIO?\r\n", timeout, 0 );
   debugTerminal("HC05_getMultiplePorts");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -1094,6 +1146,8 @@ bool LIB_HC05::setMultiplePorts(uint16_t port_states, unsigned long timeout)
   debugTerminal("HC05_setMultiplePorts");
   
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1115,7 +1169,9 @@ bool LIB_HC05::getInquiryAndPagingParams(uint16_t &inquiry_interval, uint16_t &i
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+IPSCAN?\r\n", timeout, 0);
   debugTerminal("HC05_getInquiryAndPagingParams");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -1178,6 +1234,8 @@ bool LIB_HC05::setInquiryAndPagingParams(
   answer = hc05.sendAtCommand(temp, timeout, 0);
   debugTerminal("HC05_setInquiryAndPagingParams");
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1201,7 +1259,9 @@ bool LIB_HC05::getSniffParams(uint16_t &max_time, uint16_t &min_time,
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+SNIFF?\r\n", timeout, 0 );
    debugTerminal("HC05_setInquiryAndPagingParams");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -1261,6 +1321,8 @@ bool LIB_HC05::setSniffParams(uint16_t max_time, uint16_t min_time,
   debugTerminal("HC05_setInquiryAndPagingParams");
   
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1282,6 +1344,8 @@ bool LIB_HC05::enterSniffMode(unsigned long timeout)
   answer =hc05.sendAtCommand("AT+ENSNIFF", timeout, 0);
   debugTerminal("HC05_enterSniffMode");  
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1301,6 +1365,8 @@ bool LIB_HC05::exitSniffMode(unsigned long timeout)
   uint8_t answer;
   answer =hc05.sendAtCommand("AT+EXSNIFF", timeout, 0);
   debugTerminal("HC05_exitSniffMode");
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
 
   if(answer == 1)
       return true;
@@ -1323,7 +1389,9 @@ bool LIB_HC05::getSecurityAndEncryption(HC05_Security &security,
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+SENM?\r\n", timeout, 0);
   debugTerminal("HC05_getSecurityAndEncryption");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -1367,6 +1435,8 @@ bool LIB_HC05::setSecurityAndEncryption(HC05_Security security,
   answer = hc05.sendAtCommand(temp, timeout, 0);
   debugTerminal("HC05_setSecurityAndEncryption");
   
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1400,7 +1470,9 @@ bool LIB_HC05::deleteAllDevicesFromList(unsigned long timeout)
   answer =hc05.sendAtCommand("AT+RMAAD", timeout, 0);
 
   debugTerminal("HC05_deleteAllDevicesFromList");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -1435,7 +1507,9 @@ bool LIB_HC05::countDevicesInList(uint8_t &device_count, unsigned long timeout)
   uint8_t answer; 
    answer = hc05.sendAtCommand("AT+ADCN?\r\n", timeout, 0);
   debugTerminal("HC05_countDevicesInList");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -1485,6 +1559,8 @@ bool LIB_HC05::getState(HC05_State &state, unsigned long timeout)
  
 
   
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1546,6 +1622,8 @@ bool LIB_HC05::initSerialPortProfile(unsigned long timeout)
   answer =hc05.sendAtCommand("AT+INIT", timeout, 0);
   debugTerminal("HC05_initSerialPortProfile");
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1604,6 +1682,8 @@ bool LIB_HC05::cancelInquiry(unsigned long timeout)
   answer =hc05.sendAtCommand(AT_INQC, 0, timeout);
   debugTerminal("HC05_cancelInquiry");
 
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1630,8 +1710,9 @@ bool LIB_HC05::pair(const BluetoothAddress &address, unsigned long timeout)
   uint8_t answer;
   answer =hc05.sendAtCommand(params_str, timeout, 0);
   debugTerminal("HC05_pair");
-  processPair(1);
   
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
@@ -1663,7 +1744,9 @@ bool LIB_HC05::disconnect(unsigned long timeout)
   uint8_t answer;
   answer =hc05.sendAtCommand("AT+DISC\r\n", timeout, 0 );
   debugTerminal("HC05_pair");
-    if(answer == 1)
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  if(answer == 1)
       return true;
   else
       return false;
@@ -1704,7 +1787,7 @@ bool LIB_HC05::disconnect(unsigned long timeout)
 *OUTPUT       :void
 ****************************************************************/
 bool LIB_HC05::processVersion(uint8_t answer, char *buffer, size_t buffer_size, uint16_t addrs)
-{
+{/* 
 	char      *strStart, *str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
@@ -1712,7 +1795,7 @@ bool LIB_HC05::processVersion(uint8_t answer, char *buffer, size_t buffer_size, 
   
   if(str1!=NULL)
     sscanf(str1,"%s",Sim80x.IMEI);//NEED TO CHECK
-
+ */
   debugTerminal("HC05_getversion");
   
   char response[30];
@@ -1747,13 +1830,13 @@ bool LIB_HC05::processVersion(uint8_t answer, char *buffer, size_t buffer_size, 
 ****************************************************************/
 bool LIB_HC05::processRemoteDeviceName(const BluetoothAddress &address,
   char *buffer, size_t buffer_size, uint16_t addrs)
-{
+{ 
 	char      *strStart, *str1;
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
-
-    char response[40];
-    debugTerminal("HC05_RemoteDeviceName");
-  
+//  strstart = (char*)&sim80x.usartrxbuffer[0];  
+//
+   char response[40];
+//    debugterminal("hc05_remotedevicename");
+//   
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+RNAME:");
   char *name_part = hc05.readResponseWithPrefix(response, sizeof(response), "+RNAME:");
 
@@ -1790,11 +1873,16 @@ bool LIB_HC05::processRemoteDeviceName(const BluetoothAddress &address,
 *OUTPUT       :void
 ****************************************************************/
 bool LIB_HC05::processDeviceClass(uint32_t &device_class, uint16_t addrs)
-{
+{/* 
 	char      *strStart, *str1;
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
-     
+  strStart = (char*)&Sim80x.UsartRxBuffer[0];
   
+  if(str1!=NULL)
+    sscanf(str1,"%s",Sim80x.IMEI);
+  
+  debugTerminal("HC05_DeviceClass");
+     
+   */
   device_class = 0;
 
   char response[40];
@@ -1813,12 +1901,9 @@ bool LIB_HC05::processDeviceClass(uint32_t &device_class, uint16_t addrs)
   return hc05.readOperationResult();
 
   
-  if(str1!=NULL)
-    sscanf(str1,"%s",Sim80x.IMEI);
-
   // update Flash IC here
 		
-  debugTerminal("HC05_DeviceClass");
+  
   
   
 
@@ -1834,7 +1919,7 @@ bool LIB_HC05::processInquiryAccessCode( uint32_t &iac, uint16_t addrs)
 {
 
   iac = 0;
-   debugTerminal("HC05_InquiryAccessCode");
+  // debugTerminal("HC05_InquiryAccessCode");
 
   if (isOperationTimedOut())
     return false;
@@ -1912,12 +1997,12 @@ bool LIB_HC05::processInquiryMode(HC05_InquiryMode &inq_mode,
 *OUTPUT       :void
 ****************************************************************/
 bool LIB_HC05::processPassword(char *buffer, uint16_t addrs)
-{
+{/* 
 	char      *strStart, *str1;
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
   
   debugTerminal("HC05_Password");
-
+ */
   
   char response[HC05_PASSWORD_MAXLEN + 15];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+PSWD:");
@@ -1963,7 +2048,7 @@ bool LIB_HC05::processSerialMode(uint32_t &speed, uint8_t &stop_bits,
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+UART:");
   char *mode_str = hc05.readResponseWithPrefix(response, sizeof(response), AT_RESP_UART);
   		
-   debugTerminal("HC05_SerialMode");
+   //debugTerminal("HC05_SerialMode");
 
   if (m_errCode != HC05_OK)
     return false;
@@ -2009,17 +2094,17 @@ bool LIB_HC05::processSerialMode(uint32_t &speed, uint8_t &stop_bits,
 bool LIB_HC05::processConnectionMode(
   HC05_Connection &connection_mode, uint16_t addrs)
 {
-	char      *strStart, *str1;
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+	// char      *strStart, *str1;
+  // strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
   
   
-  if(str1!=NULL)
-    sscanf(str1,"%s",Sim80x.IMEI);
+  // if(str1!=NULL)
+  //   sscanf(str1,"%s",Sim80x.IMEI);
 
-  // update Flash IC here
+  // // update Flash IC here
 		
-  debugTerminal("HC05_ConnectionMode");
+  // debugTerminal("HC05_ConnectionMode");
   
 
   char response[20];
@@ -2056,7 +2141,7 @@ bool LIB_HC05::processLed(bool &led_status,
 
   // update Flash IC here
 		
-   debugTerminal("HC05_getLedStatus");
+  //  debugTerminal("HC05_getLedStatus");
   
   led_status = 0;
   led_connection = 0;
@@ -2097,17 +2182,17 @@ bool LIB_HC05::processLed(bool &led_status,
 bool LIB_HC05::processPortState(uint8_t port_num,
   uint8_t port_state, uint16_t addrs)
 {
-	char      *strStart, *str1;
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+	// char      *strStart, *str1;
+  // strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
   
   
-  if(str1!=NULL)
-    sscanf(str1,"%s",Sim80x.IMEI);
+  // if(str1!=NULL)
+  //   sscanf(str1,"%s",Sim80x.IMEI);
 
-  // update Flash IC here
+  // // update Flash IC here
 		
-  debugTerminal("HC05_PortState");
+  // debugTerminal("HC05_PortState");
   
   
 
@@ -2121,15 +2206,15 @@ bool LIB_HC05::processPortState(uint8_t port_num,
 ****************************************************************/
 bool LIB_HC05::processMultiPortState(uint16_t &port_states, uint16_t addrs)
 {
-  char      *strStart, *str1;
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];
+  // char      *strStart, *str1;
+  // strStart = (char*)&Sim80x.UsartRxBuffer[0];
         
-  if(str1!=NULL)
-    sscanf(str1,"%s",Sim80x.IMEI);
+  // if(str1!=NULL)
+  //   sscanf(str1,"%s",Sim80x.IMEI);
 
-  // update Flash IC here
+  // // update Flash IC here
 		
-  debugTerminal("HC05_processMultiPortState");
+  // debugTerminal("HC05_processMultiPortState");
   
   port_states = 0;
 
@@ -2161,10 +2246,10 @@ bool LIB_HC05::processGetInquiryAndPagingParams(uint16_t &inquiry_interval,
 uint16_t &inquiry_duration, uint16_t &paging_interval, uint16_t &paging_duration, uint16_t addrs)
 {
 
-	char      *strStart, *str1;
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+	// char      *strStart, *str1;
+  // strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
-  debugTerminal("HC05_processGetInquiryAndPagingParams");
+  // debugTerminal("HC05_processGetInquiryAndPagingParams");
   char response[40];
   char *params_part = hc05.readResponseWithPrefix(
     response, sizeof(response), AT_RESP_IPSCAN);
@@ -2214,8 +2299,8 @@ uint16_t &inquiry_duration, uint16_t &paging_interval, uint16_t &paging_duration
 bool LIB_HC05::processSecurityAndEncryption(HC05_Security &security,
   HC05_Encryption &encryption, uint16_t addrs)
 {
-	char      *strStart, *str1;
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+	// char      *strStart, *str1;
+  // strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
   char response[20];
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+SENM:");
@@ -2242,8 +2327,8 @@ bool LIB_HC05::processSecurityAndEncryption(HC05_Security &security,
   return hc05.readOperationResult();
   
   
-  if(str1!=NULL)
-    sscanf(str1,"%s",Sim80x.IMEI);
+  // if(str1!=NULL)
+  //   sscanf(str1,"%s",Sim80x.IMEI);
 
   // update Flash IC here
   
@@ -2258,9 +2343,9 @@ bool LIB_HC05::processSecurityAndEncryption(HC05_Security &security,
 *OUTPUT       :void
 ****************************************************************/
 bool LIB_HC05::processState(HC05_State &state, uint16_t addrs)
-{
-	char      *strStart, str1[40];
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+ {
+ 	char      *strStart, str1[40];
+//   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
   //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+STATE:");
   const char *status_part = hc05.readResponseWithPrefix(
@@ -2311,13 +2396,13 @@ bool LIB_HC05::processState(HC05_State &state, uint16_t addrs)
 bool LIB_HC05::processPair(uint16_t addrs)
 {
 
-	char      *strStart, *str1;
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+	// char      *strStart, *str1;
+  // strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
   
   
-  if(str1!=NULL)
-    sscanf(str1,"%s",Sim80x.IMEI);
+  // if(str1!=NULL)
+  //   sscanf(str1,"%s",Sim80x.IMEI);
 
   // update Flash IC here
 		
@@ -2335,12 +2420,12 @@ bool LIB_HC05::processPair(uint16_t addrs)
 bool LIB_HC05::processDisconnect(uint16_t addrs)
 {
 
-  char      *strStart, *str1;
-  strStart = (char*)&Sim80x.UsartRxBuffer[0];  
+  // char      *strStart, *str1;
+  // strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
   
-  if(str1!=NULL)
-    sscanf(str1,"%s",Sim80x.IMEI);
+  // if(str1!=NULL)
+  //   sscanf(str1,"%s",Sim80x.IMEI);
 
   // update Flash IC here
 	
@@ -2358,7 +2443,7 @@ bool LIB_HC05::processDisconnect(uint16_t addrs)
     m_errCode = HC05_ERR_DISC_ERROR;
 
 	
-  debugTerminal("HC05_HC05_processDisconnect");
+  // debugTerminal("HC05_HC05_processDisconnect");
    return hc05.readOperationResult();
   
   

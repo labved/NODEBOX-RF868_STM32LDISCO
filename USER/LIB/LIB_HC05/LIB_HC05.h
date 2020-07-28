@@ -105,6 +105,8 @@ public:
   bool                    connect(const BluetoothAddress &address, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT      //need to check
   bool                    disconnect(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT   //need to check
   
+
+  
   //new
   bool processVersion(uint8_t answer, char *buffer, size_t buffer_size, uint16_t addrs);//need to check 
   bool processRemoteDeviceName(const BluetoothAddress &address,
