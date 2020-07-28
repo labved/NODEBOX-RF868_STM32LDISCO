@@ -37,10 +37,10 @@ class LIB_SIM800C
 
 
     // CUSTOM LIBRARY
-    bool setAtMode(void); //need to check
-    bool setDataMode(void);
-    bool setActiveProfile(void); //need to check
-    bool setDefaultConfig(void);
+    bool                    setAtMode(void); //need to check
+    bool                    setDataMode(void);
+    bool                    setActiveProfile(void); //need to check
+    bool                    setDefaultConfig(void);
 
     // 0.25V
     bool                    setFactoryDefault(void);
@@ -50,37 +50,37 @@ class LIB_SIM800C
     bool                    setParameters(void);
 
     // 3GPP TS 27.007
-    bool getManNo(void);
-    bool getModelNo(void);
-    bool getGlobalNo(void);
-    bool getLastCommand(void); //need to check
-    bool getCurrentConfig(void);
-    bool getTaCapabilities(void);
+    bool                    getManNo(void);
+    bool                    getModelNo(void);
+    bool                    getGlobalNo(void);
+    bool                    getLastCommand(void); //need to check
+    bool                    getCurrentConfig(void);
+    bool                    getTaCapabilities(void);
     bool                    getIMEI(char *IMEI);
     
-    bool getTeChar(void);
-    bool getAddrsType(void);
-    bool getIMSI(void);
-    bool getOperator(void);
-    bool getNetworkReg(void);
-    bool getRLPParams(void);
-    bool getCSQ(void);
-    bool getPrefOperLst(void);   
-    bool getOperName(void);
-    bool getPhoneFunc(void);
-    bool getClockData(void);
-    bool getBattChar(void);
+    bool                    getTeChar(void);
+    bool                    getAddrsType(void);
+    bool                    getIMSI(void);
+    bool                    getOperator(void);
+    bool                    getNetworkReg(void);
+    bool                    getRLPParams(void);
+    bool                    getCSQ(void);
+    bool                    getPrefOperLst(void);   
+    bool                    getOperName(void);
+    bool                    getPhoneFunc(void);
+    bool                    getClockData(void);
+    bool                    getBattChar(void);
 
     
-    bool setTeChar(char *chset);
-    bool setAddrsType(uint8_t type);
-    bool setSelOperator(uint8_t mode, uint8_t format, uint8_t oper); //need to check
-    bool setNetworkReg(bool turnon);
-    bool setRLPParams(uint16_t iws,uint16_t mws,uint16_t t2,uint16_t n2,uint16_t t4);
-    bool setPrefOperLst(uint8_t index, uint8_t  format, char *oper);  //need to check
-    bool setPhoneFunc(uint8_t fun, uint8_t  rst);
-    bool setClockData(char time);
-    bool setSimAccess(uint16_t length, char command);
+    bool                    setTeChar(char *chset);
+    bool                    setAddrsType(uint8_t type);
+    bool                    setSelOperator(uint8_t mode, uint8_t format, uint8_t oper); //need to check
+    bool                    setNetworkReg(bool turnon);
+    bool                    setRLPParams(uint16_t iws,uint16_t mws,uint16_t t2,uint16_t n2,uint16_t t4);
+    bool                    setPrefOperLst(uint8_t index, uint8_t  format, char *oper);  //need to check
+    bool                    setPhoneFunc(uint8_t fun, uint8_t  rst);
+    bool                    setClockData(char time);
+    bool                    setSimAccess(uint16_t length, char command);
 
 
 

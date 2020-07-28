@@ -1774,7 +1774,7 @@ bool LIB_SIM800C::setPhoneFunc(uint8_t fun, uint8_t  rst)
   snprintf(temp, sizeof(temp), "AT+CFUN=%d[,%d]\r\n", fun, rst); 
   answer = sim800c.sendAtCommand(temp,10000, 0);
   debugTerminal("setPhoneFunc");
-
+    
   if(answer == 1)
       return true;
   else
