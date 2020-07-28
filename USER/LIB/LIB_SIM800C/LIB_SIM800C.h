@@ -168,6 +168,12 @@ class LIB_SIM800C
     void processGPRSNetLocalIP(uint16_t addrs);//done
     void processGPRSNetMultiConnection(uint16_t addrs);//done
     void processIMEI(uint16_t addrs);
+    
+    bool processHttpData(void);
+    bool processHttpAction(void);
+    bool  processHttpRead(void);
+    bool processHttpContent(void);
+
 
 
     //HTTP 

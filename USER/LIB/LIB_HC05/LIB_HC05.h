@@ -37,7 +37,7 @@ public:
   void                    test(void);    // to be deleted 
   void                    Init(void);
   bool                    softReset(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
-  bool                    probe(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
+  bool                    probe(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT  //need to check
 
   // AT                    COMMANDS METHODS
   bool                    setFactoryDefault(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT   // need to check
@@ -67,9 +67,9 @@ public:
                                                     unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
   bool                    setConnectionMode(HC05_Connection connection_mode,
                                                     unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
-  bool                    bind(const BluetoothAddress &address, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
+  bool                    bind(const BluetoothAddress &address, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT  //need to check
   bool                    getAddressBound(BluetoothAddress &address,
-                                                    unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
+                                                    unsigned long timeout);     //HC05_DEFAULT_TIMEOUT  //need to check
   bool                    getLeds(bool &led_status, bool &led_connection, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
   bool                    setLeds(bool led_status, bool led_connection, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
   bool                    setPortState(uint8_t port_num, uint8_t port_state, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
@@ -92,7 +92,7 @@ public:
                                                    unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
   bool                    setSecurityAndEncryption(HC05_Security security, HC05_Encryption encryption,
                                                    unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
-  bool                    deleteDeviceFromList(const BluetoothAddress &address, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
+  bool                    deleteDeviceFromList(const BluetoothAddress &address, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT   //need to check
   bool                    deleteAllDevicesFromList(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
   bool                    findDeviceInList(const BluetoothAddress &address,unsigned long timeout);     //HC05_DEFAULT_TIMEOUT //need to check
   bool                    countDevicesInList(uint8_t &device_count, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
@@ -101,8 +101,8 @@ public:
   bool                    initSerialPortProfile(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
   bool                    inquire(InquiryCallback callback, unsigned long timeout = HC05_INQUIRY_DEFAULT_TIMEOUT); //need to check
   bool                    cancelInquiry(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
-  bool                    pair(const BluetoothAddress &address, unsigned long timeout = HC05_PAIRING_DEFAULT_TIMEOUT);
-  bool                    connect(const BluetoothAddress &address, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT
+  bool                    pair(const BluetoothAddress &address, unsigned long timeout = HC05_PAIRING_DEFAULT_TIMEOUT);    //need to check
+  bool                    connect(const BluetoothAddress &address, unsigned long timeout);     //HC05_DEFAULT_TIMEOUT      //need to check
   bool                    disconnect(unsigned long timeout);     //HC05_DEFAULT_TIMEOUT   //need to check
   
   //new
@@ -136,6 +136,13 @@ uint16_t &inquiry_duration, uint16_t &paging_interval, uint16_t &paging_duration
   uint16_t retry_interval, uint16_t sniff_timeout, uint16_t addrs);
   bool processRole(HC05_Role &role, uint16_t addrs);       //need to check
   bool processName(char *buffer, uint16_t addrs);
+  bool processHttpData();
+  bool processHttpAction();
+  bool  processHttpRead();
+  bool processHttpContent();
+
+  
+  
   //
 
 };

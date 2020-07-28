@@ -28,8 +28,10 @@ extern Sim80x_t                 Sim80x;
 ****************************************************************/
 void LIB_SIM800C::httpInit(void)
 {
+  
   sim800c.sendAtCommand("AT+HTTPINIT\r\n",200, 0);
   debugTerminal("httpInit");
+
 }
 
 
@@ -41,8 +43,11 @@ void LIB_SIM800C::httpInit(void)
 ****************************************************************/
 void LIB_SIM800C::httpTerminate(void)
 {
-  sim800c.sendAtCommand("+++\r\n",200, 0);
+  
+  uint8_t answer;
+  answer =  sim800c.sendAtCommand("+++\r\n",200, 0);
   debugTerminal("httpTerminate");
+
 }
 
 
@@ -57,7 +62,8 @@ bool LIB_SIM800C::getHttpParam(void)
   uint8_t answer;
   answer =  sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
   debugTerminal("getHttpParam");
- if(answer == 1)
+  
+  if(answer == 1)
     return true;
   else
     return false;
@@ -90,13 +96,9 @@ answer =  sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
 ****************************************************************/
 bool LIB_SIM800C::getHttpData(void)
 {
-  uint8_t answer;
-  answer =  sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
+  sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
   debugTerminal("getHttpData");
- if(answer == 1)
-    return true;
-  else
-    return false;
+  return processHttpData();
 }
 
 
@@ -129,10 +131,7 @@ bool LIB_SIM800C::getHttpAction(void)
   uint8_t answer;
   answer =  sim800c.sendAtCommand("AT+HTTPACTION\r\n",200, 0);
   debugTerminal("getHttpAction");
- if(answer == 1)
-    return true;
-  else
-    return false;
+  return processHttpAction();
 }
 
 
@@ -165,10 +164,7 @@ bool LIB_SIM800C::getHttpRead(void)
   uint8_t answer;
   answer =  sim800c.sendAtCommand("AT+HTTPREAD\r\n",200, 0);
   debugTerminal("getHttpRead");
- if(answer == 1)
-    return true;
-  else
-    return false;
+  return processHttpRead();
 }
 
 
@@ -184,7 +180,7 @@ bool LIB_SIM800C::setHttpRead(void)
 uint8_t answer;
 answer = sim800c.sendAtCommand("AT+HTTPREAD\r\n",200, 0);
   debugTerminal("setHttpRead");
- if((answer == 1) && (Sim80x.Bluetooth.HostName[0] != 0) && (Sim80x.Bluetooth.HostAddress[0] != 0))
+ if((answer == 1) )
     return true;
   else
     return false;
@@ -202,10 +198,7 @@ bool LIB_SIM800C::getHttpContext(void)
 uint8_t answer;
 answer =  sim800c.sendAtCommand("AT+HTTPCONT\r\n",200, 0);
   debugTerminal("getHttpContext");
- if(answer == 1)
-    return true;
-  else
-    return false;
+  return processHttpContent();
 }
 
 
@@ -220,6 +213,7 @@ bool LIB_SIM800C::getHttpStatus(void)
 uint8_t answer;
 answer =  sim800c.sendAtCommand("AT+HTTPSTATUS\r\n",200, 0);
   debugTerminal("getHttpStatus");
+  
  if(answer == 1)
     return true;
   else

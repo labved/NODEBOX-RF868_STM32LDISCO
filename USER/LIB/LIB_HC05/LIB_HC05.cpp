@@ -170,8 +170,15 @@ void LIB_HC05::Init(void)
 ****************************************************************/
 bool LIB_HC05::softReset(unsigned long timeout)
 {
+  uint8_t answer;
   //PGM_STRING_MAPPED_TO_RAM(reset_cmd, "RESET");
-  return (hc05.sendAtCommand("AT+RESET", timeout, 0)); // CHECK
+  answer = (hc05.sendAtCommand("AT+RESET", timeout, 0)); // CHECK
+
+  if(answer == 1)
+      return true;
+  else
+      return false;
+
 }
 
 /****************************************************************
@@ -217,13 +224,14 @@ bool LIB_HC05::setFactoryDefault(unsigned long timeout)
 ****************************************************************/
 bool LIB_HC05::getVersion(char *buffer, size_t buffer_size, unsigned long timeout)
 {
-  uint8_t answer ;
+  uint8_t answer;
   startOperation(timeout);
 
   if (!buffer || buffer_size <= 1)
     return false;
 
   //PGM_STRING_MAPPED_TO_RAM(command, "VERSION?");
+  
   answer = hc05.sendAtCommand("AT+VERSION?\r\n", 200, 0);
   return processVersion(answer, buffer , buffer_size, 1);
   /* Response should look like "+VERSION:2.0-20100601" */
@@ -322,7 +330,7 @@ bool LIB_HC05::setName(const char *name, unsigned long timeout)
     
   uint8_t answer;
   answer =hc05.sendAtCommand(temp,200, 0);
-  debugTerminal("HC05_setSimAccess");
+  debugTerminal("HC05_setName");
   //PGM_STRING_MAPPED_TO_RAM(command, "NAME=");
   
 
@@ -1608,8 +1616,7 @@ bool LIB_HC05::disconnect(unsigned long timeout)
  */  
 }
 
-
-
+//new functions
 /****************************************************************
 *FUNCTION NAME:processversion
 *FUNCTION     :processversion

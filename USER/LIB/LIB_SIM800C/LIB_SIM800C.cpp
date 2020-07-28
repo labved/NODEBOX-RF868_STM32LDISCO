@@ -2417,6 +2417,52 @@ void LIB_SIM800C::processIMEI(uint16_t addrs)
   memset(Sim80x.UsartRxBuffer,0,sizeof(Sim80x.UsartRxBuffer));
 	
 }
+ 
+/****************************************************************
+*FUNCTION NAME:probe
+*FUNCTION     :probe
+*INPUT        :timeout
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processHttpData(void)
+{
+
+}
+
+/****************************************************************
+*FUNCTION NAME:probe
+*FUNCTION     :probe
+*INPUT        :timeout
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processHttpAction(void)
+{
+
+}
+
+/****************************************************************
+*FUNCTION NAME:probe
+*FUNCTION     :probe
+*INPUT        :timeout
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processHttpRead(void)
+{
+
+}
+
+/****************************************************************
+*FUNCTION NAME:probe
+*FUNCTION     :probe
+*INPUT        :timeout
+*OUTPUT       :bool
+****************************************************************/
+bool LIB_SIM800C::processHttpContent(void)
+{
+
+}
+
+
 
 #endif
 
