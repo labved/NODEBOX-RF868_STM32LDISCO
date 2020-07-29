@@ -269,10 +269,10 @@ bool  LIB_SIM800C::acceptPair(bool Accept)
   {
     answer = sim800c.sendAtCommand("AT+BTPAIR:1,0\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
    
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
-  debugTerminal("Sim80x_");
-  if(answer == 1)
+    debugTerminal("Sim80x_");
+    if(answer == 1)
       return true;
     else
       return false;    

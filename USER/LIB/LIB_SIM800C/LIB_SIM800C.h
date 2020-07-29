@@ -119,9 +119,9 @@ class LIB_SIM800C
 // BLUETOOTH   
     bool                    getBtHostName(void);  
     BluetoothStatus_t       getBtStatus(void);
-    bool                    getBtVisibility(void);
+    bool                    getBtVisibility(void);//need to check
     
-    bool                    setBtPower(bool turnon);
+    bool                    setBtPower(bool turnon);//need to check
     bool                    setBtHostName(char *HostName);//need to check
     bool                    setBtAutoPair(bool  Enable);
     bool                    setBtPairPassword(char  *Pass);
