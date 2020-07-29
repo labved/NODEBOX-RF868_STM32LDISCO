@@ -217,8 +217,11 @@ bool LIB_HC05::getVersion(char *buffer, size_t buffer_size, unsigned long timeou
   //PGM_STRING_MAPPED_TO_RAM(command, "VERSION?");
   
   answer = hc05.sendAtCommand("AT+VERSION?\r\n", 200, 0);
-    debugTerminal("HC05_getVersion");
+  
+  debugTerminal("HC05_getVersion");
+  
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+  
   if(answer == 1)
       return true;
   else
@@ -1040,16 +1043,18 @@ bool LIB_HC05::getLastAuthenticatedDevice(
 ****************************************************************/
 bool LIB_HC05::setFactoryDefault(unsigned long timeout)
 {
-    
   uint8_t answer;
+
   answer =hc05.sendAtCommand("AT+ORGL\r\n", 200, 0);  
+
   debugTerminal("HC05_setFactoryDefault");
+
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
       return false;
-  
 }
 
 /****************************************************************
@@ -1062,19 +1067,20 @@ bool LIB_HC05::setName(const char *name, unsigned long timeout)
 {
  
   char temp[20];
-  snprintf(temp, sizeof(temp), "AT+NAME=%s\r\n", name); 
     
   uint8_t answer;
+    
+  snprintf(temp, sizeof(temp), "AT+NAME=%s\r\n", name); 
   answer =hc05.sendAtCommand(temp,200, 0);
+
   debugTerminal("HC05_setName");
-  //PGM_STRING_MAPPED_TO_RAM(command, "NAME="); 
+  
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
   if(answer == 1)
       return true;
   else
       return false;
- 
-  
 }
 
 /****************************************************************
@@ -1509,33 +1515,22 @@ bool LIB_HC05::findDeviceInList(
 ****************************************************************/
 bool LIB_HC05::countDevicesInList(uint8_t &device_count, unsigned long timeout)
 {
+  uint8_t answer; 
+
   startOperation(timeout);
 
-  //PGM_STRING_MAPPED_TO_RAM(command, "ADCN?");
-  
-  uint8_t answer; 
-   answer = hc05.sendAtCommand("AT+ADCN?\r\n", timeout, 0);
+  answer = hc05.sendAtCommand("AT+ADCN?\r\n", timeout, 0);
+
   debugTerminal("HC05_countDevicesInList");
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand)); 
+
+  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
   if(answer == 1)
       return true;
   else
       return false;
- /*  char response[20];
-  //PGM_STRING_MAPPED_TO_RAM(response_pattern, "+ADCN:");
-  const char *count_part = hc05.readResponseWithPrefix(
-    response, sizeof(response), AT_RESP_ADCN);
 
-  if (m_errCode != HC05_OK)
-    return false;
-
-  if (!count_part)
-    return hc05.readOperationResult() && false;
-
-  device_count = atol(count_part);
-
-  return hc05.readOperationResult();
- */}
+}
 
 /****************************************************************
 *FUNCTION NAME:initSerialPortProfile
@@ -1706,39 +1701,24 @@ bool LIB_HC05::disconnect(unsigned long timeout)
 *OUTPUT       :void
 ****************************************************************/
 bool LIB_HC05::processVersion(uint8_t answer, char *buffer, size_t buffer_size, uint16_t addrs)
-{/* 
+{
 	char      *strStart, *str1;
+  char      *temp;
+
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
   str1 = strstr(strStart,"+VERSION:");
-  
+
   if(str1!=NULL)
-    sscanf(str1,"%s",Sim80x.IMEI);//NEED TO CHECK
- */
+    sscanf(str1,"+VERSION:%s\r\nOK\r\n",temp);
+  
   debugTerminal("HC05_getversion");
-  
-  char response[30];
-  
-  const char *version = hc05.readResponseWithPrefix(
-     response, sizeof(response), AT_RESP_VERSION);
-  
-  if (m_errCode != HC05_OK)
-    return false;
 
-  if (!version)
-  {
-    *buffer = 0;
-    return hc05.readOperationResult() && false;
-  }
- 
-  snprintf(buffer, buffer_size, "%s", version);
-  return answer ;
-
-  // update Flash IC here
-	
-  
-  
-	
+  if(str1!=NULL)
+    return true;
+  else
+    return false;   
+  	
 }
 
 /****************************************************************
@@ -2515,11 +2495,6 @@ bool LIB_HC05::processName(char *buffer, uint16_t addrs)
   return hc05.readOperationResult();
 
 }
-
-
-
-
-
 
 
 #endif
