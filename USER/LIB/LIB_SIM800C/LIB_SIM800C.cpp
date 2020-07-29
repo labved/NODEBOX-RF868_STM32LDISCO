@@ -1004,9 +1004,11 @@ void LIB_SIM800C::startSim80xTask(void const * argument)
 bool LIB_SIM800C::setAtMode(void)
 {
   uint8_t answer;
+  
   delay_ms(1000);       // prerequisite for switching to At Command Mode
   answer = sim800c.sendAtCommand("+++\r\n",200, 0);
   delay_ms(1000);     // prerequisite for switching to At Command Mode
+  
   debugTerminal("Sim80x_setAtMode");
 
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
@@ -1026,7 +1028,10 @@ bool LIB_SIM800C::setAtMode(void)
 bool LIB_SIM800C::setDataMode(void)
 {
   uint8_t answer;  
+
+  delay_ms(1000);       // prerequisite for switching to Data Command Mode
   answer =sim800c.sendAtCommand("ATO\r\n",200, 0);
+  
   debugTerminal("Sim80x_setDataMode");
 
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
@@ -1046,9 +1051,10 @@ bool LIB_SIM800C::setDataMode(void)
 ****************************************************************/
 bool LIB_SIM800C::setActiveProfile(void)
 {
-
   uint8_t answer;
   
+  // write your code here
+
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
   
   if(answer == 1)
@@ -1066,8 +1072,8 @@ bool LIB_SIM800C::setActiveProfile(void)
 ****************************************************************/
 bool LIB_SIM800C::setDefaultConfig(void)
 {
-  
   uint8_t answer;
+
   answer = sim800c.sendAtCommand("ATZ\r\r",200, 0);
 
   debugTerminal("Sim80x_setDefaultConfig");
@@ -1089,13 +1095,12 @@ bool LIB_SIM800C::setDefaultConfig(void)
 ****************************************************************/
 bool LIB_SIM800C::setFactoryDefault(void)
 {
-  
   uint8_t answer;
+  
   answer = sim800c.sendAtCommand("AT&F0\r\n",200,0);
 
   debugTerminal("Sim80x_setFactoryDefault");
 
-   
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
   
    if(answer == 1)
@@ -1114,13 +1119,12 @@ bool LIB_SIM800C::setFactoryDefault(void)
 bool LIB_SIM800C::setAtEcho(bool turnon)
 {
   char temp[20];
-  snprintf(temp, sizeof(temp), "ATE%d\r\n", turnon); 
-  
   uint8_t answer;
+  
+  snprintf(temp, sizeof(temp), "ATE%d\r\n", turnon); 
   answer = sim800c.sendAtCommand(temp, 200, 0);
 
   debugTerminal("Sim80x_setAtEcho");//need to check as response changes can be on or off
-
    
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
   
@@ -1924,21 +1928,20 @@ bool LIB_SIM800C::setSimAccess(uint16_t length, char command)
 bool LIB_SIM800C::processManNo(uint16_t addrs)
 {	
 	char      *strStart,*str1;
+  
   strStart = (char*)&Sim80x.UsartRxBuffer[0];  
      
   str1 = strstr(strStart,"AT+CGMI\r\r\n");
   
   if(str1!=NULL)
     sscanf(str1,"AT+CGMI\r\r\n%s",Sim80x.IMEI);
-
-  // update Flash IC here
-		
+	
   debugTerminal("Sim80x_getManNo");
 
-  
-  
-  
-	
+  if(str1!=NULL)
+    return true;
+  else
+    return false;   
 }
 
 /****************************************************************
