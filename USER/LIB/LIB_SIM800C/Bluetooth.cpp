@@ -53,6 +53,7 @@ bool  LIB_SIM800C::getBtHostName(void)
 BluetoothStatus_t  LIB_SIM800C::getBtStatus(void)
 {
   uint8_t answer;
+
   answer = sim800c.sendAtCommand("AT+BTSTATUS?\r\n",1000,1,"\r\n+BTSTATUS:");
  
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
@@ -91,8 +92,11 @@ bool  LIB_SIM800C::getBtVisibility(void)
 bool  LIB_SIM800C::setBtPower(bool TurnOn)
 {
   uint8_t answer;
+
   delay_ms(100);
+  
   getBtStatus();
+  
   if(TurnOn == true)
   {
     if(Sim80x.Bluetooth.Status == BluetoothStatus_Initial)
@@ -165,6 +169,7 @@ bool  LIB_SIM800C::setBtHostName(char *HostName)
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
   debugTerminal("Sim80x_setBtHostName");
+
   if(answer == 1)
   {
     getBtHostName();
@@ -183,6 +188,7 @@ bool  LIB_SIM800C::setBtHostName(char *HostName)
 bool LIB_SIM800C::setBtAutoPair(bool  Enable)
 {
   uint8_t answer;
+
   if(Enable==true)
     answer = sim800c.sendAtCommand("AT+BTPAIRCFG=2\r\n",1000,2,"AT+BTPAIRCFG=2\r\r\nOK\r\n","AT+BTPAIRCFG=2\r\r\nERROR\r\n");
   else
@@ -191,6 +197,7 @@ bool LIB_SIM800C::setBtAutoPair(bool  Enable)
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
   debugTerminal("Sim80x_setBtAutoPair");
+
   if(answer == 1)
     return true;
   else
@@ -208,13 +215,16 @@ bool LIB_SIM800C::setBtPairPassword(char  *Pass)
   uint8_t answer;
   char str[32];
   char strParam[32];
+
   snprintf(str,sizeof(str),"AT+BTPAIRCFG=1,%s\r\n",Pass);
   snprintf(strParam,sizeof(strParam),"AT+BTPAIRCFG=1,%s\r\r\nOK\r\n",Pass);
+  
   answer = sim800c.sendAtCommand(str,1000,1,strParam);
  
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
   debugTerminal("Sim80x_setBtPairPassword");
+  
   if(answer == 1)
     return true;
   else
@@ -231,13 +241,14 @@ bool  LIB_SIM800C::setBtVisibility(bool Visible)//what should i do here
 {
   uint8_t answer;
   char str[16];
+
   snprintf(str,sizeof(str),"AT+BTVIS=%d\r\n",Visible);
   answer = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
-  
  
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
   debugTerminal("Sim80x_setBtVisibility");
+
   if(answer == 1)
       return true;
   else
@@ -253,6 +264,7 @@ bool  LIB_SIM800C::setBtVisibility(bool Visible)//what should i do here
 bool  LIB_SIM800C::acceptPair(bool Accept)  
 {
   uint8_t answer;
+
   if(Accept == true)
   {
     answer = sim800c.sendAtCommand("AT+BTPAIR:1,1\r\n",1000,2,"\r\nOK\r\n","\r\nERROR\r\n");
@@ -260,6 +272,7 @@ bool  LIB_SIM800C::acceptPair(bool Accept)
     memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
     debugTerminal("Sim80x_acceptPair");
+
   if(answer == 1)
       return true;
     else
@@ -271,7 +284,8 @@ bool  LIB_SIM800C::acceptPair(bool Accept)
    
     memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
-    debugTerminal("Sim80x_");
+    debugTerminal("Sim80x_acceptPair");
+
     if(answer == 1)
       return true;
     else
@@ -289,13 +303,14 @@ bool  LIB_SIM800C::acceptPairWithPass(char *Pass)
 {
   uint8_t answer;
   char str[32];
+
   snprintf(str,sizeof(str),"AT+BTPAIR:2,%s\r\n",Pass);
-  
   answer = sim800c.sendAtCommand(str,1000,1,"\r\nOK\r\n");
  
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
   debugTerminal("Sim80x_acceptPairWithPass");
+
   if(answer == 1)
     return true;
   else
@@ -314,6 +329,7 @@ bool LIB_SIM800C::btUnpair(uint8_t  Unpair_0_to_all)
   uint8_t answer;
   char str[32];
   char strParam[32];
+
   snprintf(str,sizeof(str),"AT+BTUNPAIR=%d\r\n",Unpair_0_to_all);
   snprintf(strParam,sizeof(strParam),"AT+BTUNPAIR=%d\r\n",Unpair_0_to_all);
   answer = sim800c.sendAtCommand(str,1000,1,strParam);
@@ -321,6 +337,7 @@ bool LIB_SIM800C::btUnpair(uint8_t  Unpair_0_to_all)
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
   debugTerminal("Sim80x_btUnpair");
+
   if(answer == 1)
     return true;
   else
@@ -337,6 +354,7 @@ bool  LIB_SIM800C::btSppAllowConnection(bool Accept)//what should i do here
 {
   uint8_t answer;
   char str[16];
+
   snprintf(str,sizeof(str),"AT+BTACPT=%d\r\n",Accept);
   answer = sim800c.sendAtCommand(str,1000,2,"\r\nOK\r\n","\r\nERROR\r\n");  
   
@@ -344,6 +362,7 @@ bool  LIB_SIM800C::btSppAllowConnection(bool Accept)//what should i do here
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
   debugTerminal("Sim80x_btSppAllowConnection");
+
   if(answer == 1)
       return true;
   else
@@ -360,6 +379,7 @@ bool  LIB_SIM800C::btSppSend(char *DataString)
 {
   uint8_t answer;
   char str[2];
+
   answer = sim800c.sendAtCommand("AT+BTSPPSEND\r\n",1000,2,"\r\r\n> ","\r\nERROR\r\n");
  
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
@@ -369,16 +389,14 @@ bool  LIB_SIM800C::btSppSend(char *DataString)
   if(answer == 1)
   {
     sim800c.writeString(DataString);
+    
     sprintf(str,"%c",26);
     answer = sim800c.sendAtCommand(str,1000,2,"\r\nSEND OK\r\n","\r\nERROR\r\n");
    
   memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));  
 
-  debugTerminal("Sim80x_btSppSend");
-  if(answer == 1)
+
       return true;
-    else
-      return false;
   }
   else
     return false;

@@ -27,16 +27,18 @@ extern Sim80x_t                 Sim80x;
 ****************************************************************/
 bool LIB_SIM800C::httpInit(void)
 {  
-  uint8_t answer;
-  answer =sim800c.sendAtCommand("AT+HTTPINIT\r\n",200, 0);
-  debugTerminal("Sim80x_httpInit");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    answer = sim800c.sendAtCommand("AT+HTTPINIT\r\n",200, 0);
+
+    debugTerminal("Sim80x_httpInit");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 }
 
 /****************************************************************
@@ -48,17 +50,18 @@ bool LIB_SIM800C::httpInit(void)
 bool LIB_SIM800C::httpTerminate(void)
 {
   
-  uint8_t answer;
-  answer =  sim800c.sendAtCommand("+++\r\n",200, 0);
+    uint8_t answer;
 
-  debugTerminal("Sim80x_httpTerminate");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    answer = sim800c.sendAtCommand("+++\r\n",200, 0);
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    debugTerminal("Sim80x_httpTerminate");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 
 }
 
@@ -71,15 +74,18 @@ bool LIB_SIM800C::httpTerminate(void)
 ****************************************************************/
 bool LIB_SIM800C::getHttpParam(void)
 {
-  uint8_t answer;
-  answer =  sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
-  debugTerminal("Sim80x_getHttpParam");
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
-  
-  if(answer == 1)
-    return true;
-  else
-    return false;
+    uint8_t answer;
+
+    answer = sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
+
+    debugTerminal("Sim80x_getHttpParam");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 }
 
 /****************************************************************
@@ -90,16 +96,18 @@ bool LIB_SIM800C::getHttpParam(void)
 ****************************************************************/
 bool LIB_SIM800C::getHttpData(void)
 {
-  uint8_t answer;
-  answer =sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
-  debugTerminal("Sim80x_getHttpData");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    answer = sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
+
+    debugTerminal("Sim80x_getHttpData");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 
 }
 
@@ -111,16 +119,18 @@ bool LIB_SIM800C::getHttpData(void)
 ****************************************************************/
 bool LIB_SIM800C::getHttpAction(void)
 {
-  uint8_t answer;
-  answer =  sim800c.sendAtCommand("AT+HTTPACTION\r\n",200, 0);
-  debugTerminal("Sim80x_getHttpAction");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    answer = sim800c.sendAtCommand("AT+HTTPACTION\r\n",200, 0);
+
+    debugTerminal("Sim80x_getHttpAction");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 
 }
 
@@ -132,16 +142,18 @@ bool LIB_SIM800C::getHttpAction(void)
 ****************************************************************/
 bool LIB_SIM800C::getHttpRead(void)
 {
-  uint8_t answer;
-  answer =  sim800c.sendAtCommand("AT+HTTPREAD\r\n",200, 0);
-  debugTerminal("Sim80x_getHttpRead");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    answer = sim800c.sendAtCommand("AT+HTTPREAD\r\n",200, 0);
+
+    debugTerminal("Sim80x_getHttpRead");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 
 }
 
@@ -153,16 +165,18 @@ bool LIB_SIM800C::getHttpRead(void)
 ****************************************************************/
 bool LIB_SIM800C::getHttpContext(void)
 {
-uint8_t answer;
-answer =  sim800c.sendAtCommand("AT+HTTPCONT\r\n",200, 0);
-  debugTerminal("Sim80x_getHttpContext");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    answer =  sim800c.sendAtCommand("AT+HTTPCONT\r\n",200, 0);
+
+    debugTerminal("Sim80x_getHttpContext");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 
 }
 
@@ -174,16 +188,18 @@ answer =  sim800c.sendAtCommand("AT+HTTPCONT\r\n",200, 0);
 ****************************************************************/
 bool LIB_SIM800C::getHttpStatus(void)
 {
-uint8_t answer;
-answer =  sim800c.sendAtCommand("AT+HTTPSTATUS\r\n",200, 0);
-  debugTerminal("Sim80x_getHttpStatus");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    answer =  sim800c.sendAtCommand("AT+HTTPSTATUS\r\n",200, 0);
+
+    debugTerminal("Sim80x_getHttpStatus");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 
 }
 
@@ -195,16 +211,18 @@ answer =  sim800c.sendAtCommand("AT+HTTPSTATUS\r\n",200, 0);
 ****************************************************************/
 bool LIB_SIM800C::getHttpHeader(void)
 {
-  uint8_t answer;
-  answer =  sim800c.sendAtCommand("AT+HTTPHEAD\r\n",200, 0);
-  debugTerminal("Sim80x_getHttpHeader");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    answer = sim800c.sendAtCommand("AT+HTTPHEAD\r\n",200, 0);
+
+    debugTerminal("Sim80x_getHttpHeader");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 
 }
 
@@ -217,16 +235,18 @@ bool LIB_SIM800C::getHttpHeader(void)
 ****************************************************************/
 bool LIB_SIM800C::setHttpParam(void)
 {
-uint8_t answer;
-answer =  sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
-  debugTerminal("Sim80x_setHttpParam");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    answer =  sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
+
+    debugTerminal("Sim80x_setHttpParam");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 }
 
 /****************************************************************
@@ -237,16 +257,18 @@ answer =  sim800c.sendAtCommand("AT+HTTPPARA\r\n",200, 0);
 ****************************************************************/
 bool LIB_SIM800C::setHttpData(void)
 {
-uint8_t answer;
-answer =  sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
-  debugTerminal("Sim80x_setHttpData");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    answer =  sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
+    
+    debugTerminal("Sim80x_setHttpData");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 }
 
 /****************************************************************
@@ -257,16 +279,18 @@ answer =  sim800c.sendAtCommand("AT+HTTPDATA\r\n",200, 0);
 ****************************************************************/
 bool LIB_SIM800C::setHttpAction(void)
 {  
-  uint8_t answer;
-  answer =  sim800c.sendAtCommand("AT+HTTPACTION\r\n",200, 0);
-  debugTerminal("Sim80x_setHttpAction");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    answer = sim800c.sendAtCommand("AT+HTTPACTION\r\n",200, 0);
+    
+    debugTerminal("Sim80x_setHttpAction");
+
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 }
 
 /****************************************************************
@@ -278,16 +302,18 @@ bool LIB_SIM800C::setHttpAction(void)
 bool LIB_SIM800C::setHttpRead(void)
 {
   
-uint8_t answer;
-answer = sim800c.sendAtCommand("AT+HTTPREAD\r\n",200, 0);
-  debugTerminal("Sim80x_setHttpRead");
-  
-  memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+    uint8_t answer;
+    
+    answer = sim800c.sendAtCommand("AT+HTTPREAD\r\n",200, 0);
+    
+    debugTerminal("Sim80x_setHttpRead");
 
-  if(answer == 1)
-      return true;
-  else
-      return false;
+    memset(Sim80x.AtCommand.SendCommand,0,sizeof(Sim80x.AtCommand.SendCommand));
+
+    if(answer == 1)
+        return true;
+    else
+        return false;
 
 }
 
